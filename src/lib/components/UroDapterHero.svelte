@@ -148,7 +148,7 @@
                 A simple way to perform bladder instillations without catheterization.
               </p>
             </div>
-            <div class="product-chip shrink-0 w-28 sm:w-32 lg:w-40 aspect-[4/3] rounded-2xl ring-1 ring-white/10 shadow-lg flex items-center justify-center p-4">
+            <div class="shrink-0 w-28 sm:w-32 lg:w-40 aspect-4/3 flex items-center justify-center p-4">
               <img
                 src={productImage}
                 alt="UroDapter catheter-free bladder instillation device"
@@ -282,12 +282,6 @@
       background: linear-gradient(180deg, rgba(8, 17, 31, 0.9) 0%, rgba(10, 21, 38, 0.8) 45%, rgba(13, 26, 48, 0.6) 100%);
     }
   }
-
-  /* .product-chip {
-    background:
-      radial-gradient(130% 120% at 28% 12%, rgba(255, 255, 255, 0.3), transparent 55%),
-      linear-gradient(150deg, #1b2f54 0%, #2f6fed 78%, #3aa3cf 125%);
-  } */
 
   /* Audience cards: dark base tone in the top-left corner, lightening
      toward the bottom-right, per color per card. On hover the gradient
