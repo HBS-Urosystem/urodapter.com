@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --color-navy-950: #08111f;
+  --color-navy-900: #0d1a30;
+  --color-navy-800: #132342;
+  --color-navy-700: #1b2f54;
+
+  --color-patient: #18438a;
+  --color-clinician: #2c8979;
+  --color-distributor: #8764b9;
+}
