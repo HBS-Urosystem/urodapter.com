@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/source-serif-4';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
@@ -11,4 +12,78 @@
   --color-patient: #18438a;
   --color-clinician: #2c8979;
   --color-distributor: #8764b9;
+
+  /* Editorial serif for display headlines (patient-facing pages; 2026 direction) */
+  --font-display: 'Source Serif 4 Variable', ui-serif, Georgia, serif;
+}
+
+/* Derived patient-page tints — not in @theme because they are single-purpose
+   surface colors, not a scale */
+:root {
+  --color-patient-soft: color-mix(in srgb, var(--color-patient) 7%, white);
+  --color-patient-glow: color-mix(in srgb, var(--color-patient) 30%, transparent);
+
+  /* Data-series duo for charts (brand-hue steps snapped to pass the dataviz
+     six-checks validator: lightness band, chroma floor, CVD ΔE, contrast) */
+  --chart-trying: #2f66c4;
+  --chart-continuing: #1e947e;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --chart-trying: #0284c7;
+    --chart-continuing: #059669;
+  }
+}
+
+/* Full-bleed tinted band (section bridges + the closing band). The accent is
+   parameterised so persona pages can retint: set --band-accent on the band or
+   an ancestor (defaults to the patient accent). */
+.tint-band {
+  --band-accent: var(--color-patient);
+  background:
+    radial-gradient(700px 320px at 12% -20%, color-mix(in srgb, var(--band-accent) 10%, transparent), transparent 70%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--band-accent) 7%, white) 0%,
+      color-mix(in srgb, var(--band-accent) 11%, white) 100%
+    );
+}
+@media (prefers-color-scheme: dark) {
+  .tint-band {
+    background:
+      radial-gradient(900px 400px at 85% -20%, color-mix(in srgb, var(--band-accent) 30%, transparent), transparent 65%),
+      var(--color-navy-900);
+  }
+}
+
+/* Page background below heroes: light by default, dark on prefers-color-scheme.
+   Shared by the home page and subpages (moved out of UroDapterHero). */
+.bg-page-gradient {
+  background:
+    radial-gradient(1000px 500px at 85% -10%, rgba(47, 111, 237, 0.1), transparent 60%),
+    radial-gradient(700px 450px at 10% 110%, rgba(124, 79, 209, 0.08), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f7f9fc 55%, #eef2f9 100%);
+}
+@media (prefers-color-scheme: dark) {
+  .bg-page-gradient {
+    background:
+      radial-gradient(1200px 600px at 85% -10%, rgba(47, 111, 237, 0.35), transparent 60%),
+      radial-gradient(800px 500px at 10% 110%, rgba(124, 79, 209, 0.18), transparent 60%),
+      linear-gradient(135deg, #0a1526 0%, #0d1a30 45%, #101f3b 100%);
+  }
+}
+
+/* Scroll reveal, driven by the `reveal` action ($lib/actions/reveal.ts):
+   .reveal-init hides, .reveal-in transitions in when the element enters
+   the viewport. The action never applies these under reduced motion. */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
 }

@@ -6,6 +6,26 @@
 
 ---
 
+## Read these before building UI
+
+To avoid drift, the rules live in one place each — this file only points at them:
+
+| Doc | What it holds |
+|---|---|
+| **[CLAUDE.md](CLAUDE.md)** | The non-negotiable rules + definition of done. Start here. |
+| **[docs/design-system.md](docs/design-system.md)** | Binding design reference: tokens, page rhythm, typography, surfaces, icons, motion, component inventory, copy rules, a11y. |
+| **[docs/patient-journey-page-plan.md](docs/patient-journey-page-plan.md)** | Patient page plan, client decisions, Sections 4–6 guidance, open items. |
+| **[src/routes/layout.css](src/routes/layout.css)** | Source of truth for design tokens. |
+
+Several decisions **reversed** an earlier approach (section cards removed, serif adopted, CSS
+scroll-timeline replaced by a JS action). Reading the code alone will reintroduce discarded
+patterns — read the design system doc first.
+
+When a structural or design decision changes, update `docs/design-system.md` (and the page plan)
+in the same change so the docs don't drift from the code.
+
+---
+
 You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:
 
 ## Available Svelte MCP Tools:
