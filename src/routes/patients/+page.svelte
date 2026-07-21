@@ -9,6 +9,7 @@
   import PatientStories from '$lib/components/patients/PatientStories.svelte';
   import EvidenceOutcomes from '$lib/components/patients/EvidenceOutcomes.svelte';
   import NextSteps from '$lib/components/patients/NextSteps.svelte';
+  import ImagePlaceholder from '$lib/components/patients/ImagePlaceholder.svelte';
   import {
     bridgeHowItWorks,
     bridgeWhyPrefer,
@@ -48,7 +49,7 @@
   {@html jsonLd}
 </svelte:head>
 
-<div class="bg-page-gradient text-navy-950 dark:text-white transition-colors min-h-screen">
+<div class="bg-patient-page text-navy-950 dark:text-white transition-colors min-h-screen">
   <SiteHeader variant="solid" />
 
   <main class="pb-16">
@@ -64,18 +65,25 @@
 
     <!-- Section 3: why patients prefer UroDapter -->
     <section aria-labelledby="why-prefer-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
-        {whyPrefer.eyebrow}
-      </p>
-      <h2
-        id="why-prefer-heading"
-        class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
-      >
-        {whyPrefer.heading}
-      </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
-        {whyPrefer.intro}
-      </p>
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
+            {whyPrefer.eyebrow}
+          </p>
+          <h2
+            id="why-prefer-heading"
+            class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
+          >
+            {whyPrefer.heading}
+          </h2>
+          <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
+            {whyPrefer.intro}
+          </p>
+        </div>
+        <div class="w-full lg:w-72 shrink-0">
+          <ImagePlaceholder description={whyPrefer.image.description} />
+        </div>
+      </div>
 
       <div use:reveal class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {#each whyPrefer.benefits as benefit (benefit.title)}

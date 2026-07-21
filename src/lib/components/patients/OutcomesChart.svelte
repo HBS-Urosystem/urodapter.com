@@ -14,7 +14,7 @@
      are the validated chart tokens (--chart-trying / --chart-continuing,
      dark-mode steps included). Every row carries its label + value as real
      text, so the bars are decoration over an accessible list. -->
-<div class="rounded-2xl bg-white dark:bg-white/[0.04] border border-slate-200/70 dark:border-white/10 p-6 sm:p-8">
+<div class="rounded-2xl surface-card p-6 sm:p-8">
   <h3 class="font-semibold text-navy-950 dark:text-white">{heading}</h3>
   <p class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300 text-pretty">{intro}</p>
 

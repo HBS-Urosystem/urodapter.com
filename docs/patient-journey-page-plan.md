@@ -362,8 +362,26 @@ slider interaction, `svelte-check`, eslint, autofixer, dataviz palette validatio
   UroDapter" — label adopted from the mockup since the docx's own button copy ends in "???"),
   UroDapter App, and the four patient-story pages (`Read <name>'s story`).
 - ~~Closing hero image~~ — **delivered and placed 2026-07-20**
-  (`src/lib/assets/patients/closing-hero.jpg`, AI watermark cropped out; the closing band is
-  now photo (2fr) + text (3fr), stacked and centered on mobile).
+  (`src/lib/assets/patients/closing-hero.jpg`). AI-watermark sparkle **inpainted** (cloned couch
+  texture, not a crop — the sparkle sat mid-frame, so a crop would have cut the subject).
+  Layout: text (3fr, left) + photo (2fr, right) — the subject's gaze points **left into the
+  text**, so the photo goes on the right; stacks text-first on mobile.
 - Wording adopted from client mockups (flag if unwanted): S4 H2 "Stories from patients like
   you", S5 H2 "What the research shows", clinician-testimonial disclaimer line. S6 H2 kept as
   docx "…do now?" over mockup "…do next?".
+
+**Update (2026-07-20): colourful redesign + image placeholders.**
+- The page is now visibly built on the **patient accent** — colourful canvas (`.bg-patient-page`),
+  accent-tinted cards/panels (`.surface-card` / `.surface-panel`), and more saturated bridges.
+  All parameterised via `--surface-accent` / `--band-accent` (design-system §4) so the clinician
+  page retints in one line. The home page's neutral gradient is untouched.
+- **Full-strength primary colour** on the strong CTAs, not only tints: `SupportCenterCard`
+  defaults to `variant="solid"` (`.surface-solid` band + white text) — the "Read all patient
+  testimonials" and "Go to Support Center" bands are now bold patient-blue, alongside the
+  Section 6 "Order UroDapter" CTA. Secondary callouts stay `.surface-panel` (light tint).
+- **Three image placeholders** (`ImagePlaceholder`) added in the Section 3 / 4 / 5 headers, each
+  with a proposed image description in `patients.ts` (`whyPrefer.image` / `stories.image` /
+  `evidence.image`). **Pending assets** — swap each for an `<enhanced:img>` on delivery:
+  - S3 "Why patients prefer": patient self-administering at home (independence).
+  - S4 "Stories": warm candid patient portrait (quality of life).
+  - S5 "Evidence": reassuring clinician–patient consultation / bright clinic.

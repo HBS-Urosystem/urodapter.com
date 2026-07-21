@@ -3,21 +3,29 @@
   import { stories } from '$lib/content/patients';
   import TestimonialCard from './TestimonialCard.svelte';
   import SupportCenterCard from './SupportCenterCard.svelte';
+  import ImagePlaceholder from './ImagePlaceholder.svelte';
 </script>
 
 <section aria-labelledby="patient-stories-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
-    {stories.eyebrow}
-  </p>
-  <h2
-    id="patient-stories-heading"
-    class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
-  >
-    {stories.heading}
-  </h2>
-  <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
-    {stories.intro}
-  </p>
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
+        {stories.eyebrow}
+      </p>
+      <h2
+        id="patient-stories-heading"
+        class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
+      >
+        {stories.heading}
+      </h2>
+      <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
+        {stories.intro}
+      </p>
+    </div>
+    <div class="w-full lg:w-72 shrink-0">
+      <ImagePlaceholder description={stories.image.description} />
+    </div>
+  </div>
 
   <div use:reveal class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     {#each stories.testimonials as t (t.author)}

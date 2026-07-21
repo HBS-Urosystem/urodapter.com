@@ -4,7 +4,7 @@
 
 <!-- The icon-chip + title treatment here is the shared vocabulary for the
      Section 4 testimonial theme labels — keep them visually in sync. -->
-<div class="rounded-2xl bg-white dark:bg-white/[0.04] border border-slate-200/70 dark:border-white/10 p-5">
+<div class="rounded-2xl surface-card p-5">
   <div class="flex items-center gap-3">
     <span
       class="w-10 h-10 rounded-full bg-(--color-patient-soft) dark:bg-sky-300/10 border border-patient/20 dark:border-sky-300/25 text-patient dark:text-sky-300 flex items-center justify-center shrink-0"

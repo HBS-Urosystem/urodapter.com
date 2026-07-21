@@ -22,8 +22,8 @@
 </script>
 
 <!-- Text is always white: the overlay variant sits on the hero photo's navy
-     overlay, the solid variant carries its own navy band -->
-<header class="text-white {variant === 'solid' ? 'bg-navy-950' : ''}">
+     overlay, the solid variant carries its own navy→accent gradient band -->
+<header class="text-white {variant === 'solid' ? 'nav-gradient' : ''}">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 {variant === 'solid' ? 'py-5' : 'pt-6'}">
     <nav class="flex items-center justify-between">
       <a href={resolve('/')} aria-label="UroDapter home" class="flex items-center text-white">

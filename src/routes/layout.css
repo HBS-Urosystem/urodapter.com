@@ -41,18 +41,134 @@
 .tint-band {
   --band-accent: var(--color-patient);
   background:
-    radial-gradient(700px 320px at 12% -20%, color-mix(in srgb, var(--band-accent) 10%, transparent), transparent 70%),
+    radial-gradient(760px 340px at 12% -20%, color-mix(in srgb, var(--band-accent) 18%, transparent), transparent 70%),
+    radial-gradient(680px 320px at 92% 120%, color-mix(in srgb, var(--band-accent) 14%, transparent), transparent 70%),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--band-accent) 7%, white) 0%,
-      color-mix(in srgb, var(--band-accent) 11%, white) 100%
+      color-mix(in srgb, var(--band-accent) 12%, white) 0%,
+      color-mix(in srgb, var(--band-accent) 18%, white) 100%
     );
 }
 @media (prefers-color-scheme: dark) {
   .tint-band {
     background:
-      radial-gradient(900px 400px at 85% -20%, color-mix(in srgb, var(--band-accent) 30%, transparent), transparent 65%),
-      var(--color-navy-900);
+      radial-gradient(900px 400px at 85% -20%, color-mix(in srgb, var(--band-accent) 42%, transparent), transparent 65%),
+      radial-gradient(700px 360px at 8% 120%, color-mix(in srgb, var(--band-accent) 26%, transparent), transparent 68%),
+      color-mix(in srgb, var(--band-accent) 12%, var(--color-navy-900));
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Colourful patient-page surfaces. Accent is parameterised via --surface-accent
+   (defaults to patient) so the clinician page retints by setting it on an
+   ancestor. Page canvas is deliberately patient-tinted; cards lift off it with
+   a soft accent border + accent-tinted shadow rather than going stark white.
+--------------------------------------------------------------------------- */
+
+/* Patient page canvas — a warmer, more saturated patient-blue gradient than the
+   neutral home .bg-page-gradient (kept separate so the home page is untouched) */
+.bg-patient-page {
+  --surface-accent: var(--color-patient);
+  background:
+    radial-gradient(1100px 560px at 88% -6%, color-mix(in srgb, var(--surface-accent) 20%, transparent), transparent 62%),
+    radial-gradient(780px 520px at 0% 14%, color-mix(in srgb, var(--surface-accent) 13%, transparent), transparent 58%),
+    radial-gradient(960px 640px at 55% 106%, color-mix(in srgb, var(--surface-accent) 14%, transparent), transparent 60%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-accent) 3%, white) 0%,
+      color-mix(in srgb, var(--surface-accent) 8%, white) 40%,
+      color-mix(in srgb, var(--surface-accent) 13%, white) 100%
+    );
+}
+@media (prefers-color-scheme: dark) {
+  .bg-patient-page {
+    background:
+      radial-gradient(1200px 620px at 88% -8%, color-mix(in srgb, var(--surface-accent) 55%, transparent), transparent 60%),
+      radial-gradient(900px 560px at 0% 18%, color-mix(in srgb, var(--surface-accent) 32%, transparent), transparent 56%),
+      radial-gradient(1040px 680px at 55% 108%, color-mix(in srgb, var(--surface-accent) 30%, transparent), transparent 60%),
+      linear-gradient(160deg, #091327 0%, #0b1a35 50%, #0d2247 100%);
+  }
+}
+
+/* Content card — gently accent-tinted, lifted by a soft accent border + shadow */
+.surface-card {
+  --surface-accent: var(--color-patient);
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--surface-accent) 2%, white) 0%,
+    color-mix(in srgb, var(--surface-accent) 10%, white) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--surface-accent) 22%, white);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--surface-accent) 10%, transparent),
+    0 10px 26px -16px color-mix(in srgb, var(--surface-accent) 40%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  .surface-card {
+    background: linear-gradient(
+      155deg,
+      color-mix(in srgb, var(--surface-accent) 13%, var(--color-navy-900)) 0%,
+      color-mix(in srgb, var(--surface-accent) 7%, var(--color-navy-900)) 100%
+    );
+    border-color: color-mix(in srgb, var(--surface-accent) 42%, transparent);
+    box-shadow: none;
+  }
+}
+
+/* Solid header band — the subpage nav bar. Diagonal navy→accent gradient so
+   the logo (left) stays on deep navy while the bar carries the primary colour.
+   Accent via --nav-accent (defaults to patient) for the clinician page. */
+.nav-gradient {
+  --nav-accent: var(--color-patient);
+  background: linear-gradient(
+    100deg,
+    var(--color-navy-950) 0%,
+    color-mix(in srgb, var(--nav-accent) 72%, var(--color-navy-950)) 52%,
+    var(--nav-accent) 100%
+  );
+}
+
+/* Solid accent fill — bold primary-colour CTA bands (Support Center invites).
+   Same gradient language as the home audience cards / Section 6 primary CTA,
+   so every "solid patient CTA" on the site matches. White text sits on top. */
+.surface-solid {
+  --surface-accent: var(--color-patient);
+  background: linear-gradient(
+    135deg,
+    var(--surface-accent) 0%,
+    color-mix(in srgb, var(--surface-accent) 85%, white) 100%
+  );
+}
+@media (prefers-color-scheme: dark) {
+  /* Brighten toward the (text-free) bottom-right corner so the band lifts off
+     the patient-tinted navy canvas; text stays on the darker top-left. */
+  .surface-solid {
+    background: linear-gradient(
+      135deg,
+      var(--surface-accent) 0%,
+      color-mix(in srgb, var(--surface-accent) 56%, white) 100%
+    );
+  }
+}
+
+/* Deeper accent-tinted panel — Support Center boxes, callouts, indication strip */
+.surface-panel {
+  --surface-accent: var(--color-patient);
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--surface-accent) 13%, white) 0%,
+    color-mix(in srgb, var(--surface-accent) 21%, white) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--surface-accent) 30%, white);
+}
+@media (prefers-color-scheme: dark) {
+  .surface-panel {
+    background: linear-gradient(
+      155deg,
+      color-mix(in srgb, var(--surface-accent) 22%, var(--color-navy-900)) 0%,
+      color-mix(in srgb, var(--surface-accent) 13%, var(--color-navy-900)) 100%
+    );
+    border-color: color-mix(in srgb, var(--surface-accent) 48%, transparent);
   }
 }
 

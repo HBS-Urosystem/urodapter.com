@@ -30,7 +30,7 @@
       </p>
 
       <!-- Product panel (mood board's features box, without the title strip) -->
-      <div class="mt-8 rounded-2xl bg-white/70 dark:bg-white/[0.04] border border-slate-200/70 dark:border-white/10 p-6 sm:p-8">
+      <div class="mt-8 rounded-2xl surface-card p-6 sm:p-8">
         <ProductCallouts callouts={howItWorks.callouts} />
       </div>
 

@@ -5,7 +5,7 @@
   }: { text: string; items: { label: string; icon: string }[] } = $props();
 </script>
 
-<div class="rounded-2xl bg-(--color-patient-soft) dark:bg-white/[0.05] border border-slate-200/70 dark:border-white/10 p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-x-10 gap-y-6 items-center">
+<div class="rounded-2xl surface-panel p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-x-10 gap-y-6 items-center">
   <p class="text-sm leading-relaxed text-slate-700 dark:text-slate-300 max-w-2xl text-pretty">{text}</p>
 
   <ul class="grid grid-cols-2 sm:flex sm:items-start gap-x-8 gap-y-5">

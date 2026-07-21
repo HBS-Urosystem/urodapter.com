@@ -20,7 +20,7 @@
 <!-- Manual slider only — no auto-advance (calm register; the docx offers
      either). All quotes are stacked in one grid cell so the box height fits
      the longest quote and never jumps between slides. -->
-<div class="rounded-2xl bg-(--color-patient-soft) dark:bg-white/[0.05] border border-slate-200/70 dark:border-white/10 p-6 sm:p-10">
+<div class="rounded-2xl surface-panel p-6 sm:p-10">
   <h3 class="font-semibold text-navy-950 dark:text-white">{heading}</h3>
 
   <div class="mt-6 grid" aria-live="polite">

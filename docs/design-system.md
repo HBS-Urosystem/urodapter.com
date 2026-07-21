@@ -37,6 +37,9 @@ Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not
 - `.tint-band` (layout.css) = the full-bleed band surface used by every `SectionBridge` *and*
   the closing band. Its accent is the `--band-accent` custom property (defaults to patient) —
   persona pages retint by setting `--band-accent` on an ancestor, no new CSS.
+- `.bg-patient-page`, `.surface-card`, `.surface-panel` (layout.css) = the colourful page canvas
+  and the two card surfaces (see §4). All read `--surface-accent` (defaults to patient) so a
+  persona page retints every surface at once by setting `--surface-accent` on the page wrapper.
 
 **Persona colour rule:** each audience page uses its own accent. The patient page uses
 `--color-patient` everywhere an accent appears. When building the clinician/distributor pages,
@@ -117,15 +120,29 @@ Two-tier radius:
 - `rounded-2xl` — cards and panels (the default).
 - `rounded-full` — icon chips, pills.
 
-| Surface | Light | Dark |
-|---|---|---|
-| Card | `bg-white` | `dark:bg-white/[0.04]` |
-| Tinted panel | `bg-(--color-patient-soft)` | `dark:bg-white/[0.05]` |
-| Product panel | `bg-white/70` | `dark:bg-white/[0.04]` |
-| Border (hairline) | `border-slate-200/70` | `dark:border-white/10` |
-| Support/CTA box | `bg-(--color-patient-soft)` | `dark:bg-white/[0.06]` + `dark:border-white/15` |
+**Surfaces are colour, not chrome** *(2026-07-20 direction: the page is deliberately colourful,
+built on the patient accent).* Do **not** reach for `bg-white`/`bg-slate-*` cards — use the two
+utility classes in `layout.css`, which carry an accent-tinted gradient + accent border (+ a soft
+accent shadow on cards in light). Both read the accent from `--surface-accent` (defaults to
+patient), so the clinician page retints by setting that variable on the page wrapper.
 
-Cards that aren't links get **no hover lift**. Hover states belong to interactive things only.
+| Surface | Class | Notes |
+|---|---|---|
+| Page canvas | `.bg-patient-page` | Colourful patient-blue gradient (light: white→~13% accent + accent radials; dark: navy + strong accent glows). Replaces the neutral home `.bg-page-gradient`, which stays as-is. |
+| Content card | `.surface-card` | Gently accent-tinted (white→~10%), accent border, soft accent shadow. Benefit/testimonial/stat/chart/video/product cards. |
+| Tinted panel | `.surface-panel` | Deeper accent tint (~13→21%). Callouts, indications strip, clinician-quote box, dive-deep band. |
+| Solid CTA band | `.surface-solid` | **Bold, full-strength accent fill** + white text — the same gradient as the home audience cards / Section 6 primary CTA. For strong "go here" invitations (Support Center bands). Dark mode brightens toward the text-free bottom-right so the band lifts off the navy canvas while white text stays on the dark top-left. |
+| Full-bleed band | `.tint-band` | Section bridges + closing band (accent via `--band-accent`; see §1). |
+
+**Use the primary accent at full strength where an element is a strong call-to-action**, not only
+as a light tint — e.g. the "Read all patient testimonials" / "Go to Support Center" bands
+(`SupportCenterCard variant="solid"`, the default) and the Section 6 primary "Order UroDapter"
+CTA. Reserve `.surface-panel` (light tint) for secondary/informational callouts so the solid
+bands stay the loudest thing in their section.
+
+Only `rounded-2xl` + padding utilities stay inline on these elements; the class supplies bg +
+border (+ shadow). Cards that aren't links get **no hover lift** — hover belongs to interactive
+things. Icon chips inside cards stay `bg-(--color-patient-soft)` / white as before.
 
 ---
 
@@ -186,7 +203,7 @@ Patient page (`src/lib/components/patients/`):
 | `HowItWorks.svelte` | Section 2 composition: centered header, then `[3fr_2fr]` columns. |
 | `ProductCallouts.svelte` | The 3×3 device diagram — see §8. |
 | `VideoFacade.svelte` | Click-to-load `youtube-nocookie` embed. Props `videoId`, `poster`, `caption`, `duration`. `videoId: null` → "Coming soon" placeholder. **Never show a fake duration.** |
-| `SupportCenterCard.svelte` | Reusable CTA box; `href` typed `ResolvedPathname`. |
+| `SupportCenterCard.svelte` | Reusable "visit the Support Center" CTA. `variant`: `'solid'` (default — bold `.surface-solid` band, white text) \| `'tint'` (light `.surface-panel`). `href` typed `ResolvedPathname`. |
 | `BenefitCard.svelte` | Icon chip + title + body. **Its chip+title treatment is the shared vocabulary** the Section 4 testimonial theme labels rhyme with. |
 | `IndicationsStrip.svelte` | Tinted band: sentence + condition icon chips. |
 | `TestimonialCard.svelte` | Section 4 card: theme chip+label (BenefitCard vocabulary), real `<blockquote>`/`<footer>`, story link. |
@@ -195,6 +212,7 @@ Patient page (`src/lib/components/patients/`):
 | `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. |
 | `EvidenceOutcomes.svelte` | Section 5 composition: stat cards (serif first-word highlight + citation) → chart + consensus callout → quotes slider. |
 | `NextSteps.svelte` | Section 6 composition: CTA tiers (primary wears the home audience-card gradient via scoped `.cta-primary`; others = home support-card neutral), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
+| `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. Placed in the Section 3/4/5 headers (a two-column `lg:grid-cols-[1fr_auto]`, image `lg:w-72`, stacks below the heading on mobile). |
 
 Reusable beyond the patient page: `SectionBridge`, `VideoFacade`, `SupportCenterCard`,
 `BenefitCard`, `TestimonialCard`, `OutcomesChart`, `ClinicianQuotes`. Keep them
@@ -287,10 +305,14 @@ The clinician page is the same system with different parameters — **do not for
   Dark-mode small-accent swap: **`emerald-300`** (the home page already pairs clinician-teal
   with emerald-300 checkmarks) — i.e. `text-clinician dark:text-emerald-300`. Derive
   `--color-clinician-soft`/`-glow` the same way as the patient tints when first needed.
-- **Bands:** wrap the page (or each band) with `--band-accent: var(--color-clinician)` — the
-  shared `.tint-band` retints itself; `SectionBridge` needs no changes.
-- **Same rhythm:** solid `SiteHeader` → open sections on `.bg-page-gradient` → alternating
-  arrow/quote bridges → closing band. Sections are still not cards.
+- **Colour, in one line:** set `--surface-accent: var(--color-clinician)` **and**
+  `--band-accent: var(--color-clinician)` on the page wrapper — `.surface-card`, `.surface-panel`
+  and every `.tint-band` retint themselves; no per-component edits. Give the clinician page its
+  own canvas class (clone `.bg-patient-page` → `.bg-clinician-page`, or reuse it with
+  `--surface-accent` overridden) so the whole page reads teal instead of blue.
+- **Same rhythm:** solid `SiteHeader` → open sections on the colourful persona canvas →
+  alternating arrow/quote bridges → closing band. Sections are still not cards; cards use the
+  `.surface-*` classes.
 - **Same components, new content module** (`src/lib/content/clinicians.ts`): `SectionBridge`,
   `VideoFacade` (poster + nocookie embed), `SupportCenterCard`, `BenefitCard`,
   `TestimonialCard` (peer quotes), `OutcomesChart` (the evidence data is persona-neutral —

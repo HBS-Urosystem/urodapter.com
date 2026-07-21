@@ -100,6 +100,10 @@ export const stories = {
 	heading: 'Stories from patients like you',
 	intro:
 		'Every patient’s journey is different. Here are some of the experiences shared by people who have used UroDapter.',
+	image: {
+		description:
+			'A warm, candid portrait of a patient in daily life — relaxed and smiling, conveying quality of life rather than treatment.',
+	},
 	// Theme labels visually rhyme with the Section 3 benefit cards (docx note)
 	testimonials: [
 		{
@@ -166,6 +170,10 @@ export const evidence = {
 	heading: 'What the research shows',
 	intro:
 		'UroDapter has been studied in clinical settings in real patients receiving intravesical instillations. Here are the findings that matter most to patients.',
+	image: {
+		description:
+			'A reassuring clinician–patient consultation, or a bright modern clinic — conveying trust and clinical rigour.',
+	},
 	// First word/phrase of each stat is highlighted (docx spec)
 	stats: [
 		{
@@ -344,6 +352,10 @@ export const whyPrefer = {
 	heading: 'Why patients prefer UroDapter?',
 	intro:
 		'For many patients, bladder instillations are not a one-time event — they are repeated over weeks, months or even years. UroDapter is designed to make every one of those treatments a more comfortable experience, without changing the medication itself.',
+	image: {
+		description:
+			'A patient self-administering UroDapter at home — calm and independent, in a bright, everyday setting (not clinical).',
+	},
 	benefits: [
 		{
 			title: 'More comfortable treatment',

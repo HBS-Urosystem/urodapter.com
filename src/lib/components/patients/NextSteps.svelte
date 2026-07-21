@@ -51,7 +51,7 @@
   </div>
 
   <!-- Dive deep: Support Center band -->
-  <div use:reveal class="mt-6 rounded-2xl bg-(--color-patient-soft) dark:bg-white/[0.06] border border-slate-200/70 dark:border-white/15 p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-x-10 gap-y-6 items-center">
+  <div use:reveal class="mt-6 rounded-2xl surface-panel p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-x-10 gap-y-6 items-center">
     <div class="flex items-start gap-4">
       <span
         class="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 text-patient dark:text-sky-300 flex items-center justify-center shrink-0"
