@@ -50,7 +50,9 @@
   {#each corners as corner (corner.label)}
     <div class="{corner.place} flex gap-2 sm:gap-3 {corner.side === 'left' ? 'flex-row-reverse text-right' : ''}">
       {@render leader(corner.side, corner.pos)}
-      <span class="text-xs sm:text-sm leading-snug text-slate-700 dark:text-slate-200 {corner.pos === 'top' ? 'self-start' : 'self-end'}">{corner.label}</span>
+      <!-- Padding is on the text only, so the leader still reaches the device
+           (the arrow overshoots past the label toward the center). -->
+      <span class="text-xs sm:text-sm leading-snug text-slate-700 dark:text-slate-200 {corner.pos === 'top' ? 'self-start pb-6' : 'self-end pt-6'}">{corner.label}</span>
     </div>
   {/each}
 

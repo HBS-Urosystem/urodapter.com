@@ -37,9 +37,13 @@ Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not
 - `.tint-band` (layout.css) = the full-bleed band surface used by every `SectionBridge` *and*
   the closing band. Its accent is the `--band-accent` custom property (defaults to patient) —
   persona pages retint by setting `--band-accent` on an ancestor, no new CSS.
-- `.bg-patient-page`, `.surface-card`, `.surface-panel` (layout.css) = the colourful page canvas
-  and the two card surfaces (see §4). All read `--surface-accent` (defaults to patient) so a
-  persona page retints every surface at once by setting `--surface-accent` on the page wrapper.
+- `.bg-patient-page`, `.surface-card`, `.surface-panel`, `.surface-solid` (layout.css) = the
+  colourful page canvas and the card/CTA surfaces (see §4). All read `--surface-accent` (defaults
+  to patient) so a persona page retints every surface at once by setting `--surface-accent` on
+  the page wrapper.
+- `.nav-gradient` (layout.css) = the subpage nav bar's diagonal **navy→accent** gradient (logo
+  stays on deep navy, the bar carries the primary colour). Accent via `--nav-accent` (defaults to
+  patient). Same in light & dark (the header is always dark with white text).
 
 **Persona colour rule:** each audience page uses its own accent. The patient page uses
 `--color-patient` everywhere an accent appears. When building the clinician/distributor pages,
@@ -191,7 +195,7 @@ Shared:
 
 | Component | Notes |
 |---|---|
-| `SiteHeader.svelte` | `variant: 'overlay'` (transparent, over the home hero photo) \| `'solid'` (navy band, subpages). Owns nav + mobile menu. |
+| `SiteHeader.svelte` | `variant: 'overlay'` (transparent, over the home hero photo) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar). Owns nav + mobile menu. Overlay is unchanged; only `solid` carries the primary-colour gradient. |
 | `UroDapterHero.svelte` | Home hero. Consumes `SiteHeader variant="overlay"`. |
 
 Patient page (`src/lib/components/patients/`):
@@ -305,10 +309,10 @@ The clinician page is the same system with different parameters — **do not for
   Dark-mode small-accent swap: **`emerald-300`** (the home page already pairs clinician-teal
   with emerald-300 checkmarks) — i.e. `text-clinician dark:text-emerald-300`. Derive
   `--color-clinician-soft`/`-glow` the same way as the patient tints when first needed.
-- **Colour, in one line:** set `--surface-accent: var(--color-clinician)` **and**
-  `--band-accent: var(--color-clinician)` on the page wrapper — `.surface-card`, `.surface-panel`
-  and every `.tint-band` retint themselves; no per-component edits. Give the clinician page its
-  own canvas class (clone `.bg-patient-page` → `.bg-clinician-page`, or reuse it with
+- **Colour, in one line:** set `--surface-accent`, `--band-accent` **and** `--nav-accent` to
+  `var(--color-clinician)` on the page wrapper — `.surface-card/panel/solid`, every `.tint-band`
+  and the `.nav-gradient` header retint themselves; no per-component edits. Give the clinician
+  page its own canvas class (clone `.bg-patient-page` → `.bg-clinician-page`, or reuse it with
   `--surface-accent` overridden) so the whole page reads teal instead of blue.
 - **Same rhythm:** solid `SiteHeader` → open sections on the colourful persona canvas →
   alternating arrow/quote bridges → closing band. Sections are still not cards; cards use the
