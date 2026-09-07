@@ -41,7 +41,7 @@
 {:else}
   <div class="rounded-2xl surface-panel p-6 flex items-start gap-4">
     <span
-      class="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 text-patient dark:text-sky-300 flex items-center justify-center shrink-0"
+      class="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 text-(--accent-ink) flex items-center justify-center shrink-0"
       aria-hidden="true"
     >
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={bookIcon} /></svg>
@@ -51,7 +51,7 @@
       <p class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{body}</p>
       <a
         {href}
-        class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-patient dark:text-sky-300 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-patient dark:focus-visible:ring-sky-300 rounded-sm"
+        class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink) rounded-sm"
       >
         {linkLabel}
         <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>

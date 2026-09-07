@@ -2,14 +2,14 @@
   import { reveal } from '$lib/actions/reveal';
   import SiteHeader from '$lib/components/SiteHeader.svelte';
   import PatientHero from '$lib/components/patients/PatientHero.svelte';
-  import SectionBridge from '$lib/components/patients/SectionBridge.svelte';
+  import SectionBridge from '$lib/components/shared/SectionBridge.svelte';
   import HowItWorks from '$lib/components/patients/HowItWorks.svelte';
-  import BenefitCard from '$lib/components/patients/BenefitCard.svelte';
-  import IndicationsStrip from '$lib/components/patients/IndicationsStrip.svelte';
+  import BenefitCard from '$lib/components/shared/BenefitCard.svelte';
+  import IndicationsStrip from '$lib/components/shared/IndicationsStrip.svelte';
   import PatientStories from '$lib/components/patients/PatientStories.svelte';
   import EvidenceOutcomes from '$lib/components/patients/EvidenceOutcomes.svelte';
   import NextSteps from '$lib/components/patients/NextSteps.svelte';
-  import ImagePlaceholder from '$lib/components/patients/ImagePlaceholder.svelte';
+  import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
   import {
     bridgeHowItWorks,
     bridgeWhyPrefer,
@@ -49,7 +49,7 @@
   {@html jsonLd}
 </svelte:head>
 
-<div class="bg-patient-page text-navy-950 dark:text-white transition-colors min-h-screen">
+<div class="bg-persona-page accent-patient text-navy-950 dark:text-white transition-colors min-h-screen">
   <SiteHeader variant="solid" />
 
   <main class="pb-16">

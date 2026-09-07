@@ -55,7 +55,7 @@
           class="group absolute inset-0 flex items-center justify-center focus-visible:outline-none"
           aria-label="Play the animation"
         >
-          <span class="w-16 h-16 rounded-full bg-white/95 text-navy-950 shadow-xl flex items-center justify-center transition-transform group-hover:scale-105 group-focus-visible:ring-2 group-focus-visible:ring-sky-300">
+          <span class="w-16 h-16 rounded-full bg-white/95 text-navy-950 shadow-xl flex items-center justify-center transition-transform group-hover:scale-105 group-focus-visible:ring-2 group-focus-visible:ring-(--accent-ink)">
             <svg class="w-7 h-7 translate-x-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" /></svg>
           </span>
         </button>
@@ -77,7 +77,7 @@
 <style>
   .poster-gradient {
     background:
-      radial-gradient(420px 260px at 70% 20%, var(--color-patient-glow), transparent 70%),
+      radial-gradient(420px 260px at 70% 20%, color-mix(in srgb, var(--accent, var(--color-patient)) 30%, transparent), transparent 70%),
       linear-gradient(135deg, var(--color-navy-800) 0%, var(--color-navy-950) 100%);
   }
 </style>

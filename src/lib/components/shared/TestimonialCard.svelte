@@ -7,16 +7,18 @@
     quote,
     author,
     meta,
-    linkLabel,
-    href,
+    linkLabel = undefined,
+    href = undefined,
   }: {
     theme: string;
     icon: string;
     quote: string;
     author: string;
     meta: string;
-    linkLabel: string;
-    href: ResolvedPathname;
+    // Optional: the clinician page shows a grid of quotes with one shared
+    // "read all testimonials" band instead of a link per card.
+    linkLabel?: string;
+    href?: ResolvedPathname;
   } = $props();
 </script>
 
@@ -25,12 +27,12 @@
 <div class="rounded-2xl surface-card p-5 flex flex-col">
   <div class="flex items-center gap-3">
     <span
-      class="w-10 h-10 rounded-full bg-(--color-patient-soft) dark:bg-sky-300/10 border border-patient/20 dark:border-sky-300/25 text-patient dark:text-sky-300 flex items-center justify-center shrink-0"
+      class="w-10 h-10 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center shrink-0"
       aria-hidden="true"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={icon} /></svg>
     </span>
-    <h3 class="text-xs font-semibold uppercase tracking-[0.15em] text-patient dark:text-sky-300 leading-snug">{theme}</h3>
+    <h3 class="text-xs font-semibold uppercase tracking-[0.15em] text-(--accent-ink) leading-snug">{theme}</h3>
   </div>
 
   <blockquote class="mt-4 flex-1">
@@ -41,11 +43,13 @@
     </footer>
   </blockquote>
 
-  <a
-    {href}
-    class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-patient dark:text-sky-300 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-patient dark:focus-visible:ring-sky-300 rounded-sm"
-  >
-    {linkLabel}
-    <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-  </a>
+  {#if href && linkLabel}
+    <a
+      {href}
+      class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink) rounded-sm"
+    >
+      {linkLabel}
+      <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+    </a>
+  {/if}
 </div>

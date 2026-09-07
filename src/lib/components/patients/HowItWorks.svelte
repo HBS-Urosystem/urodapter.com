@@ -1,9 +1,9 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/reveal';
   import { howItWorks } from '$lib/content/patients';
-  import ProductCallouts from './ProductCallouts.svelte';
-  import VideoFacade from './VideoFacade.svelte';
-  import SupportCenterCard from './SupportCenterCard.svelte';
+  import ProductCallouts from '$lib/components/shared/ProductCallouts.svelte';
+  import VideoFacade from '$lib/components/shared/VideoFacade.svelte';
+  import SupportCenterCard from '$lib/components/shared/SupportCenterCard.svelte';
 </script>
 
 <section aria-labelledby="how-it-works-heading" class="max-w-7xl mx-auto px-5 sm:px-8">

@@ -15,11 +15,18 @@ To avoid drift, the rules live in one place each — this file only points at th
 | **[CLAUDE.md](CLAUDE.md)** | The non-negotiable rules + definition of done. Start here. |
 | **[docs/design-system.md](docs/design-system.md)** | Binding design reference: tokens, page rhythm, typography, surfaces, icons, motion, component inventory, copy rules, a11y. |
 | **[docs/patient-journey-page-plan.md](docs/patient-journey-page-plan.md)** | Patient page plan, client decisions, Sections 4–6 guidance, open items. |
+| **[docs/home-page-plan.md](docs/home-page-plan.md)** | Home page plan: the six sections below the hero, CMS copy provenance, claims flagged to the client, missing assets. |
+| **[docs/clinician-journey-page-plan.md](docs/clinician-journey-page-plan.md)** | Clinician page plan: section-by-section structure, what each client docx comment turned into, copy provenance, open items. |
 | **[src/routes/layout.css](src/routes/layout.css)** | Source of truth for design tokens. |
 
 Several decisions **reversed** an earlier approach (section cards removed, serif adopted, CSS
 scroll-timeline replaced by a JS action). Reading the code alone will reintroduce discarded
 patterns — read the design system doc first.
+
+**Layout note:** shared components live in `src/lib/components/shared/` and take their accent from
+an enclosing `.accent-patient` / `.accent-clinician` / `.accent-distributor` scope. Never hardcode
+patient blue in them, and never declare `--surface-accent` / `--band-accent` / `--nav-accent` on a
+styled element — that breaks retinting (design system §1).
 
 When a structural or design decision changes, update `docs/design-system.md` (and the page plan)
 in the same change so the docs don't drift from the code.

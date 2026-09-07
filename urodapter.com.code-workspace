@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../urosystem.kit1/cms"
 		}
 	],
 	"settings": {

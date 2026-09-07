@@ -35,26 +35,101 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Persona accent scopes. One class on a section (or page) wrapper retints
+   everything below it: the .surface-* cards, the .tint-band bridges, the
+   .nav-gradient header, and the small accents inside shared components.
+
+   --accent-ink is the *readable* accent for text/borders/icon strokes. The deep
+   persona colours vanish against navy, so in dark mode it swaps to the light
+   300-step of the same hue (the convention the home hero already uses:
+   patient→sky-300, clinician→emerald-300). --accent-soft is the icon-chip fill.
+
+   Every scope redeclares --accent-soft rather than deriving it from --accent:
+   a custom property inherits its *substituted* value, so a derived token would
+   keep the ancestor's colour.
+--------------------------------------------------------------------------- */
+:root {
+  --accent: var(--color-patient);
+  --accent-ink: var(--color-patient);
+  --accent-soft: color-mix(in srgb, var(--color-patient) 7%, white);
+  --accent-solid: color-mix(in srgb, var(--color-patient) 88%, black);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-ink: var(--color-sky-300, #7dd3fc);
+    --accent-soft: color-mix(in srgb, var(--color-sky-300, #7dd3fc) 10%, transparent);
+  }
+}
+
+.accent-patient {
+  --accent: var(--color-patient);
+  --accent-ink: var(--color-patient);
+  --accent-soft: color-mix(in srgb, var(--color-patient) 7%, white);
+  --accent-solid: color-mix(in srgb, var(--color-patient) 88%, black);
+  --surface-accent: var(--color-patient);
+  --band-accent: var(--color-patient);
+  --nav-accent: var(--color-patient);
+}
+.accent-clinician {
+  --accent: var(--color-clinician);
+  /* Clinician teal is the one persona colour that does NOT clear AA as text:
+     #2c8979 measures 4.23:1 on white, and --accent-ink is by definition the
+     *readable* accent (12–14px eyebrows, links and step numbers use it).
+     Darkened to 80% → 5.9:1 on white and 4.66:1 on the deepest .surface-panel
+     tint, the worst case on the page. Measured, not guessed; re-measure before
+     changing any persona ink. */
+  --accent-ink: color-mix(in srgb, var(--color-clinician) 80%, black);
+  --accent-soft: color-mix(in srgb, var(--color-clinician) 7%, white);
+  --accent-solid: color-mix(in srgb, var(--color-clinician) 88%, black);
+  --surface-accent: var(--color-clinician);
+  --band-accent: var(--color-clinician);
+  --nav-accent: var(--color-clinician);
+}
+.accent-distributor {
+  --accent: var(--color-distributor);
+  --accent-ink: var(--color-distributor);
+  --accent-soft: color-mix(in srgb, var(--color-distributor) 7%, white);
+  --accent-solid: color-mix(in srgb, var(--color-distributor) 88%, black);
+  --surface-accent: var(--color-distributor);
+  --band-accent: var(--color-distributor);
+  --nav-accent: var(--color-distributor);
+}
+
+@media (prefers-color-scheme: dark) {
+  .accent-patient {
+    --accent-ink: var(--color-sky-300, #7dd3fc);
+    --accent-soft: color-mix(in srgb, var(--color-sky-300, #7dd3fc) 10%, transparent);
+  }
+  .accent-clinician {
+    --accent-ink: var(--color-emerald-300, #6ee7b7);
+    --accent-soft: color-mix(in srgb, var(--color-emerald-300, #6ee7b7) 10%, transparent);
+  }
+  .accent-distributor {
+    --accent-ink: var(--color-violet-300, #c4b5fd);
+    --accent-soft: color-mix(in srgb, var(--color-violet-300, #c4b5fd) 10%, transparent);
+  }
+}
+
 /* Full-bleed tinted band (section bridges + the closing band). The accent is
    parameterised so persona pages can retint: set --band-accent on the band or
    an ancestor (defaults to the patient accent). */
 .tint-band {
-  --band-accent: var(--color-patient);
   background:
-    radial-gradient(760px 340px at 12% -20%, color-mix(in srgb, var(--band-accent) 18%, transparent), transparent 70%),
-    radial-gradient(680px 320px at 92% 120%, color-mix(in srgb, var(--band-accent) 14%, transparent), transparent 70%),
+    radial-gradient(760px 340px at 12% -20%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 18%, transparent), transparent 70%),
+    radial-gradient(680px 320px at 92% 120%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 14%, transparent), transparent 70%),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--band-accent) 12%, white) 0%,
-      color-mix(in srgb, var(--band-accent) 18%, white) 100%
+      color-mix(in srgb, var(--band-accent, var(--color-patient)) 12%, white) 0%,
+      color-mix(in srgb, var(--band-accent, var(--color-patient)) 18%, white) 100%
     );
 }
 @media (prefers-color-scheme: dark) {
   .tint-band {
     background:
-      radial-gradient(900px 400px at 85% -20%, color-mix(in srgb, var(--band-accent) 42%, transparent), transparent 65%),
-      radial-gradient(700px 360px at 8% 120%, color-mix(in srgb, var(--band-accent) 26%, transparent), transparent 68%),
-      color-mix(in srgb, var(--band-accent) 12%, var(--color-navy-900));
+      radial-gradient(900px 400px at 85% -20%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 42%, transparent), transparent 65%),
+      radial-gradient(700px 360px at 8% 120%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 26%, transparent), transparent 68%),
+      color-mix(in srgb, var(--band-accent, var(--color-patient)) 12%, var(--color-navy-900));
   }
 }
 
@@ -65,52 +140,52 @@
    a soft accent border + accent-tinted shadow rather than going stark white.
 --------------------------------------------------------------------------- */
 
-/* Patient page canvas — a warmer, more saturated patient-blue gradient than the
-   neutral home .bg-page-gradient (kept separate so the home page is untouched) */
-.bg-patient-page {
-  --surface-accent: var(--color-patient);
+/* Persona page canvas — a warmer, more saturated accent gradient than the
+   neutral home .bg-page-gradient (kept separate so the home page is untouched).
+   Pair it with an .accent-* class to pick the persona: the patient page is
+   `bg-persona-page accent-patient`. */
+.bg-persona-page {
   background:
-    radial-gradient(1100px 560px at 88% -6%, color-mix(in srgb, var(--surface-accent) 20%, transparent), transparent 62%),
-    radial-gradient(780px 520px at 0% 14%, color-mix(in srgb, var(--surface-accent) 13%, transparent), transparent 58%),
-    radial-gradient(960px 640px at 55% 106%, color-mix(in srgb, var(--surface-accent) 14%, transparent), transparent 60%),
+    radial-gradient(1100px 560px at 88% -6%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 20%, transparent), transparent 62%),
+    radial-gradient(780px 520px at 0% 14%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, transparent), transparent 58%),
+    radial-gradient(960px 640px at 55% 106%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 14%, transparent), transparent 60%),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--surface-accent) 3%, white) 0%,
-      color-mix(in srgb, var(--surface-accent) 8%, white) 40%,
-      color-mix(in srgb, var(--surface-accent) 13%, white) 100%
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 3%, white) 0%,
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 8%, white) 40%,
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, white) 100%
     );
 }
 @media (prefers-color-scheme: dark) {
-  .bg-patient-page {
+  .bg-persona-page {
     background:
-      radial-gradient(1200px 620px at 88% -8%, color-mix(in srgb, var(--surface-accent) 55%, transparent), transparent 60%),
-      radial-gradient(900px 560px at 0% 18%, color-mix(in srgb, var(--surface-accent) 32%, transparent), transparent 56%),
-      radial-gradient(1040px 680px at 55% 108%, color-mix(in srgb, var(--surface-accent) 30%, transparent), transparent 60%),
+      radial-gradient(1200px 620px at 88% -8%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 55%, transparent), transparent 60%),
+      radial-gradient(900px 560px at 0% 18%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 32%, transparent), transparent 56%),
+      radial-gradient(1040px 680px at 55% 108%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 30%, transparent), transparent 60%),
       linear-gradient(160deg, #091327 0%, #0b1a35 50%, #0d2247 100%);
   }
 }
 
 /* Content card — gently accent-tinted, lifted by a soft accent border + shadow */
 .surface-card {
-  --surface-accent: var(--color-patient);
   background: linear-gradient(
     155deg,
-    color-mix(in srgb, var(--surface-accent) 2%, white) 0%,
-    color-mix(in srgb, var(--surface-accent) 10%, white) 100%
+    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 2%, white) 0%,
+    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 10%, white) 100%
   );
-  border: 1px solid color-mix(in srgb, var(--surface-accent) 22%, white);
+  border: 1px solid color-mix(in srgb, var(--surface-accent, var(--color-patient)) 22%, white);
   box-shadow:
-    0 1px 2px color-mix(in srgb, var(--surface-accent) 10%, transparent),
-    0 10px 26px -16px color-mix(in srgb, var(--surface-accent) 40%, transparent);
+    0 1px 2px color-mix(in srgb, var(--surface-accent, var(--color-patient)) 10%, transparent),
+    0 10px 26px -16px color-mix(in srgb, var(--surface-accent, var(--color-patient)) 40%, transparent);
 }
 @media (prefers-color-scheme: dark) {
   .surface-card {
     background: linear-gradient(
       155deg,
-      color-mix(in srgb, var(--surface-accent) 13%, var(--color-navy-900)) 0%,
-      color-mix(in srgb, var(--surface-accent) 7%, var(--color-navy-900)) 100%
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, var(--color-navy-900)) 0%,
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 7%, var(--color-navy-900)) 100%
     );
-    border-color: color-mix(in srgb, var(--surface-accent) 42%, transparent);
+    border-color: color-mix(in srgb, var(--surface-accent, var(--color-patient)) 42%, transparent);
     box-shadow: none;
   }
 }
@@ -119,12 +194,11 @@
    the logo (left) stays on deep navy while the bar carries the primary colour.
    Accent via --nav-accent (defaults to patient) for the clinician page. */
 .nav-gradient {
-  --nav-accent: var(--color-patient);
   background: linear-gradient(
     100deg,
     var(--color-navy-950) 0%,
-    color-mix(in srgb, var(--nav-accent) 72%, var(--color-navy-950)) 52%,
-    var(--nav-accent) 100%
+    color-mix(in srgb, var(--nav-accent, var(--color-patient)) 72%, var(--color-navy-950)) 52%,
+    var(--nav-accent, var(--color-patient)) 100%
   );
 }
 
@@ -132,11 +206,10 @@
    Same gradient language as the home audience cards / Section 6 primary CTA,
    so every "solid patient CTA" on the site matches. White text sits on top. */
 .surface-solid {
-  --surface-accent: var(--color-patient);
   background: linear-gradient(
     135deg,
-    var(--surface-accent) 0%,
-    color-mix(in srgb, var(--surface-accent) 85%, white) 100%
+    var(--surface-accent, var(--color-patient)) 0%,
+    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 85%, white) 100%
   );
 }
 @media (prefers-color-scheme: dark) {
@@ -145,30 +218,43 @@
   .surface-solid {
     background: linear-gradient(
       135deg,
-      var(--surface-accent) 0%,
-      color-mix(in srgb, var(--surface-accent) 56%, white) 100%
+      var(--surface-accent, var(--color-patient)) 0%,
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 56%, white) 100%
     );
   }
 }
 
+/* Flat persona fill for COMPACT solid CTAs (pills, small CTA panels).
+   .surface-solid is a wide band: its gradient brightens toward a corner the
+   text never reaches. A pill is small enough that its label sits across the
+   whole sweep, and the lighter accents (clinician teal, distributor violet)
+   drop white text under 4.5:1 there. This flat fill — the accent darkened to
+   88% — clears AA for white text at every point, in both schemes, for all
+   three personas. Use .surface-solid for bands, .accent-pill for buttons. */
+.accent-pill {
+  background: var(--accent-solid);
+}
+.accent-pill:hover {
+  background: color-mix(in srgb, var(--accent-solid) 88%, black);
+}
+
 /* Deeper accent-tinted panel — Support Center boxes, callouts, indication strip */
 .surface-panel {
-  --surface-accent: var(--color-patient);
   background: linear-gradient(
     155deg,
-    color-mix(in srgb, var(--surface-accent) 13%, white) 0%,
-    color-mix(in srgb, var(--surface-accent) 21%, white) 100%
+    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, white) 0%,
+    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 21%, white) 100%
   );
-  border: 1px solid color-mix(in srgb, var(--surface-accent) 30%, white);
+  border: 1px solid color-mix(in srgb, var(--surface-accent, var(--color-patient)) 30%, white);
 }
 @media (prefers-color-scheme: dark) {
   .surface-panel {
     background: linear-gradient(
       155deg,
-      color-mix(in srgb, var(--surface-accent) 22%, var(--color-navy-900)) 0%,
-      color-mix(in srgb, var(--surface-accent) 13%, var(--color-navy-900)) 100%
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 22%, var(--color-navy-900)) 0%,
+      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, var(--color-navy-900)) 100%
     );
-    border-color: color-mix(in srgb, var(--surface-accent) 48%, transparent);
+    border-color: color-mix(in srgb, var(--surface-accent, var(--color-patient)) 48%, transparent);
   }
 }
 

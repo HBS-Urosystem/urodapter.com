@@ -11,8 +11,8 @@
 
   const navLinks = [
     { href: resolve('/patients'), label: 'For Patients' },
-    { href: fragment('#clinicians'), label: 'For Clinicians' },
-    { href: fragment('#distributors'), label: 'For Distributors' },
+    { href: resolve('/clinicians'), label: 'For Clinicians' },
+    { href: resolve('/partners'), label: 'For Distributors' },
     { href: fragment('#support'), label: 'Support Center' },
   ];
 

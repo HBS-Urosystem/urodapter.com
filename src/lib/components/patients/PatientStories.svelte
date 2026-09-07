@@ -1,9 +1,9 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/reveal';
   import { stories } from '$lib/content/patients';
-  import TestimonialCard from './TestimonialCard.svelte';
-  import SupportCenterCard from './SupportCenterCard.svelte';
-  import ImagePlaceholder from './ImagePlaceholder.svelte';
+  import TestimonialCard from '$lib/components/shared/TestimonialCard.svelte';
+  import SupportCenterCard from '$lib/components/shared/SupportCenterCard.svelte';
+  import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
 </script>
 
 <section aria-labelledby="patient-stories-heading" class="max-w-7xl mx-auto px-5 sm:px-8">

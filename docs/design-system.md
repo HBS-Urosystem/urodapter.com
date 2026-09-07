@@ -35,12 +35,38 @@ Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not
   **Never chart with raw `--color-patient`/`--color-clinician`** — both fail the validator
   (too dark / chroma under the floor). Re-run the validator before adding any series colour.
 - `.tint-band` (layout.css) = the full-bleed band surface used by every `SectionBridge` *and*
-  the closing band. Its accent is the `--band-accent` custom property (defaults to patient) —
-  persona pages retint by setting `--band-accent` on an ancestor, no new CSS.
-- `.bg-patient-page`, `.surface-card`, `.surface-panel`, `.surface-solid` (layout.css) = the
+  the closing band. Its accent is the `--band-accent` custom property (defaults to patient).
+- `.bg-persona-page`, `.surface-card`, `.surface-panel`, `.surface-solid` (layout.css) = the
   colourful page canvas and the card/CTA surfaces (see §4). All read `--surface-accent` (defaults
-  to patient) so a persona page retints every surface at once by setting `--surface-accent` on
-  the page wrapper.
+  to patient).
+
+### The accent scopes — how retinting actually works
+
+**One class retints everything below it.** Put `.accent-patient`, `.accent-clinician` or
+`.accent-distributor` on a page wrapper *or a single section*, and every `.surface-*`, every
+`.tint-band`, the `.nav-gradient` header and all the small accents inside the shared components
+follow. The home page uses this per-section (blue → teal → purple as you scroll); persona pages
+use it once, on the page wrapper.
+
+Each scope sets four accent tokens plus the three surface variables:
+
+| Token | Role |
+|---|---|
+| `--accent` | The raw persona colour. |
+| `--accent-ink` | The **readable** accent, for text/borders/icon strokes. In dark mode it swaps to the light 300-step of the same hue (patient→`sky-300`, clinician→`emerald-300`, distributor→`violet-300`) — the deep brand colours vanish on navy. Components write `text-(--accent-ink)`, never `text-patient dark:text-sky-300`. **In light mode the clinician ink is the accent darkened to 80%**, not the raw `#2c8979`: the raw teal measures 4.23:1 on white and fails AA for the 12–14px text that uses this token (fixed + measured 2026-08-26 → 6.04:1 on white, 4.66:1 on the deepest panel tint). Patient blue and distributor violet pass unchanged. Measure before changing any persona ink. |
+| `--accent-soft` | Icon-chip fill (7% accent in white; 10% ink alpha in dark). |
+| `--accent-solid` | Flat fill for compact solid CTAs — the accent at 88%, dark enough for white text to clear AA in every persona (see `.accent-pill`, §4). |
+
+Two rules that are easy to get wrong:
+
+1. **Never declare `--surface-accent` / `--band-accent` / `--nav-accent` on the styled element
+   itself.** A declaration on the element beats the inherited value, so a self-declaring
+   `.surface-card` could never be retinted from an ancestor. They read
+   `var(--surface-accent, var(--color-patient))` at each use site instead — inherit, with a
+   patient fallback. *(Fixed 2026-08-26; the bug was invisible while patient was the only persona.)*
+2. **Never derive one accent token from another across a scope boundary.** A custom property
+   inherits its *substituted* value, so `--accent-soft: color-mix(…var(--accent)…)` declared on
+   `:root` would keep `:root`'s colour inside `.accent-clinician`. Every scope redeclares all four.
 - `.nav-gradient` (layout.css) = the subpage nav bar's diagonal **navy→accent** gradient (logo
   stays on deep navy, the bar carries the primary colour). Accent via `--nav-accent` (defaults to
   patient). Same in light & dark (the header is always dark with white text).
@@ -55,9 +81,13 @@ Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not
 small accent to `sky-300`:
 
 ```html
+<!-- shared components — accent comes from the enclosing .accent-* scope -->
+class="text-(--accent-ink)"
+class="bg-(--accent-ink)/60"
+class="border-(--accent-ink)/20 dark:border-(--accent-ink)/25"
+
+<!-- patient-page-only compositions may still hardcode; they resolve identically -->
 class="text-patient dark:text-sky-300"
-class="bg-patient/60 dark:bg-sky-300/60"
-class="border-patient/20 dark:border-sky-300/25"
 ```
 
 Dark mode is driven by `prefers-color-scheme` (no theme toggle). Every component ships both.
@@ -87,6 +117,33 @@ surfaces. *(This reversed the original plan's `rounded-3xl` section cards.)*
 
 **Only these are cards:** product panel, benefit cards, video facade, Support Center box,
 indications strip. If you're reaching for a 6th surface, question it.
+
+### The home page
+
+Same rhythm, on the neutral `.bg-page-gradient` canvas, with the colour carried by the sections
+themselves rather than the page:
+
+```
+UroDapterHero (photo hero + audience CTA row)   ← no <main>; the route owns that
+WhatItIs          #how-it-works   (default accent)
+SectionBridge
+ProofStats        #proof          (default accent)
+SectionBridge ─┐
+PersonaSection │ #patients        .accent-patient      ← bridge + section share the class
+SectionBridge ─┐
+PersonaSection │ #clinicians      .accent-clinician
+SectionBridge ─┐
+PersonaSection │ #distributors    .accent-distributor
+SectionBridge
+Voices            #stories / #support
+```
+
+**The bridge before a persona lane wears that lane's accent**, so the colour hands over before the
+content does. Wrap the bridge in a `<div class={persona.accentClass}>` — the bridge itself takes no
+accent prop.
+
+Those five IDs are load-bearing: `SiteHeader` and the hero's audience cards link to them, and
+before this page existed every one of those links was dead.
 
 ---
 
@@ -132,11 +189,12 @@ patient), so the clinician page retints by setting that variable on the page wra
 
 | Surface | Class | Notes |
 |---|---|---|
-| Page canvas | `.bg-patient-page` | Colourful patient-blue gradient (light: white→~13% accent + accent radials; dark: navy + strong accent glows). Replaces the neutral home `.bg-page-gradient`, which stays as-is. |
+| Page canvas | `.bg-persona-page` | Colourful accent gradient (light: white→~13% accent + accent radials; dark: navy + strong accent glows). Pair with an `.accent-*` class — the patient page is `bg-persona-page accent-patient`. Replaces the neutral home `.bg-page-gradient`, which stays as-is. *(Renamed from `.bg-patient-page` 2026-08-26 — it was never patient-specific.)* |
 | Content card | `.surface-card` | Gently accent-tinted (white→~10%), accent border, soft accent shadow. Benefit/testimonial/stat/chart/video/product cards. |
 | Tinted panel | `.surface-panel` | Deeper accent tint (~13→21%). Callouts, indications strip, clinician-quote box, dive-deep band. |
 | Solid CTA band | `.surface-solid` | **Bold, full-strength accent fill** + white text — the same gradient as the home audience cards / Section 6 primary CTA. For strong "go here" invitations (Support Center bands). Dark mode brightens toward the text-free bottom-right so the band lifts off the navy canvas while white text stays on the dark top-left. |
 | Full-bleed band | `.tint-band` | Section bridges + closing band (accent via `--band-accent`; see §1). |
+| Compact solid CTA | `.accent-pill` | **Flat** `--accent-solid` fill for buttons and small CTA panels. `.surface-solid` is a *band*: its gradient brightens toward a corner the text never reaches. A pill is small enough that its label sits across the whole sweep, and there clinician teal and distributor violet drop white text under 4.5:1. Use `.surface-solid` for bands, `.accent-pill` for buttons. |
 
 **Use the primary accent at full strength where an element is a strong call-to-action**, not only
 as a light tint — e.g. the "Read all patient testimonials" / "Go to Support Center" bands
@@ -191,36 +249,72 @@ rejected exactly because it hides content behind interaction.
 
 ## 7. Components
 
-Shared:
+Shared (`src/lib/components/`):
 
 | Component | Notes |
 |---|---|
 | `SiteHeader.svelte` | `variant: 'overlay'` (transparent, over the home hero photo) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar). Owns nav + mobile menu. Overlay is unchanged; only `solid` carries the primary-colour gradient. |
-| `UroDapterHero.svelte` | Home hero. Consumes `SiteHeader variant="overlay"`. |
+| `UroDapterHero.svelte` | Home hero + audience CTA row. Consumes `SiteHeader variant="overlay"`. Renders **no** `<main>` and **no** page wrapper — the route owns both. Its two audience glass cards are one loop over `heroAudiences`, tinted by `data-tone`. |
+
+`src/lib/components/shared/` — used by more than one page. **These take their accent from the
+enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out of
+`components/patients/` 2026-08-26, when the home page began using them.)*
+
+| Component | Notes |
+|---|---|
+| `SectionBridge.svelte` | `variant: 'arrow' \| 'quote'`, props `lead` (optional), `emphasis`. Full-bleed tinted band. **The page's separator — always exactly one between sections.** Omit `lead` when the bridge copy is a single sentence — a sentence stays in one element. |
+| `BenefitCard.svelte` | Icon chip + title + body, optional `source` citation line (design system §9 — a card that carries a clinical claim carries its source). **Its chip+title treatment is the shared vocabulary** the testimonial theme labels rhyme with. |
+| `TestimonialCard.svelte` | Theme chip+label (BenefitCard vocabulary), real `<blockquote>`/`<footer>`, optional story link (omit `linkLabel`/`href` when a grid shares one "read all" band, as the clinician page does). |
+| `StatCard.svelte` | Icon chip + serif `highlight` + body + optional `source` citation. Extracted from `EvidenceOutcomes`; also the home page's "The numbers" row. |
+| `SupportCenterCard.svelte` | Reusable "visit the Support Center" CTA. `variant`: `'solid'` (default — bold `.surface-solid` band, white text) \| `'tint'` (light `.surface-panel`). `href` typed `ResolvedPathname`. |
+| `IndicationsStrip.svelte` | Tinted band: sentence + condition icon chips. Designed for ~4 chips; more than that squeezes the `sm:flex` row — the clinician page's five indications use their own card grid instead. |
+| `OutcomesChart.svelte` | Two single-series labeled-bar lists on a shared 0–100% scale. Thin `h-2` bars, data-end-only rounding, recessive track, label+value as real text on every row (the bars are decoration over an accessible list), source line. Series colours: the validated `--chart-*` tokens only. *(Promoted from `patients/` 2026-08-26, when the clinician page needed it.)* |
+| `ProductCallouts.svelte` | The 3×3 device diagram — see §8. Callouts may carry an optional `description` (the client's technical figure notes); it is hidden below `sm`, where a corner cell is ~80px wide. |
+| `VideoFacade.svelte` | Click-to-load `youtube-nocookie` embed. Props `videoId`, `poster`, `caption`, `duration`. `videoId: null` → "Coming soon" placeholder. **Never show a fake duration.** |
+| `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. |
+
+Home page (`src/lib/components/home/`):
+
+| Component | Notes |
+|---|---|
+| `WhatItIs.svelte` | Section 1: header + `ImagePlaceholder`, then `[3fr_2fr]` product diagram / spec + quick-benefit list, then the `IndicationsStrip`. |
+| `ProofStats.svelte` | Section 2: a 4-up `StatCard` row. Deliberately *deeper* than the hero's trust bar — the bar is a glance, this row carries citations. |
+| `PersonaSection.svelte` | **One component, three lanes.** Props `{ id, accentClass, eyebrow, heading, intro, benefits, testimonial, callout?, cta }`; spread straight from the content object (`<PersonaSection {...clinicians} />`). Wrapper carries `accentClass`. |
+| `Voices.svelte` | Section 6: mixed patient/clinician testimonial grid (each card in its own `.accent-*` wrapper), regulatory bullets, and the `#support` band. |
+| `AudienceStub.svelte` | The `/partners` placeholder page (since 2026-08-26 `/clinicians` is a real journey): persona canvas + solid nav + "coming soon" roadmap + CTA panel. Replace with a real journey, don't extend. |
 
 Patient page (`src/lib/components/patients/`):
 
 | Component | Notes |
 |---|---|
 | `PatientHero.svelte` | Section 1: one-sentence serif `h1` + accent rule + body, `rounded-3xl` photo beside it. LCP image → `fetchpriority="high"`. |
-| `SectionBridge.svelte` | `variant: 'arrow' \| 'quote'`, props `lead`, `emphasis`. Full-bleed tinted band. **The page's separator — always exactly one between sections.** |
 | `HowItWorks.svelte` | Section 2 composition: centered header, then `[3fr_2fr]` columns. |
-| `ProductCallouts.svelte` | The 3×3 device diagram — see §8. |
-| `VideoFacade.svelte` | Click-to-load `youtube-nocookie` embed. Props `videoId`, `poster`, `caption`, `duration`. `videoId: null` → "Coming soon" placeholder. **Never show a fake duration.** |
-| `SupportCenterCard.svelte` | Reusable "visit the Support Center" CTA. `variant`: `'solid'` (default — bold `.surface-solid` band, white text) \| `'tint'` (light `.surface-panel`). `href` typed `ResolvedPathname`. |
-| `BenefitCard.svelte` | Icon chip + title + body. **Its chip+title treatment is the shared vocabulary** the Section 4 testimonial theme labels rhyme with. |
-| `IndicationsStrip.svelte` | Tinted band: sentence + condition icon chips. |
-| `TestimonialCard.svelte` | Section 4 card: theme chip+label (BenefitCard vocabulary), real `<blockquote>`/`<footer>`, story link. |
 | `PatientStories.svelte` | Section 4 composition: header + testimonial grid + "more stories" (`SupportCenterCard` reuse). |
 | `OutcomesChart.svelte` | Two single-series labeled-bar lists on a shared 0–100% scale. Thin `h-2` bars, data-end-only rounding, recessive track, label+value as real text on every row (the bars are decoration over an accessible list), source line. Series colours: the validated `--chart-*` tokens only. |
 | `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. |
 | `EvidenceOutcomes.svelte` | Section 5 composition: stat cards (serif first-word highlight + citation) → chart + consensus callout → quotes slider. |
 | `NextSteps.svelte` | Section 6 composition: CTA tiers (primary wears the home audience-card gradient via scoped `.cta-primary`; others = home support-card neutral), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
-| `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. Placed in the Section 3/4/5 headers (a two-column `lg:grid-cols-[1fr_auto]`, image `lg:w-72`, stacks below the heading on mobile). |
 
-Reusable beyond the patient page: `SectionBridge`, `VideoFacade`, `SupportCenterCard`,
-`BenefitCard`, `TestimonialCard`, `OutcomesChart`, `ClinicianQuotes`. Keep them
-accent-parameterisable rather than hardcoding patient blue.
+Clinician page (`src/lib/components/clinicians/`) — one component per section, route is
+composition only. All of them take the accent from the page's `.accent-clinician` scope:
+
+| Component | Notes |
+|---|---|
+| `ClinicianHero.svelte` | Section 1: one-sentence serif `h1` + accent rule + body, `ImagePlaceholder` beside it (the hero photo is a pending client asset). |
+| `WhatIsIt.svelte` | Section 2: centered header, then the `ProductCallouts` diagram carrying the client figure's four technical labels; below `sm` the notes move to a `<dl>` under the diagram. |
+| `Mechanism.svelte` | Section 3: a 4-step `<ol>` (each step body is one docx sentence, verbatim) + `VideoFacade` + the attributed learning-curve callout. |
+| `ClinicalBenefits.svelte` | Section 4: three `BenefitCard`s (the third carries a `source`) + the time-saving callout. |
+| `Indications.svelte` | Section 5: five icon cards + the docx paragraph in its own panel. |
+| `EvidenceApprovals.svelte` | Section 6: `StatCard` row → `OutcomesChart` + consensus callout → publications / regulatory pair. |
+| `Adoption.svelte` | Section 7: stats, the named international partners, a 4-up `TestimonialCard` grid (no per-card links) + one `SupportCenterCard`. |
+| `NextSteps.svelte` | Section 8: three CTA tiers; a tier may carry **more than one** link (the docx's "For patients – for clinicians" pair). Primary tier is `.accent-pill`, not the patient page's scoped gradient. |
+| `SupportClosing.svelte` | The closing full-bleed band: the last docx bridge line in bridge typography **plus** the Support Center box. Deliberately one band — a bridge immediately followed by a closing band stacks two tinted bands. |
+
+*(`ImagePlaceholder` sits in the Section 3/4/5 headers: a two-column `lg:grid-cols-[1fr_auto]`,
+image `lg:w-72`, stacking below the heading on mobile.)*
+
+`OutcomesChart` and `ClinicianQuotes` are still under `patients/` — promote them to `shared/` and
+swap their hardcoded accents for `--accent-ink` at the moment a second page needs them.
 
 ---
 
@@ -229,13 +323,54 @@ accent-parameterisable rather than hardcoding patient blue.
 Worth its own section — it took several iterations, and the constraints are easy to break.
 
 ```
-[label TL] [    —    ] [label TR]
-[    —    ] [ DEVICE ] [    —    ]
-[label BL] [    —    ] [label BR]
+[ label TL .....] [   ][ ] [label TR]
+[      —       ] [ D E V I C E ..... ]
+[ label BL ] [   ][ ] [label BR .....]
 ```
 
-- `grid grid-cols-3 grid-rows-[auto_auto_auto]`, **no grid gaps**. Mid-edge cells empty.
-- Device in the **center cell** (`col-start-2 row-start-2`), `w-full max-w-52 object-contain`.
+- **The column edges are the leader anchors.** Five columns, and each interior edge is where
+  one leader meets the photo, chosen so every label points at the part it names. The widths
+  are derived from `product_features.png` (1251×262) as fractions of the photo's width:
+
+  | edge | fraction | device part | leader |
+  |---|---|---|---|
+  | 1\|2 | 0.000 | rounded tip | bottom-left |
+  | 2\|3 | 0.088 | flange | top-left |
+  | 3\|4 | 0.215 | sealing collar | bottom-right |
+  | 4\|5 | 0.300 | luer ribs | top-right |
+
+  The photo keeps 60% of the width and the label columns 40%, giving
+  `grid-cols-[minmax(0,400fr)_minmax(0,53fr)_minmax(0,76fr)_minmax(0,51fr)_minmax(0,420fr)]`.
+  Placement: TL `col-start-1 col-span-2`, BL `col-start-1`, BR `col-start-4 col-span-2`,
+  TR `col-start-5`. The left pair is deliberately *not* nearest-first: the seal copy belongs
+  on the flange and the "only the tip enters" copy on the tip, so the top-left leader reaches
+  past the bottom-left one. **Re-derive the tracks if the photo is re-cropped** — measure the parts
+  from the alpha silhouette, don't eyeball them.
+- **No column gap.** A uniform `gap-x` also sits inside the photo's own span, which pushes
+  every anchor to the right of its part; the 0.5rem breathing room the layout used to get
+  from `gap-x-2` now comes from the leader lines themselves.
+- Each leader's **dot is inset ~4px from its cell edge** (`cx` 4/44 of the 48-wide viewBox),
+  so left-hand dots land a hair left of their anchor and right-hand dots a hair right. The
+  flange edge is set to 0.088 rather than the flange's own 0.082 to absorb that.
+- **`minmax(0, …)` is load-bearing.** A bare `fr` floors at the track's min-content width, so
+  the labels and the 1251px-wide photo would blow the narrow anchor columns wide open.
+- Device in the **middle row, spanning columns 2–5** (`col-start-2 col-span-4 row-start-2
+  self-center`), image `block w-full h-auto`, `sizes="(min-width: 1024px) 31rem, 45vw"` —
+  `sizes` describes the laid-out box (measured 488px on the clinician page, the widest), so
+  re-check it whenever the column ratios change. The middle row carries no labels, so the
+  span costs nothing; in a single column the device rendered barely 40px tall.
+- **`product_features.png` is a cropped derivative, not the client's file.** The client's
+  render is 2502×479 (kept beside it as `product_features-full.png`): its right half is only
+  the syringe plunger, and that plunger is the *only* reason the canvas is 479 tall — within
+  the left half, rows 0–109 and 372–478 are fully transparent and showed as dead space above
+  and below the adapter. The shipped asset is the window **x 0–1251, y 110–372** = 1251×262
+  (≈4.8:1), cropped tight to the device (`Image.getbbox()` returns the full frame).
+  **When the client ships a new render, re-crop it the same way** — re-derive the box from
+  the alpha bounding box of the left half — rather than compensating in CSS.
+- **The image's cell must not be `flex`.** `<enhanced:img>` emits a `<picture>` wrapper; as a
+  flex item the picture shrink-wraps to the `<img>`, whose `w-full` then resolves against the
+  picture — a circular width that collapses to 0 until the image loads. A plain block cell
+  resolves the percentage against the cell.
 - **Same layout at every breakpoint** — there is deliberately no stacked mobile fallback. The
   image, leaders and label text scale down instead.
 - **No icons on the labels.** The leader lines carry the label→device association.
@@ -303,17 +438,19 @@ Worth its own section — it took several iterations, and the constraints are ea
 
 ## 12. Reusing this system for the clinician journey
 
+**Built 2026-08-26** — `/clinicians` is a full journey page; see
+[clinician-journey-page-plan.md](clinician-journey-page-plan.md) for its structure, copy
+provenance and open items. The notes below are what the build actually followed.
+
 The clinician page is the same system with different parameters — **do not fork patterns**:
 
 - **Accent:** `--color-clinician` (#2c8979) everywhere the patient page uses `--color-patient`.
   Dark-mode small-accent swap: **`emerald-300`** (the home page already pairs clinician-teal
   with emerald-300 checkmarks) — i.e. `text-clinician dark:text-emerald-300`. Derive
   `--color-clinician-soft`/`-glow` the same way as the patient tints when first needed.
-- **Colour, in one line:** set `--surface-accent`, `--band-accent` **and** `--nav-accent` to
-  `var(--color-clinician)` on the page wrapper — `.surface-card/panel/solid`, every `.tint-band`
-  and the `.nav-gradient` header retint themselves; no per-component edits. Give the clinician
-  page its own canvas class (clone `.bg-patient-page` → `.bg-clinician-page`, or reuse it with
-  `--surface-accent` overridden) so the whole page reads teal instead of blue.
+- **Colour, in one class:** `<div class="bg-persona-page accent-clinician">`. That is the whole
+  retint — `.surface-card/panel/solid`, every `.tint-band`, the `.nav-gradient` header and every
+  `--accent-ink` inside the shared components follow. See §1 and `AudienceStub.svelte`.
 - **Same rhythm:** solid `SiteHeader` → open sections on the colourful persona canvas →
   alternating arrow/quote bridges → closing band. Sections are still not cards; cards use the
   `.surface-*` classes.
@@ -326,8 +463,11 @@ The clinician page is the same system with different parameters — **do not for
 - **Register shifts, rules don't:** clinician copy may be more technical (docx will provide),
   but claims stay verbatim-from-docx, sources stay cited, motion stays the three verbs, and the
   serif stays display-only.
-- **Audience-page checklist:** nav link retarget (`/#clinicians` → `/clinicians`), JSON-LD
-  `audience` → `MedicalAudience/Clinician`, and the same definition of done (§14).
+- **Audience-page checklist:** nav link retarget (done — `SiteHeader` points at `/clinicians` and
+  `/partners`), JSON-LD `audience` → `MedicalAudience/Clinician` (done), and the same definition of
+  done (§14). The home page's `#clinicians` / `#distributors` lanes are the teaser; the full journey
+  replaced `AudienceStub` on `/clinicians`. **`AudienceStub` now serves `/partners` only** — the
+  distributor journey is the remaining one to build, the same way.
 
 ---
 

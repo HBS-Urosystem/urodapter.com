@@ -10,8 +10,10 @@
 
 **[docs/design-system.md](docs/design-system.md) is the binding reference.** Read it before adding
 any section, page, or component — it records decisions that *reversed* earlier approaches, so
-guessing from the existing code alone will reintroduce discarded patterns. Page plan, client
-decisions and open items: **[docs/patient-journey-page-plan.md](docs/patient-journey-page-plan.md)**.
+guessing from the existing code alone will reintroduce discarded patterns. Page plans, client
+decisions and open items: **[docs/patient-journey-page-plan.md](docs/patient-journey-page-plan.md)**,
+**[docs/home-page-plan.md](docs/home-page-plan.md)** and
+**[docs/clinician-journey-page-plan.md](docs/clinician-journey-page-plan.md)**.
 
 Non-negotiables (rationale + specifics in the design system doc):
 
