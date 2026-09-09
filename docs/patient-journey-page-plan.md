@@ -1,5 +1,69 @@
 # Patient Journey Page — Design & Build Plan
 
+> ## ⚠️ 2026-09-07 — restructured to the 0831 client plan
+>
+> The page was rebuilt against **`0831/4. patient journey page.docx`** and
+> **`0831/2. website architecture.docx`**. Sections 1–9 below are the *original* build record and
+> are kept for the reasoning they contain (why serif, why bridges, why no section cards) — but
+> **§3 (Section 1), §5 (Section 2 "How it works") and §6 (Section 3) no longer describe the
+> shipped page.** Read this box first.
+>
+> ### What the 0831 architecture changed
+>
+> Journey Steps 1–3 — *"Is this relevant to me?"*, *"Is there a better way?"*, *"How does it
+> work?"* — are now answered **on the homepage**. The patient page starts at **Step 4 (Proof)**
+> and therefore opens with the docx's Section 1, "Why patients choose UroDapter?".
+>
+> ### Shipped structure (four sections, three bridges)
+>
+> | # | Section | Component | Docx |
+> |---|---|---|---|
+> | 1 | Hero (headline on the photo) + intro + 4 benefit cards + indications | `patients/WhyChoose.svelte` | Section 1 |
+> | — | bridge (arrow) | `SectionBridge` | Section 2 bridge text |
+> | 2 | Patient experiences — 4 testimonials + "read all" band | `patients/PatientStories.svelte` | Section 2 |
+> | — | bridge (quote) | `SectionBridge` | Section 3 bridge text |
+> | 3 | Evidence & outcomes — stats, chart, consensus, clinician slider | `patients/EvidenceOutcomes.svelte` | Section 3 |
+> | — | bridge (arrow) | `SectionBridge` | Section 5 bridge text |
+> | 4 | What happens next — CTA tiers, dive-deep band, closing band | `patients/NextSteps.svelte` | Section 5 |
+>
+> ### Removed / renamed
+>
+> - **`PatientHero.svelte` deleted.** Its job (h1 + accent rule + photo) is now the top of
+>   `WhyChoose.svelte`, where the headline sits **on** the photo in a frosted glass panel — the
+>   docx asks for "text on top/top-right of patient hero image".
+> - **`HowItWorks.svelte` parked, not deleted.** It and the `howItWorks` content object are kept
+>   unrendered at the end of `content/patients.ts` for the homepage rebuild. Do not re-add it to a
+>   journey page without a docx change.
+> - **`bridgeHowItWorks` and `bridgeWhyPrefer` removed** — with two sections gone, so are their
+>   bridges. Exactly one bridge still sits between any two sections.
+> - **`whyPrefer` → `whyChoose`**, heading `"Why patients prefer UroDapter?"` →
+>   `"Why patients choose UroDapter?"` (docx wording), its `intro` dropped (the docx intro
+>   sentence belongs to the hero) and its `ImagePlaceholder` dropped (the hero photo covers it).
+>
+> ### Open items for the client
+>
+> 1. **Hero headline placement.** The docx says "top/top-right" of the hero image. In the current
+>    asset (`patient-hero.jpg`) the subject's face occupies the top-right, so the glass panel sits
+>    **top-left** from `sm` up and **bottom** at 375px (where the crop puts her head at the top).
+>    If a new hero photo is supplied with empty space top-right, move the panel back.
+> 2. **Section 3 design.** The docx notes *"lets talk before starting this, i have a version in my
+>    head"* for the evidence section. What ships is the 2026-07-19 build (stat cards → chart +
+>    consensus → clinician quote slider); it has not been re-reviewed against that comment.
+> 3. **Secondary CTA button label.** The docx leaves it open — *"Discuss UroDapter with your
+>    clinician. ???"*. The page still uses "Learn how to discuss UroDapter".
+> 4. CTA targets: the **webshop** (`https://www.urosystem.com/shop`) and the **UroDapter App**
+>    (`https://app.urodapter.com`) went live 2026-09-09 and open in a new tab. The **discussion
+>    guide** is still the Support Center placeholder.
+
+> **2026-09-08 — canonical source folder + English pass.** The 0831 documents now live at
+> `/Users/vhollo/Public/Google/_melo/Urosystem/urodapter - UX/0831/` (this page's docx is
+> byte-identical to the copy this page was built from; the file is larger only because of embedded
+> images). A site-wide English correction pass was applied — hyphens used as dashes → em dashes,
+> "1,5 years" → "1.5 years", and the spelling fixes already noted. The full list is in
+> [home-page-plan.md](home-page-plan.md). Two of the corrections touch testimonial quotes; flag to
+> the client if quotes must stay byte-identical.
+
+
 **Scope of this plan:** Sections 1–3 and the two bridges between them, specified to build-ready
 detail, plus system-level guidelines so Sections 4–6 (testimonials, evidence, next steps) can be
 added later without redesigning anything.
@@ -84,7 +148,7 @@ presentational text above the heading, not headings themselves.
 
 ---
 
-## 3. Section 1 — Brief value reminder
+## 3. Section 1 — Brief value reminder *(superseded 2026-09-07 — see the box at the top)*
 
 **Copy (docx, final):**
 - H1: *"A more comfortable bladder instillation experience may be possible."*
@@ -139,7 +203,7 @@ Both variants get a soft scroll-reveal (see §7). API sketch:
 
 ---
 
-## 5. Section 2 — How it works
+## 5. Section 2 — How it works *(parked 2026-09-07 — this section moved to the homepage)*
 
 **Heading block** *(revised 2026-07-15 to follow the "Section 2 mood.png" board, no eyebrow)*:
 **centered** H2 *"A simple, catheter-free approach"* + centered intro paragraph (docx):
@@ -205,7 +269,7 @@ into the bladder through the adapter – without passing a catheter through the 
 
 ---
 
-## 6. Section 3 — Why patients prefer UroDapter?
+## 6. Section 3 — Why patients prefer UroDapter? *(now Section 1 “Why patients choose UroDapter?” — see the box at the top)*
 
 **Heading block:** H2 *"Why patients prefer UroDapter?"* + intro (docx): *"For many patients,
 bladder instillations are not a one-time event — they are repeated over weeks, months or even

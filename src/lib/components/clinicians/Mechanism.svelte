@@ -4,6 +4,11 @@
   import VideoFacade from '$lib/components/shared/VideoFacade.svelte';
 </script>
 
+<!-- PARKED (0831 architecture) — "How does it work?" is a HOMEPAGE question now, so this section is no longer
+     rendered on /clinicians. Kept intact so the homepage rebuild can reuse
+     it; re-add it to a journey page only on a docx change. Copy lives at the
+     end of $lib/content/clinicians. -->
+
 <!-- Section 3 — mechanism of action. The four steps are the four sentences of
      the docx paragraph, in order and verbatim; only the step titles are labels. -->
 <section aria-labelledby="mechanism-heading" class="max-w-7xl mx-auto px-5 sm:px-8">

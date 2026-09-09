@@ -1,10 +1,18 @@
 # UroDapter Design System
 
 The binding reference for building anything on this site. It records the decisions actually
-shipped in code (home page + patient journey page), including the ones that reversed an earlier
-approach. **Read this before adding a section, page, or component.**
+shipped in code, including the ones that reversed an earlier approach. **Read this before adding a
+section, page, or component.**
 
-- Page-specific plan & open items → [patient-journey-page-plan.md](patient-journey-page-plan.md)
+> **2026-09-08:** all three built pages now follow the client's 0831 plan — `/patients` and
+> `/clinicians` restructured (§2 *"Where each journey step is answered"*), and the homepage rebuilt
+> from `3. page_content.docx`. `/partners` is still the `AudienceStub`, and there is still no
+> Support Center route. Canonical docx folder:
+> `/Users/vhollo/Public/Google/_melo/Urosystem/urodapter - UX/0831/`.
+
+- Page-specific plans & open items → [patient-journey-page-plan.md](patient-journey-page-plan.md),
+  [clinician-journey-page-plan.md](clinician-journey-page-plan.md),
+  [home-page-plan.md](home-page-plan.md)
 - Tokens live in [src/routes/layout.css](../src/routes/layout.css) — that file is the source of
   truth; this doc explains *how to use them*.
 
@@ -118,32 +126,79 @@ surfaces. *(This reversed the original plan's `rounded-3xl` section cards.)*
 **Only these are cards:** product panel, benefit cards, video facade, Support Center box,
 indications strip. If you're reaching for a 6th surface, question it.
 
+### Where each journey step is answered *(0831 architecture, 2026-09-07)*
+
+The client's `0831/2. website architecture.docx` assigns the first journey steps to the
+**homepage** and the rest to the persona pages. This is load-bearing for page structure:
+
+| Journey step | Answered on |
+|---|---|
+| "Is this relevant to me?" / "Why should I care?" | Homepage |
+| "Is there a better way?" / "What is UroDapter?" | Homepage |
+| "How does it work?" | Homepage |
+| "Why is this better / can I trust it?" onward | The persona journey page |
+| "I want more information" | Support Center (journey pages only point at it) |
+
+So a journey page **opens at the "why choose it" step** — it does not re-explain the device.
+`/patients` is four sections, `/clinicians` six. The components that answered the homepage
+questions (`patients/HowItWorks`, `clinicians/WhatIsIt`, `clinicians/Mechanism`) are **parked**,
+not deleted: they and their content objects are kept unrendered for the homepage rebuild. Don't
+re-add them to a journey page without a docx change.
+
+Journey pages carry **curated highlights only**; every deep resource (full publication list,
+regulatory documents, all testimonials, IFU, training) belongs to the Support Center, and the page
+links to it rather than reproducing it.
+
 ### The home page
 
-Same rhythm, on the neutral `.bg-page-gradient` canvas, with the colour carried by the sections
-themselves rather than the page:
+Same rhythm, on the neutral `.bg-page-gradient` canvas. **Rebuilt 2026-09-08 from
+`0831/3. page_content.docx`** — see [home-page-plan.md](home-page-plan.md):
 
 ```
-UroDapterHero (photo hero + audience CTA row)   ← no <main>; the route owns that
-WhatItIs          #how-it-works   (default accent)
+UroDapterHero        ← headline + subheadline on the photo, product chip,
+                       credibility strip + regulatory line. One column, ending
+                       just below the regulatory line.
+                       Renders no <main> and no page wrapper — the route owns both.
+KeyBenefits          ← two audience cards + the testimonial column beside them
+SectionBridge          "A simple idea can make a remarkable difference."
+HowItWorks   #how-it-works   ← intro, ProductCallouts, explanation, the 30s animation
 SectionBridge
-ProofStats        #proof          (default accent)
-SectionBridge ─┐
-PersonaSection │ #patients        .accent-patient      ← bridge + section share the class
-SectionBridge ─┐
-PersonaSection │ #clinicians      .accent-clinician
-SectionBridge ─┐
-PersonaSection │ #distributors    .accent-distributor
-SectionBridge
-Voices            #stories / #support
+ChooseJourney #support ← three journey cards + the Support Center shortcut
 ```
 
-**The bridge before a persona lane wears that lane's accent**, so the colour hands over before the
-content does. Wrap the bridge in a `<div class={persona.accentClass}>` — the bridge itself takes no
-accent prop.
+**The credibility strip lives on the hero photo on purpose.** The docx opens by asking that "the
+reader doesn't have to scroll down too much… cards or text elements might be inserted on the
+opening image" — that is why credibility is overlaid rather than given a section of its own, and
+it is the one place the page departs from docx order.
 
-Those five IDs are load-bearing: `SiteHeader` and the hero's audience cards link to them, and
-before this page existed every one of those links was dead.
+**The hero is deliberately short** (~530px at 1280, ending just below the regulatory line). It used
+to be stretched to ~710px by a second column holding the testimonials; those moved to the
+key-benefits row (client direction 2026-09-08), which removed ~240px of dead space under the
+left-hand content. If you add anything to the hero, don't reintroduce a tall second column —
+the height is the point.
+
+**Per-section persona accents still apply**, but now *within* a section: `KeyBenefits` puts
+`.accent-patient` and `.accent-clinician` on its two cards side by side, and `ChooseJourney`
+scopes each journey card. The old page's blue → teal → purple *lane* structure is retired.
+
+**`#support` is load-bearing.** `SiteHeader`'s "Support Center" nav item and every pending
+"learn more" link across the site resolve to it; it is the id on `ChooseJourney`'s Support Center
+block. Until a real Support Center route exists, do not remove it — those links go nowhere without
+it.
+
+**Off-site links are a separate field.** A CTA that leaves the site carries `externalHref`
+(an absolute URL) instead of `href`; `href` stays typed `ResolvedPathname` so eslint's
+`no-navigation-without-resolve` still guards every internal link. The component renders those
+anchors with `target="_blank" rel="external noopener noreferrer"` — `external` is what makes
+SvelteKit's router hand the URL to the browser, and it is also the rule's own escape hatch — plus
+an `sr-only` "(opens in a new tab)" after the label. Live off-site destinations (client, 2026-09-09):
+the webshop `https://www.urosystem.com/shop` and the app `https://app.urodapter.com`.
+
+**Cross-journey links go to the real page, not to `#support`.** A pending link resolves to
+`#support` only when its destination does not exist yet. Where a journey page already holds the
+content, link the page and its section: `/patients#stories` (the id lives on `PatientStories`) is
+the clinician page's "Read all patient testimonials". Anchor targets carry `scroll-mt-24` so the
+sticky header does not cover the heading.
 
 ---
 
@@ -254,7 +309,7 @@ Shared (`src/lib/components/`):
 | Component | Notes |
 |---|---|
 | `SiteHeader.svelte` | `variant: 'overlay'` (transparent, over the home hero photo) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar). Owns nav + mobile menu. Overlay is unchanged; only `solid` carries the primary-colour gradient. |
-| `UroDapterHero.svelte` | Home hero + audience CTA row. Consumes `SiteHeader variant="overlay"`. Renders **no** `<main>` and **no** page wrapper — the route owns both. Its two audience glass cards are one loop over `heroAudiences`, tinted by `data-tone`. |
+| `UroDapterHero.svelte` | Home hero: headline + subheadline over the photo, product chip, the four-item credibility strip and the one-line regulatory statement. Consumes `SiteHeader variant="overlay"`. Renders **no** `<main>` and **no** page wrapper — the route owns both. **Single column** (`lg:max-w-[62%]`), so the photo's subjects stay clear; the audience glass cards and the testimonial stack that used to sit here are gone (see §2). |
 
 `src/lib/components/shared/` — used by more than one page. **These take their accent from the
 enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out of
@@ -269,52 +324,51 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 | `SupportCenterCard.svelte` | Reusable "visit the Support Center" CTA. `variant`: `'solid'` (default — bold `.surface-solid` band, white text) \| `'tint'` (light `.surface-panel`). `href` typed `ResolvedPathname`. |
 | `IndicationsStrip.svelte` | Tinted band: sentence + condition icon chips. Designed for ~4 chips; more than that squeezes the `sm:flex` row — the clinician page's five indications use their own card grid instead. |
 | `OutcomesChart.svelte` | Two single-series labeled-bar lists on a shared 0–100% scale. Thin `h-2` bars, data-end-only rounding, recessive track, label+value as real text on every row (the bars are decoration over an accessible list), source line. Series colours: the validated `--chart-*` tokens only. *(Promoted from `patients/` 2026-08-26, when the clinician page needed it.)* |
+| `DonutStat.svelte` | Single-value completion ring (the clinician docx's "large 74% continuation ring"). Arc drawn with `--chart-continuing` — **never the raw persona accent** (§1) — `stroke-linecap="round"`, SVG `aria-hidden`, percentage + caption as real text. Props `value` (0–100) + `caption`. |
 | `ProductCallouts.svelte` | The 3×3 device diagram — see §8. Callouts may carry an optional `description` (the client's technical figure notes); it is hidden below `sm`, where a corner cell is ~80px wide. |
-| `VideoFacade.svelte` | Click-to-load `youtube-nocookie` embed. Props `videoId`, `poster`, `caption`, `duration`. `videoId: null` → "Coming soon" placeholder. **Never show a fake duration.** |
+| `VideoFacade.svelte` | Click-to-load video; **nothing is fetched until the viewer presses play**. `sources={{ webm?, mp4 }}` → a self-hosted native `<video>` (preferred: no third party is contacted at all); `videoId` → a `youtube-nocookie` embed. Neither → "Coming soon" placeholder. Also `poster`, `caption`, `duration`. **Never show a fake duration.** |
 | `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. |
 
-Home page (`src/lib/components/home/`):
+Home page (`src/lib/components/home/`) — three sections since the 0831 rebuild:
 
 | Component | Notes |
 |---|---|
-| `WhatItIs.svelte` | Section 1: header + `ImagePlaceholder`, then `[3fr_2fr]` product diagram / spec + quick-benefit list, then the `IndicationsStrip`. |
-| `ProofStats.svelte` | Section 2: a 4-up `StatCard` row. Deliberately *deeper* than the hero's trust bar — the bar is a glance, this row carries citations. |
-| `PersonaSection.svelte` | **One component, three lanes.** Props `{ id, accentClass, eyebrow, heading, intro, benefits, testimonial, callout?, cta }`; spread straight from the content object (`<PersonaSection {...clinicians} />`). Wrapper carries `accentClass`. |
-| `Voices.svelte` | Section 6: mixed patient/clinician testimonial grid (each card in its own `.accent-*` wrapper), regulatory bullets, and the `#support` band. |
-| `AudienceStub.svelte` | The `/partners` placeholder page (since 2026-08-26 `/clinicians` is a real journey): persona canvas + solid nav + "coming soon" roadmap + CTA panel. Replace with a real journey, don't extend. |
+| `KeyBenefits.svelte` | **Section 1**: a three-column row — the two audience cards (each in its own accent scope) plus the two docx testimonials in a `.surface-panel` beside them. The docx key-benefits headline is **split across the two card titles** (`h2` each), so the section has no headline of its own and is labelled by both — `aria-labelledby="benefits-patients benefits-clinicians"`. Inside a card: persona chip + serif title, that audience's problem sentence, a hairline, then the three benefits as **ticks** (bare check icon in `--accent-ink`, no chip). The testimonial column is `md:col-span-2 lg:col-span-1` — at `md` three columns squeeze the serif titles, so it drops below the pair. |
+| `HowItWorks.svelte` | **Section 2**: header + intro, the `ProductCallouts` diagram in a `.surface-card`, then a `[2fr_3fr]` row pairing the second-line explanation with the 30-second animation. |
+| `ChooseJourney.svelte` | **Section 3**: three journey cards (`.accent-pill`, each in its own accent scope) + the Support Center shortcut. **Carries `id="support"`** — see §2. |
+| `WhatItIs.svelte`, `ProofStats.svelte`, `PersonaSection.svelte`, `Voices.svelte` | **Parked** — the pre-0831 home page. Not rendered; their CMS-approved copy is kept for the Support Center build. |
+| `AudienceStub.svelte` | The `/partners` placeholder page: persona canvas + solid nav + "coming soon" roadmap + CTA panel. Replace with a real journey, don't extend. |
 
-Patient page (`src/lib/components/patients/`):
+Patient page (`src/lib/components/patients/`) — four sections since the 0831 restructure:
 
 | Component | Notes |
 |---|---|
-| `PatientHero.svelte` | Section 1: one-sentence serif `h1` + accent rule + body, `rounded-3xl` photo beside it. LCP image → `fetchpriority="high"`. |
-| `HowItWorks.svelte` | Section 2 composition: centered header, then `[3fr_2fr]` columns. |
-| `PatientStories.svelte` | Section 4 composition: header + testimonial grid + "more stories" (`SupportCenterCard` reuse). |
-| `OutcomesChart.svelte` | Two single-series labeled-bar lists on a shared 0–100% scale. Thin `h-2` bars, data-end-only rounding, recessive track, label+value as real text on every row (the bars are decoration over an accessible list), source line. Series colours: the validated `--chart-*` tokens only. |
+| `WhyChoose.svelte` | **Section 1**: the hero photo with the serif `h1` in a frosted glass panel **on** the image (docx: "text on top/top-right"), the intro sentence below it, then the four benefit cards and the `IndicationsStrip`. LCP image → `fetchpriority="high"`. The panel is `self-end sm:self-start` — at 375px the crop puts the subject's face at the top, so the headline drops to the bottom. |
+| `PatientStories.svelte` | Section 2: header + testimonial grid + "more stories" (`SupportCenterCard` reuse). |
+| `OutcomesChart.svelte` | *(now in `shared/`)* Two single-series labeled-bar lists on a shared 0–100% scale. |
 | `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. |
-| `EvidenceOutcomes.svelte` | Section 5 composition: stat cards (serif first-word highlight + citation) → chart + consensus callout → quotes slider. |
-| `NextSteps.svelte` | Section 6 composition: CTA tiers (primary wears the home audience-card gradient via scoped `.cta-primary`; others = home support-card neutral), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
+| `EvidenceOutcomes.svelte` | Section 3 composition: stat cards (serif first-word highlight + citation) → chart + consensus callout → quotes slider. |
+| `NextSteps.svelte` | Section 4 composition: CTA tiers (primary wears the home audience-card gradient via scoped `.cta-primary`; others = home support-card neutral), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
+| `HowItWorks.svelte` | **Parked** — "how does it work?" is a homepage question now. Kept for the homepage rebuild; not rendered. |
 
-Clinician page (`src/lib/components/clinicians/`) — one component per section, route is
-composition only. All of them take the accent from the page's `.accent-clinician` scope:
+Clinician page (`src/lib/components/clinicians/`) — six sections since the 0831 restructure; the
+route is composition only. All of them take the accent from the page's `.accent-clinician` scope:
 
 | Component | Notes |
 |---|---|
-| `ClinicianHero.svelte` | Section 1: one-sentence serif `h1` + accent rule + body, `ImagePlaceholder` beside it (the hero photo is a pending client asset). |
-| `WhatIsIt.svelte` | Section 2: centered header, then the `ProductCallouts` diagram carrying the client figure's four technical labels; below `sm` the notes move to a `<dl>` under the diagram. |
-| `Mechanism.svelte` | Section 3: a 4-step `<ol>` (each step body is one docx sentence, verbatim) + `VideoFacade` + the attributed learning-curve callout. |
-| `ClinicalBenefits.svelte` | Section 4: three `BenefitCard`s (the third carries a `source`) + the time-saving callout. |
-| `Indications.svelte` | Section 5: five icon cards + the docx paragraph in its own panel. |
-| `EvidenceApprovals.svelte` | Section 6: `StatCard` row → `OutcomesChart` + consensus callout → publications / regulatory pair. |
-| `Adoption.svelte` | Section 7: stats, the named international partners, a 4-up `TestimonialCard` grid (no per-card links) + one `SupportCenterCard`. |
-| `NextSteps.svelte` | Section 8: three CTA tiers; a tier may carry **more than one** link (the docx's "For patients – for clinicians" pair). Primary tier is `.accent-pill`, not the patient page's scoped gradient. |
-| `SupportClosing.svelte` | The closing full-bleed band: the last docx bridge line in bridge typography **plus** the Support Center box. Deliberately one band — a bridge immediately followed by a closing band stacks two tinted bands. |
+| `ClinicalValue.svelte` | **Section 1**: serif `h1` + accent rule + two intro paragraphs, `ImagePlaceholder` beside them (the hero photo is still a pending client asset), then two labelled groups of three `BenefitCard`s — "For Your Practice" / "For Your Patients". Two labelled rows, **not** cards nested inside a box: that would stack surfaces. |
+| `ClinicalEvidence.svelte` | **Section 2**: three named study blocks — a `<dl>` row of three serif figures (Lovász), `DonutStat` + a two-row bar list (Pothoven), and a recognition `.surface-panel` (Buford). |
+| `SocialProof.svelte` | **Section 3**: clinician `TestimonialCard` grid + a `tint` Support Center band, the three "Trusted Worldwide" `StatCard`s, then the patient quote grid + a `solid` Support Center band. Two bands in one section: the first is tinted so only the last one is loud (§4). |
+| `Implementation.svelte` | **Section 4**: five indication icon cards, the six-item workflow checklist in a `.surface-panel`, and the three-step learning `<ol>` with static ↓ marks + resource pills. |
+| `NextSteps.svelte` | **Section 5**: three CTA tiers, one link each. Primary tier is `.accent-pill`, not the patient page's scoped gradient. |
+| `SupportClosing.svelte` | **Section 6**: the Support Center box **and** the docx's closing statement in one full-bleed band — a bridge or a second band stacked here would put two tinted surfaces back to back. |
+| `WhatIsIt.svelte`, `Mechanism.svelte` | **Parked** — "what is it?" / "how does it work?" are homepage questions now. Kept for the homepage rebuild; not rendered. |
 
-*(`ImagePlaceholder` sits in the Section 3/4/5 headers: a two-column `lg:grid-cols-[1fr_auto]`,
-image `lg:w-72`, stacking below the heading on mobile.)*
+*(`ImagePlaceholder` sits in the patient page's Section 2/3 headers: a two-column
+`lg:grid-cols-[1fr_auto]`, image `lg:w-72`, stacking below the heading on mobile.)*
 
-`OutcomesChart` and `ClinicianQuotes` are still under `patients/` — promote them to `shared/` and
-swap their hardcoded accents for `--accent-ink` at the moment a second page needs them.
+`ClinicianQuotes` is still under `patients/` and still hardcodes patient blue — promote it to
+`shared/` and swap its accents for `--accent-ink` at the moment a second page needs it.
 
 ---
 
@@ -422,6 +476,11 @@ Worth its own section — it took several iterations, and the constraints are ea
   (e.g. `/Introducing%20the%20UroDapter%C2%AE.webp`).
 - Only the above-the-fold hero image is eager (`fetchpriority="high"`); everything else
   `loading="lazy"`.
+- **Video is self-hosted from `static/`, never embedded from a third party** where the client owns
+  the file. Client masters are far too heavy to ship as-is (the 30-second animation arrived at
+  38 MB); re-encode to a `.webm` (VP9) + `.mp4` (H.264, `+faststart`) pair around 2 MB each plus a
+  WebP poster, and hand them to `VideoFacade`'s `sources` prop. Exact settings and the ffmpeg
+  situation on this machine: [home-page-plan.md](home-page-plan.md).
 
 ---
 
@@ -438,7 +497,8 @@ Worth its own section — it took several iterations, and the constraints are ea
 
 ## 12. Reusing this system for the clinician journey
 
-**Built 2026-08-26** — `/clinicians` is a full journey page; see
+**Built 2026-08-26, restructured to the 0831 client plan 2026-09-07.** The parameterisation rules
+below are unchanged and still binding; only the page's *section list* changed (§2 and §7). See
 [clinician-journey-page-plan.md](clinician-journey-page-plan.md) for its structure, copy
 provenance and open items. The notes below are what the build actually followed.
 
@@ -465,9 +525,13 @@ The clinician page is the same system with different parameters — **do not for
   serif stays display-only.
 - **Audience-page checklist:** nav link retarget (done — `SiteHeader` points at `/clinicians` and
   `/partners`), JSON-LD `audience` → `MedicalAudience/Clinician` (done), and the same definition of
-  done (§14). The home page's `#clinicians` / `#distributors` lanes are the teaser; the full journey
-  replaced `AudienceStub` on `/clinicians`. **`AudienceStub` now serves `/partners` only** — the
-  distributor journey is the remaining one to build, the same way.
+  done (§14). **`AudienceStub` now serves `/partners` only** — the distributor journey is the
+  remaining one to build, the same way, and under the 0831 architecture it too starts at the
+  "why choose it" step rather than re-explaining the device.
+
+**Building the distributor journey?** Follow §2's journey-step table: don't reintroduce a
+"what is it / how does it work" section. If the distributor docx asks for one, that is a
+homepage-vs-journey-page conflict — raise it with the client rather than resolving it in code.
 
 ---
 

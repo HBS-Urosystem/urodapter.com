@@ -2,7 +2,37 @@
   import { reveal } from '$lib/actions/reveal';
   import { nextSteps } from '$lib/content/patients';
   import closingImage from '$lib/assets/patients/closing-hero.jpg?enhanced';
+
+  type Cta = (typeof nextSteps.ctas)[number];
+
+  // CTA tiers: primary wears the home page's audience-card gradient language;
+  // the other tiers are neutral cards (home support-card style).
+  const cardClass = (cta: Cta) =>
+    cta.tier === 'primary'
+      ? 'group cta-primary transition-[background] rounded-2xl p-6 flex flex-col text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300'
+      : 'group bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border border-slate-200 dark:border-white/15 transition-colors rounded-2xl p-6 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-patient dark:focus-visible:ring-sky-300';
 </script>
+
+<!-- Card interior, shared by the on-site and off-site anchors below. -->
+{#snippet cardBody(cta: Cta)}
+  {@const primary = cta.tier === 'primary'}
+  <span
+    class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 {primary
+      ? 'bg-white/20'
+      : 'bg-white dark:bg-navy-800 border border-patient/20 dark:border-sky-300/25 text-patient dark:text-sky-300'}"
+    aria-hidden="true"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={cta.icon} /></svg>
+  </span>
+  <h3 class="mt-4 font-semibold {primary ? '' : 'text-navy-950 dark:text-white'}">{cta.title}</h3>
+  <p class="mt-1.5 text-sm leading-relaxed flex-1 {primary ? 'text-white/85' : 'text-slate-600 dark:text-slate-300'}">
+    {cta.body}
+  </p>
+  <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium {primary ? '' : 'text-patient dark:text-sky-300'}">
+    {cta.linkLabel}{#if cta.externalHref}<span class="sr-only"> (opens in a new tab)</span>{/if}
+    <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+  </span>
+{/snippet}
 
 <section aria-labelledby="next-steps-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
   <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
@@ -18,33 +48,22 @@
     {nextSteps.intro}
   </p>
 
-  <!-- CTA tiers: primary wears the home page's audience-card gradient
-       language; the other tiers are neutral cards (home support-card style) -->
   <div use:reveal class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
     {#each nextSteps.ctas as cta (cta.title)}
-      {#if cta.tier === 'primary'}
-        <a href={cta.href} class="group cta-primary transition-[background] rounded-2xl p-6 flex flex-col text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300">
-          <span class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0" aria-hidden="true">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={cta.icon} /></svg>
-          </span>
-          <h3 class="mt-4 font-semibold">{cta.title}</h3>
-          <p class="mt-1.5 text-sm text-white/85 leading-relaxed flex-1">{cta.body}</p>
-          <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium">
-            {cta.linkLabel}
-            <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-          </span>
+      {#if cta.externalHref}
+        <!-- Off-site (client webshop / UroDapter App): a new tab, and
+             `rel="external"` so SvelteKit's router hands it to the browser. -->
+        <a
+          href={cta.externalHref}
+          target="_blank"
+          rel="external noopener noreferrer"
+          class={cardClass(cta)}
+        >
+          {@render cardBody(cta)}
         </a>
       {:else}
-        <a href={cta.href} class="group bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border border-slate-200 dark:border-white/15 transition-colors rounded-2xl p-6 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-patient dark:focus-visible:ring-sky-300">
-          <span class="w-10 h-10 rounded-full bg-white dark:bg-navy-800 border border-patient/20 dark:border-sky-300/25 text-patient dark:text-sky-300 flex items-center justify-center shrink-0" aria-hidden="true">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={cta.icon} /></svg>
-          </span>
-          <h3 class="mt-4 font-semibold text-navy-950 dark:text-white">{cta.title}</h3>
-          <p class="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed flex-1">{cta.body}</p>
-          <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-patient dark:text-sky-300">
-            {cta.linkLabel}
-            <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-          </span>
+        <a href={cta.href} class={cardClass(cta)}>
+          {@render cardBody(cta)}
         </a>
       {/if}
     {/each}

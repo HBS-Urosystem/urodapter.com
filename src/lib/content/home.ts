@@ -1,7 +1,17 @@
-// Home page copy. Source of truth: the client CMS at
-// urosystem.kit1/cms/blocks/** — the block file is named above each object.
-// Wording is verbatim from those blocks (or de-escalated). Never strengthen a
-// claim: keep "may", "designed to", "can be", "many patients".
+// Home page copy.
+// Source of truth: "0831/3. page_content.docx" (client-approved homepage copy)
+// + "0831/2. website architecture.docx". Where the 0831 docx keeps wording that
+// already existed, the earlier provenance still holds: the client CMS at
+// urosystem.kit1/cms/blocks/** (the block file is named above each object).
+//
+// The homepage answers journey Steps 1-3 for BOTH personas — "What is
+// UroDapter?", "Why should I care?", "Can I trust it?", "Where do I go next?" —
+// and hands over to the journey pages. Keep it simple; the depth lives on the
+// journey pages and in the Support Center.
+//
+// Never strengthen a claim: keep "may", "designed to", "can be", "many
+// patients". Where the docx offers alternatives ("1 Million+ Uses / 1 Million+
+// Procedures"), the choice is noted in a comment.
 //
 // Icon `d` strings are heroicons *outline*, single path, drawn with
 // currentColor; the comment above each one names the icon.
@@ -15,7 +25,7 @@ const partnersHref = resolve('/partners');
 // The Support Center section at the foot of this page, until a dedicated
 // resources route exists.
 const supportHref = (resolve('/') + '#support') as ResolvedPathname;
-const sectionHref = (hash: string) => (resolve('/') + hash) as ResolvedPathname;
+const homeHref = resolve('/');
 
 // ---------------------------------------------------------------------------
 // Icons reused across several sections
@@ -67,9 +77,10 @@ const iconBookOpen =
 	'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253';
 
 // ---------------------------------------------------------------------------
-// HERO — migrated out of UroDapterHero.svelte (copy belongs in content/*.ts).
-// Source: blocks/index/hero.en.md, blocks/index/key-benefits.en.md,
-// blocks/index/credibility.en.md, blocks/index/audience.en.md
+// HERO — docx: headline + subheadline sit ON the opening image. The docx also
+// says "cards or text elements might be inserted on the opening image" so the
+// reader does not have to scroll far, which is why the credibility strip and
+// the two testimonials are overlaid here rather than given their own sections.
 // ---------------------------------------------------------------------------
 
 export const hero = {
@@ -78,85 +89,197 @@ export const hero = {
 	headlineLines: ['Catheter-Free', 'Bladder Instillation'],
 	body: 'A simple way to perform bladder instillations without catheterization.',
 	productAlt: 'UroDapter catheter-free bladder instillation device',
-	trustPill: 'Trusted by patients and clinicians worldwide',
 };
 
-export const heroAudiences = [
-	{
-		id: 'patients',
-		label: 'For Patients',
-		tone: 'patient' as const,
-		icon: iconHeart,
-		benefits: ['Catheter-free treatment', 'Greater comfort', 'Less anxiety'],
-	},
-	{
-		id: 'clinicians',
-		label: 'For Clinicians',
-		tone: 'clinician' as const,
-		// plus-circle
-		icon: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-		benefits: [
-			'Better patient experience',
-			'Reduced catheter-related complications',
-			'Simple integration into practice',
-		],
-	},
-];
-
+// docx "Credibility — short, peak infos". Two of the four items are offered as
+// alternatives in the docx; the choice is noted per item.
 export const heroTrustStats = [
-	{ value: '1M+ Procedures', label: 'Worldwide', icon: iconUsers },
+	// docx: "1 Million+ Uses / 1 Million+ Procedures" → Procedures, in the
+	// numeral style the rest of the site already uses.
+	{ value: '1,000,000+', label: 'Procedures worldwide', icon: iconUsers },
 	{
 		value: 'Scientifically',
-		label: 'Validated',
+		label: 'validated',
 		// microscope: eyepiece + body tube, arm curving down to the base,
 		// stage slide, and the bench line it stands on
 		icon: 'M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2ZM9 14h2M14 22a7 7 0 1 0 0-14h-1M6 18h8M3 22h18',
 	},
-	{ value: 'Used In', label: '50+ Countries', icon: iconGlobe },
-	{ value: 'FDA / CE / MDR', label: 'Certified', icon: iconShieldCheck },
+	// docx: "Available Internationally / Used in XY Countries" → the wording
+	// without a figure. The country count is an open client item: 30+, 50+ and
+	// 85 are all in circulation (see home-page-plan.md).
+	{ value: 'Available', label: 'internationally', icon: iconGlobe },
+	// docx: "FDA Registered (?) / CE Marked / MDR". The client's own question
+	// mark is answered by the approved CMS wording: the device is *listed* with
+	// the FDA, never "FDA approved" or "FDA registered".
+	{ value: 'CE marked', label: 'and FDA listed', icon: iconShieldCheck },
 ];
 
-export const heroTestimonials = [
-	{
-		quote:
-			'I now have confidence, less apprehension, more predictability, and an overall better quality of life.',
-		author: 'Hannah, 27y, IC/BPS patient',
-	},
-	{
-		quote:
-			'Perfect for quick, targeted bladder treatments — especially when repeated instillations are needed. Less discomfort, more efficiency, better experience.',
-		author: 'Dr. Parekattil, Avant Concierge Urology',
-		subAuthor: 'Winter Garden, Florida, USA',
-	},
-];
+// blocks/index/regulatory.en.md + blocks/company/quality.en.md — the one line
+// that keeps the regulatory facts on the site now that the journey pages point
+// at the Support Center for them.
+export const heroRegulatory =
+	'UroDapter® holds required CE certification and is listed with the U.S. Food and Drug Administration (FDA). The quality management system behind it is certified to ISO 13485.';
 
-export const audienceCards = [
-	{
-		id: 'patient',
-		title: 'I’m a Patient',
-		copy: 'Learn how catheter-free bladder instillation may improve your treatment experience.',
-		href: sectionHref('#patients'),
-	},
-	{
-		id: 'clinician',
-		title: 'I’m a Clinician',
-		copy: 'See how UroDapter can improve patient experience while fitting into your clinical workflow.',
-		href: sectionHref('#clinicians'),
-	},
-	{
-		id: 'distributor',
-		title: 'I’m a Distributor',
-		copy: 'Explore partnership and distribution opportunities in your market.',
-		href: sectionHref('#distributors'),
-	},
-];
+// ---------------------------------------------------------------------------
+// SECTION 1 — the key benefits, one card per audience.
+// The docx's key-benefits headline ("A Better Experience for Patients. A
+// Practical Solution for Clinicians.") is split across the two card titles, so
+// each card owns its half; there is no separate section headline repeating it.
+// The docx's two "why heroes care" lines sit inside the cards, between the
+// title and the list — the problem each audience has, then what changes.
+// ---------------------------------------------------------------------------
 
-export const heroSupportCard = {
-	copy: 'Looking for publications, FAQs, videos, training or technical resources?',
-	linkLabel: 'Visit Support Center',
-	href: supportHref,
-	icon: iconBookOpen,
+// docx: "1-1 testimonials – should be put to different place than the rest of
+// the list", i.e. away from the credibility strip on the hero. They sit as the
+// third column of the key-benefits row (client direction 2026-09-08).
+export const quotes = {
+	pill: 'Trusted by patients and clinicians worldwide',
+	items: [
+		{
+			quote:
+				'I now have confidence, less apprehension, more predictability, and an overall better quality of life.',
+			author: 'Hannah, 27, female IC/BPS patient',
+		},
+		{
+			quote:
+				'Perfect for quick, targeted bladder treatments — especially when repeated instillations are needed. Less discomfort, more efficiency, better experience.',
+			author: 'Dr. Parekattil, Avant Concierge Urology',
+			subAuthor: 'Winter Garden, Florida, USA',
+		},
+	],
 };
+
+export const keyBenefits = {
+	columns: [
+		{
+			id: 'patients',
+			// One half of the docx key-benefits headline.
+			title: 'A Better Experience for Patients',
+			accentClass: 'accent-patient',
+			icon: iconHeart,
+			// docx "Why Heroes Care / Why it matters" — patients.
+			problem:
+				'Repeated bladder treatments can be stressful, uncomfortable and emotionally exhausting.',
+			items: [
+				'Catheter-free treatment',
+				'Greater comfort',
+				'Less anxiety',
+			],
+		},
+		{
+			id: 'clinicians',
+			title: 'A Practical Solution for Clinicians',
+			accentClass: 'accent-clinician',
+			// plus-circle
+			icon: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
+			// docx "Why Heroes Care / Why it matters" — clinicians. Minimally
+			// corrected: "is associated with complications, procedural burden and
+			// creates discomfort" mixed two constructions.
+			problem:
+				'Catheterization for bladder instillations is associated with complications and procedural burden, and creates discomfort for patients.',
+			items: [
+				'Better patient experience',
+				'Reduced catheter-related complications',
+				'Simple integration into practice',
+			],
+		},
+	],
+};
+
+// ---------------------------------------------------------------------------
+// SECTION 2 — How It Works (docx: "[Title written out]")
+// Both paragraphs and the video caption are docx-verbatim. The product diagram
+// reuses the patient-facing callout labels already approved for the patient
+// journey page — the personas doc is explicit that patients are not looking for
+// technical specifications.
+// ---------------------------------------------------------------------------
+
+export const bridgeHowItWorks = {
+	variant: 'quote' as const,
+	// docx's own "[Main headline/introductory explanation]" line.
+	emphasis: 'A simple idea can make a remarkable difference.',
+};
+
+export const howItWorks = {
+	heading: 'How It Works',
+	intro:
+		'UroDapter is a sterile, single-use syringe adapter that allows medication to be delivered into the bladder without inserting a catheter in both female and male patients. It offers a simple, catheter-free bladder instillation approach that may make treatment more comfortable for many patients.',
+	detail:
+		'UroDapter is placed at the urethral opening, where it forms a temporary, watertight seal while only the short rounded tip is inserted. During instillation, the patient is asked to relax the urethral sphincter, allowing the medication to pass gently through the urethra into the bladder without the need for catheterization. The procedure uses a standard syringe and integrates easily into existing bladder instillation routines.',
+	// Patient-facing labels (approved for the patient journey page); the leader
+	// lines carry the label→device association, so no icons here.
+	callouts: [
+		{ label: 'Creates a temporary seal during treatment', icon: '' },
+		{ label: 'Only the short, rounded tip enters the urethra', icon: '' },
+		{ label: 'Connects to a standard syringe', icon: '' },
+		{ label: 'Designed to be gentle and comfortable', icon: '' },
+	],
+	video: {
+		caption: 'Watch this short animation to see how UroDapter works.',
+		duration: '0:30',
+		// Client asset: Urodapter_anim_30sec_EN_230309.mp4, re-encoded for the
+		// web and self-hosted from /static (no third-party embed).
+		poster: '/urodapter-animation-poster.webp',
+		sources: {
+			webm: '/urodapter-animation.webm',
+			mp4: '/urodapter-animation.mp4',
+		},
+	},
+};
+
+// ---------------------------------------------------------------------------
+// SECTION 3 — Choose Your Journey + the Support Center shortcut.
+// docx card copy verbatim. The hrefs are the real routes — they used to be
+// on-page anchors (#patients …) that no longer exist.
+// ---------------------------------------------------------------------------
+
+export const bridgeJourney = {
+	variant: 'arrow' as const,
+	lead: 'That is the whole idea.',
+	emphasis: 'Choose the path that fits you best.',
+};
+
+export const journey = {
+	heading: 'Choose Your Journey',
+	cards: [
+		{
+			id: 'patient',
+			title: 'I’m a Patient',
+			copy: 'Learn how catheter-free bladder instillation may improve your treatment experience.',
+			href: patientsHref,
+		},
+		{
+			id: 'clinician',
+			title: 'I’m a Clinician',
+			copy: 'See how UroDapter can improve patient experience while fitting into your clinical workflow.',
+			href: cliniciansHref,
+		},
+		{
+			id: 'distributor',
+			title: 'I’m a Distributor',
+			copy: 'Explore partnership and distribution opportunities in your market.',
+			href: partnersHref,
+		},
+	],
+	// docx offers two lead-ins for the Support Center shortcut; both are used —
+	// one as the heading, one as the body.
+	support: {
+		heading: 'Already using UroDapter?',
+		body: 'Looking for publications, FAQs, videos, training or technical resources?',
+		linkLabel: 'Visit Support Center',
+		href: supportHref,
+	},
+};
+
+// ===========================================================================
+// PARKED — the pre-0831 home page (six sections below the hero). The 0831
+// homepage docx replaces all of it: the persona lanes became the "Choose Your
+// Journey" cards, the proof row became the hero credibility strip, and the
+// voices grid became the two hero testimonials. Kept verbatim, together with
+// components/home/{WhatItIs,ProofStats,PersonaSection,Voices}.svelte, because
+// the copy below is client-CMS-approved and the Support Center page will need
+// much of it. Nothing here is rendered.
+// ===========================================================================
 
 // ---------------------------------------------------------------------------
 // SECTION 1 — what UroDapter is / how it works
@@ -530,6 +653,8 @@ export const partnerPage = {
 		heading: 'A special invitation to our B2B partners',
 		body: 'License, build OEM relationships, or form a multi-country corporate alliance with UroSystem.',
 		linkLabel: 'Back to the overview',
-		href: sectionHref('#distributors'),
+		// The homepage's `#distributors` section is gone (0831 rebuild), so this
+		// goes to the homepage itself rather than a dead anchor.
+		href: homeHref,
 	},
 };

@@ -6,6 +6,11 @@
   import SupportCenterCard from '$lib/components/shared/SupportCenterCard.svelte';
 </script>
 
+<!-- PARKED (0831 architecture) — "How does it work?" is a HOMEPAGE question
+     now, so this section is no longer rendered on /patients. Kept intact so the
+     homepage rebuild can reuse it; re-add it to a journey page only on a docx
+     change. Copy lives in `howItWorks` in $lib/content/patients. -->
+
 <section aria-labelledby="how-it-works-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
   <!-- Centered header, per the Section 2 mood board -->
   <div class="text---center max-w-3xl mx---auto">

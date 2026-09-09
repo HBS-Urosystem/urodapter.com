@@ -6,7 +6,9 @@
   import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
 </script>
 
-<section aria-labelledby="patient-stories-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
+<!-- `#stories` is a cross-page anchor target: the clinician journey's "Read all
+     patient testimonials" lands here. `scroll-mt-24` clears the sticky header. -->
+<section id="stories" aria-labelledby="patient-stories-heading" class="max-w-7xl mx-auto px-5 sm:px-8 scroll-mt-24">
   <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
     <div>
       <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">

@@ -4,6 +4,11 @@
   import ProductCallouts from '$lib/components/shared/ProductCallouts.svelte';
 </script>
 
+<!-- PARKED (0831 architecture) — "What is the UroDapter?" is a HOMEPAGE question now, so this section is no longer
+     rendered on /clinicians. Kept intact so the homepage rebuild can reuse
+     it; re-add it to a journey page only on a docx change. Copy lives at the
+     end of $lib/content/clinicians. -->
+
 <!-- Section 2 — the device itself. The client's own "Product Features" figure
      (embedded in the docx) supplies the four labels and their technical notes;
      the notes are hidden inside the 3×3 diagram below `sm` and repeated as a

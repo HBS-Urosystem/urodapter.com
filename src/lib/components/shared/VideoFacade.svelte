@@ -3,25 +3,46 @@
 
   let {
     videoId = null,
+    sources = null,
     poster = null,
     caption,
     duration,
   }: {
     videoId?: string | null;
+    // Self-hosted clip (preferred): nothing is fetched until the user presses
+    // play, and no third party is contacted at all.
+    sources?: { webm?: string; mp4: string } | null;
     poster?: string | null;
     caption: string;
     duration: string;
   } = $props();
 
+  const playable = $derived(Boolean(sources) || Boolean(videoId));
+
   let playing = $state(false);
 </script>
 
-<!-- Lite video facade: no YouTube payload until the user clicks play, then a
-     youtube-nocookie embed loads. If videoId is null (e.g. a shorter cut still
-     in production) it renders a branded "Coming soon" placeholder instead. -->
+<!-- Lite video facade: nothing loads until the user presses play.
+     `sources` = a self-hosted clip (a native <video>, no third party at all);
+     `videoId` = a youtube-nocookie embed. With neither, it renders a branded
+     "Coming soon" placeholder instead. -->
 <figure>
   <div class="relative rounded-2xl overflow-hidden aspect-video border border-slate-200/70 dark:border-white/10 bg-navy-900">
-    {#if playing && videoId}
+    {#if playing && sources}
+      <!-- The client's animation carries burned-in (open) captions. Add a
+           <track kind="captions"> WebVTT file here once a transcript exists —
+           open captions are not machine-readable and cannot be turned off. -->
+      <video
+        controls
+        autoplay
+        playsinline
+        {poster}
+        class="absolute inset-0 w-full h-full bg-navy-950 object-cover"
+      >
+        {#if sources.webm}<source src={sources.webm} type="video/webm" />{/if}
+        <source src={sources.mp4} type="video/mp4" />
+      </video>
+    {:else if playing && videoId}
       <iframe
         src="https://www.youtube-nocookie.com/embed/{videoId}?autoplay=1&rel=0"
         title="Animation: how UroDapter works"
@@ -49,7 +70,7 @@
         </div>
       {/if}
 
-      {#if videoId}
+      {#if playable}
         <button
           onclick={() => (playing = true)}
           class="group absolute inset-0 flex items-center justify-center focus-visible:outline-none"
