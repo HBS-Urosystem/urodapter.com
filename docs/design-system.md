@@ -171,11 +171,95 @@ reader doesn't have to scroll down too much… cards or text elements might be i
 opening image" — that is why credibility is overlaid rather than given a section of its own, and
 it is the one place the page departs from docx order.
 
-**The hero is deliberately short** (~530px at 1280, ending just below the regulatory line). It used
-to be stretched to ~710px by a second column holding the testimonials; those moved to the
-key-benefits row (client direction 2026-09-08), which removed ~240px of dead space under the
-left-hand content. If you add anything to the hero, don't reintroduce a tall second column —
-the height is the point.
+**The hero was deliberately short** (~530px at 1280) until the horizontal lockup took a row of its
+own under the copy; it is now ~705px at 1280 (client direction 2026-09-12). Before that it had been
+stretched to ~710px by a second column holding the testimonials, which moved to the key-benefits row
+(2026-09-08) precisely to remove ~240px of dead space — so the height that decision bought has since
+been spent on the lockup. Worth knowing before adding anything else: don't reintroduce a tall second
+column on top of this.
+
+**The hero photo now shows at every width** (client direction 2026-09-10). It used to be dropped
+below 960px in favour of plain navy, because the single-column content covered it and cropped the
+subject's face. It is back on small screens with a different anchor: below `md` the photo starts
+*under* the `SiteHeader` and runs behind the product chip and the rest of the column; from `md` up
+it is full-bleed behind the header as before. That switch is done by moving the *containing block*
+— the wrapper around the photo is `relative md:static`, so the same `absolute inset-0` boxes
+resolve against the wrapper on small screens and against the section on large ones. Don't replace
+this with a hardcoded `top` offset: the header grows when the mobile menu opens, and the
+containing-block version follows it for free.
+
+**Under 1024px the brand lockup sits below the hero copy, left-aligned to it.** The headline row
+is `flex flex-col gap-6 lg:flex-row`, so below `lg` the lockup — the UroDapter logo plus the product
+chip — stacks under the copy. It was centred on the copy column until the logo joined it
+(2026-09-11), and that stopped working: a centred lockup occupies the middle of the frame, and any
+crop that keeps the clinician in shot puts the patient's face in the middle too, so the two collide
+at *every* anchor in 400–640px. Left-aligning frees the right half of the frame for both subjects
+(client direction 2026-09-12, chosen over cropping the clinician or covering the patient). From
+`lg` up both width caps lift, the row turns, and the lockup sits right of the headline. It was also
+briefly hoisted *above* the copy with `order-first`; at 768–1023px that read as part of the header
+rather than the hero. Don't put it back, and don't re-centre it.
+
+**The two logo lockups are sized by their ink, not their boxes, and never share a row.** Both SVGs
+carry internal padding — the artwork fills 73.5% of the square viewBox's height and 63.6% of the
+horizontal one's — so matching box heights would leave them visibly shorter than the product image.
+The heights are therefore `productHeight / inkFraction`: the square lockup is `h-[3.4rem]`
+(54px box → 40px of ink) and `sm:h-[5.44rem]` (87px → 64px), the horizontal one `lg:h-[8.65rem]`
+(138px → 88px). Measured, the ink lands within 0.4px of the product image at every breakpoint
+(client direction 2026-09-12).
+
+Placement follows from how much frame the row can spare. Ink-matched, the horizontal lockup is
+~196px wide, so below `md` it would push that row onto the patient's face — at 640px it cuts the
+clinician from 67% of her width to 29%. The square lockup therefore runs below 768px. From `md` the
+visible window is wide enough (69% of the frame at 768px vs 58% at 640px) that the horizontal one
+costs nothing — measured at 768px it leaves the lockup ending at 60.8%, still clear of her head at
+66%, with the clinician unchanged at 75% (client direction 2026-09-12). So: square below 768px,
+horizontal beside the product image 768–1023px, and from `lg` horizontal again but in a row of its
+own under the copy, centred on the text column, with the product image beside the headline. The
+`md` height is `md:h-[6.29rem]` (101px box → 64px of ink).
+
+At `lg`, `lg:flex-initial` on the copy column is what keeps the product image *next to* the text. As
+`flex-1` the column grew to fill the whole 62% track, leaving a ~300px void and pinning the image to
+the track's right edge (client direction 2026-09-12). The column is now as wide as the copy itself —
+411px at 1024, 448px from ~1120 where `max-w-md` on the body caps it — with a 40px gap to the image,
+and the headline still holds two lines at every width from 1024 up. The horizontal lockup centres on
+that narrower column, so it tracks the copy rather than the track.
+
+Both lockups are decorative (`alt=""`,
+`aria-hidden`): `SiteHeader` already carries the brand as a link. They are plain `<img>`, not
+`enhanced:img` — that transform is raster-only.
+
+**The photo's crop anchor is stepped across four breakpoints, and not monotonically.** Below `lg`
+the hero band is portrait, so `object-cover` on the 16:9 source matches the band's *height* and
+overflows horizontally: the crop is purely horizontal, `object-position`'s Y value does nothing, and
+its X value decides what sits behind the lockup. Two goals pull against each other — the lockup must
+stay left of ~66% (the patient's head runs ~66–78%) while the window must reach ~88%+ for the
+clinician (~85–100%) to be in shot. The stops are the best each range allows, measured as lockup
+rect vs. band rect converted to source %:
+
+| viewport | anchor | lockup ends at | patient whole | clinician shown |
+|----------|--------|----------------|---------------|-----------------|
+| 375      | 75%    | 65.6%          | yes           | 0% — see below  |
+| 430      | 80%    | 64.5%          | yes           | 20%             |
+| 480      | 88%    | 64.4%          | yes           | 57%             |
+| 640      | 88%    | 62.9%          | yes           | 67%             |
+| 768      | 88%    | ~53%           | yes           | ~75%            |
+| 1023     | 88%    | ~33%           | yes           | 94%             |
+| 1280     | 75%    | n/a — beside the headline | yes | full           |
+
+Below 400px the window is only ~34% of the frame — too narrow to hold lockup + patient + clinician
+at once — so the patient wins and the clinician stays out. That is geometry, not a tuning miss: the
+only fix is a shorter band, which costs hero breathing room. 400px and 480px are expressed in rem
+(`min-[25rem]`, `min-[30rem]`) so they sort correctly against Tailwind's rem breakpoints.
+**Re-measure before touching any of this** — and note these numbers are void if the hero photo is
+ever swapped, since they encode where the two subjects stand in *this* frame.
+
+**The sub-`lg` overlay dips where the faces are.** Above 1024px the horizontal fade leaves the
+subjects almost clear (4–6% at the right), but below it a single top-to-bottom gradient sat as
+heavily on the faces as on the background and the people read far darker than on desktop (client
+direction 2026-09-12). The gradient now has four stops: it opens at 60%, **dips to 42% at 38%
+height — where the crop puts the two faces** — and closes back to 62%/74% for the credibility strip
+and the 12px regulatory line, which run over the subject's light sweater and need the cover. Dark
+keeps the same shape, heavier throughout (86/60/74/82).
 
 **Per-section persona accents still apply**, but now *within* a section: `KeyBenefits` puts
 `.accent-patient` and `.accent-clinician` on its two cards side by side, and `ChooseJourney`
