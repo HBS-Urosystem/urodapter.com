@@ -4,7 +4,16 @@
   import productImage from "$lib/assets/hero/urodapter-product.png";
   import logoHorizontal from "$lib/assets/hero/UroDapter_logo_horizontal.svg";
   import logoSquare from "$lib/assets/hero/UroDapter_logo_square.svg";
-  import { hero, heroTrustStats, heroRegulatory } from "$lib/content/home";
+  import {
+    hero,
+    heroTrustStats,
+    heroRegulatory,
+    quotes,
+  } from "$lib/content/home";
+
+  // check-badge (heroicons outline) — the trust pill's mark
+  const badgeIcon =
+    "M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z";
 </script>
 
 <!-- HERO with full-width background photo; text is always white here
@@ -22,56 +31,51 @@
        section instead and the photo goes full-bleed behind the header too.
        Doing it this way keeps the header's height out of the CSS. -->
   <div class="relative md:static flex-1">
-    <!-- The crop anchor is stepped, and the steps are not monotonic on purpose.
-         Below lg the band is portrait, so covering the 16:9 source matches its
-         *height* and overflows horizontally: the crop is purely horizontal, the
-         Y value does nothing, and the X value is exactly what ends up behind the
-         centred product chip. As the viewport widens the visible window widens
-         faster than the chip moves, so the chip sweeps leftward across the
-         source — 84% of the frame at 375px down to 37% at 1023px — dragging it
-         straight over the patient, whose head occupies ~61–77%. One anchor
-         therefore cannot clear her at every width (a single 75% put the chip on
-         her cheek; a single 100% fixed 375px but not 500–768px). Each step below
-         parks the chip on quiet frame while keeping her fully in shot:
-           <400px   100% — narrowest window; she sits left, the clinician right,
-                           and the chip falls in the gap between them
-           400px     62% — past ~400px a 100% anchor drags the chip onto her
-                           cheek, so the anchor pulls back to keep it left of her
-           768px+    75% — window is nearly the full width; the chip is over the
-                           blurred background, and this is the desktop framing too
-         400px is in rem for the same reason the media query below is: mixing
-         units with Tailwind's rem breakpoints throws off its sort order.
-         The anchors also have to keep the clinician in frame (she occupies
-         ~85–100% of the source) — below lg she was cropped almost entirely away
-         (client direction 2026-09-12). Both goals pull against each other: the
-         lockup must stay left of ~66%, which caps how far right the window can
-         reach. The stops are the best each range allows, measured:
-           <400px  75% — window is only ~34% of the frame, too narrow to hold
-                         lockup + patient + clinician; the patient wins and the
-                         clinician stays out. Not fixable without a shorter band.
-           400px   80% — clinician starts to appear (~20% of her at 430px)
-           480px   88% — 57% of her at 480px, 69% at 768px, 92% at 1023px
-           1024px  75% — desktop framing, unchanged
+    <!-- The crop anchor is stepped, and every value is measured, not guessed.
+         Below lg the band is portrait, so object-cover matches its *height* and
+         overflows horizontally: the crop is purely horizontal, the Y value does
+         nothing, and the X value decides what sits behind the brand lockup. Two
+         goals pull against each other — the lockup must stay left of ~66% (the
+         patient's head runs ~66–78%) while the window must reach ~88% for the
+         clinician (~85–100%) to be in shot.
+         Restoring the testimonials to the hero (2026-09-13) made the band far
+         taller below lg — 999px at 375 against 635px before — which narrows the
+         visible window to ~21% of the frame and slides everything right. These
+         anchors are the re-solved values that keep the lockup off her face at
+         the new heights; the clinician is the casualty below ~700px, and the
+         only lever that brings her back is stopping the band from stretching
+         behind the testimonials.
+           <400px   69%    lockup ends ~65%, clinician out of frame
+           400px    73%    lockup ends ~65%, clinician out of frame
+           480px    76%    lockup ends ~65%, clinician out of frame
+           640px    80%    lockup ends ~65%, clinician ~20% at 640, ~50% at 1023
+           1024px   75%    desktop; lockup sits beside the headline, ends ~52%
          Re-measure (lockup rect vs. band rect, converted to source %) before
-         changing any of these; they are not arbitrary. -->
+         changing any of these, and re-measure again if the hero's height moves —
+         the band's aspect is the input to all of it. -->
     <enhanced:img
       src={heroImage}
       alt=""
       aria-hidden="true"
       sizes="min(2752px, 100vw)"
       fetchpriority="high"
-      class="absolute inset-0 w-full h-full object-cover object-[75%_50%] min-[25rem]:object-[80%_50%] min-[30rem]:object-[88%_50%] lg:object-[75%_50%]"
+      class="hero-photo absolute inset-0 w-full h-full object-cover object-[73%_50%] min-[25rem]:object-[79%_50%] min-[30rem]:object-[84%_50%] sm:object-[88%_50%] lg:object-[75%_50%]"
     />
     <div class="hero-overlay absolute inset-0"></div>
 
     <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pb-14">
-      <!-- One column. The testimonials used to sit in a second column here; they
-           moved to the key-benefits row (client direction 2026-09-08), which is
-           what lets the hero end just below the regulatory line instead of being
-           stretched to the height of a quote stack. `lg:min-h` keeps enough photo
-           on screen for the subjects to read. -->
-      <div class="lg:min-h-[26rem] pt-10 sm:pt-14">
-        <div class="lg:max-w-[62%]">
+      <!-- Two columns from lg, one below it, and the testimonials are the same
+           markup in both — the grid is what moves them. From lg they are the
+           right-hand column, floating over the photo as they did before they
+           were moved to the key-benefits row; below lg the wrapper is a plain
+           block, so they simply fall after the credibility strip and its
+           regulatory line (client direction 2026-09-13, reversing 2026-09-08).
+           `1.5fr_1fr` reproduces the old split and stands in for the
+           `lg:max-w-[62%]` the left column used to carry. -->
+      <div
+        class="lg:min-h-[26rem] pt-10 sm:pt-14 lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-x-10 lg:items-start"
+      >
+        <div>
           <!-- Under 1024px this row stacks, so the brand lockup lands under the
                copy rather than beside it, aligned to the copy's left edge. It
                was centred on the copy column until the lockup grew a logo: a
@@ -187,6 +191,49 @@
             {heroRegulatory}
           </p>
         </div>
+
+        <!-- Glass over the photo, so it reads as floating rather than as a card
+             on the page. `lg:self-end lg:translate-y-8` drops it against the
+             bottom of the band the way it sat before; below lg it is just the
+             next block after the regulatory line. -->
+        <div
+          class="mt-10 space-y-3 lg:mt-0 lg:w-full lg:max-w-sm lg:justify-self-end lg:self-end lg:translate-y-8"
+        >
+          <div
+            class="inline-flex items-center gap-2 bg-navy-900/80 backdrop-blur border border-white/10 rounded-full pl-3 pr-4 py-2"
+          >
+            <svg
+              class="w-4 h-4 text-sky-300 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d={badgeIcon}
+              /></svg
+            >
+            <p class="text-xs font-semibold text-slate-200">{quotes.pill}</p>
+          </div>
+
+          <div
+            class="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl shadow-xl divide-y divide-white/10"
+          >
+            {#each quotes.items as quote (quote.author)}
+              <blockquote class="p-4">
+                <p class="text-sm leading-relaxed text-white text-pretty">
+                  &ldquo;{quote.quote}&rdquo;
+                </p>
+                <footer class="mt-2 text-xs text-slate-300">
+                  <span class="font-bold text-white">{quote.author}</span>
+                  {#if quote.subAuthor}<br />{quote.subAuthor}{/if}
+                </footer>
+              </blockquote>
+            {/each}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -235,6 +282,27 @@
       --overlay-100: rgba(13, 26, 48, 0.18);
     }
   }
+  /* The photo is capped below lg. Stacking the testimonials into the hero takes
+     it to ~900–1000px there, and a 16:9 source covering a box that tall leaves a
+     ~21%-wide window, which crops the clinician out entirely. Capping the photo
+     holds the band's aspect near what it was before the quotes came back, so the
+     crop anchors keep both subjects in frame (client direction 2026-09-13).
+     Below the cap the quotes sit on the navy base; the mask fades the photo out
+     over its last quarter instead of ending it on a hard line. From lg the photo
+     fills the section again — the hero is landscape there and crops vertically. */
+  .hero-photo {
+    max-height: 40rem;
+    -webkit-mask-image: linear-gradient(to bottom, #000 74%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 74%, transparent 100%);
+  }
+  @media (min-width: 64rem) {
+    .hero-photo {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+
   /* 63.9375rem (1023px at the default 16px root) instead of a raw px value,
      so this lines up exactly with Tailwind's `lg:` (64rem) breakpoint used
      elsewhere in this component — mixing units here previously threw off

@@ -171,12 +171,13 @@ reader doesn't have to scroll down too much… cards or text elements might be i
 opening image" — that is why credibility is overlaid rather than given a section of its own, and
 it is the one place the page departs from docx order.
 
-**The hero was deliberately short** (~530px at 1280) until the horizontal lockup took a row of its
-own under the copy; it is now ~705px at 1280 (client direction 2026-09-12). Before that it had been
-stretched to ~710px by a second column holding the testimonials, which moved to the key-benefits row
-(2026-09-08) precisely to remove ~240px of dead space — so the height that decision bought has since
-been spent on the lockup. Worth knowing before adding anything else: don't reintroduce a tall second
-column on top of this.
+**The hero is no longer short, and that was a deliberate reversal.** It was ~530px at 1280 until the
+horizontal lockup took a row of its own under the copy (~705px), and the testimonials then came back
+into it (client direction 2026-09-13), which leaves it ~705px at 1280 — they fit in the right-hand
+column without adding height — but **~913–999px below `lg`**, where they stack. The testimonials had
+been moved out to the key-benefits row on 2026-09-08 precisely to reclaim ~240px; that decision is
+now reversed. The height matters beyond looks: the band's aspect is the input to every crop anchor
+below, so anything that changes the hero's height invalidates them.
 
 **The hero photo now shows at every width** (client direction 2026-09-10). It used to be dropped
 below 960px in favour of plain navy, because the single-column content covered it and cropped the
@@ -228,30 +229,38 @@ Both lockups are decorative (`alt=""`,
 `aria-hidden`): `SiteHeader` already carries the brand as a link. They are plain `<img>`, not
 `enhanced:img` — that transform is raster-only.
 
-**The photo's crop anchor is stepped across four breakpoints, and not monotonically.** Below `lg`
-the hero band is portrait, so `object-cover` on the 16:9 source matches the band's *height* and
-overflows horizontally: the crop is purely horizontal, `object-position`'s Y value does nothing, and
-its X value decides what sits behind the lockup. Two goals pull against each other — the lockup must
-stay left of ~66% (the patient's head runs ~66–78%) while the window must reach ~88%+ for the
-clinician (~85–100%) to be in shot. The stops are the best each range allows, measured as lockup
-rect vs. band rect converted to source %:
+**The photo's crop anchor is stepped across five breakpoints, all measured.** Below `lg` the hero
+band is portrait, so `object-cover` matches its *height* and overflows horizontally: the crop is
+purely horizontal, `object-position`'s Y value does nothing, and its X value decides what sits behind
+the brand lockup. Two goals pull against each other — the lockup must stay left of ~66% (the
+patient's head runs ~66–78%) while the window must reach ~88% for the clinician (~85–100%) to be in
+shot.
+
+Restoring the testimonials (2026-09-13) made the band far taller below `lg` — 999px at 375 against
+635px before — which narrowed the window to ~21% of the frame and cropped the clinician out
+entirely. The fix is `.hero-photo`: below `lg` the photo is capped at `max-height: 40rem` and masked
+to fade out over its last quarter, so the band's aspect stays near what it was before the quotes
+came back and the quotes sit on the navy base below the fade. From `lg` the cap and mask are
+removed — the hero is landscape there and crops vertically instead. With the cap in place:
 
 | viewport | anchor | lockup ends at | patient whole | clinician shown |
 |----------|--------|----------------|---------------|-----------------|
-| 375      | 75%    | 65.6%          | yes           | 0% — see below  |
-| 430      | 80%    | 64.5%          | yes           | 20%             |
-| 480      | 88%    | 64.4%          | yes           | 57%             |
-| 640      | 88%    | 62.9%          | yes           | 67%             |
-| 768      | 88%    | ~53%           | yes           | ~75%            |
-| 1023     | 88%    | ~33%           | yes           | 94%             |
-| 1280     | 75%    | n/a — beside the headline | yes | full           |
+| 375      | 73%    | 65.0%          | yes           | 0% — see below  |
+| 430      | 79%    | 65.3%          | yes           | 13%             |
+| 480      | 84%    | 64.7%          | yes           | 38%             |
+| 640      | 88%    | 61.8%          | yes           | 65%             |
+| 768      | 88%    | 61.5%          | yes           | 73%             |
+| 1023     | 88%    | 41.9%          | yes           | 91%             |
+| 1280     | 75%    | 51.9% — beside the headline | yes | full |
 
-Below 400px the window is only ~34% of the frame — too narrow to hold lockup + patient + clinician
-at once — so the patient wins and the clinician stays out. That is geometry, not a tuning miss: the
-only fix is a shorter band, which costs hero breathing room. 400px and 480px are expressed in rem
-(`min-[25rem]`, `min-[30rem]`) so they sort correctly against Tailwind's rem breakpoints.
-**Re-measure before touching any of this** — and note these numbers are void if the hero photo is
-ever swapped, since they encode where the two subjects stand in *this* frame.
+375 is the one width where she still cannot appear: the window there is ~33% of the frame, too
+narrow to hold lockup + patient + clinician at once, and the lockup has only ~1% of headroom before
+it reaches the patient's face. That is geometry, not a tuning miss.
+
+400px and 480px are expressed in rem (`min-[25rem]`, `min-[30rem]`) so they sort correctly against
+Tailwind's rem breakpoints. **Re-measure before touching any of this**, and re-measure again if the
+hero's height moves at all. These numbers are void if the hero photo is ever swapped, since they
+encode where the two subjects stand in *this* frame.
 
 **The sub-`lg` overlay dips where the faces are.** Above 1024px the horizontal fade leaves the
 subjects almost clear (4–6% at the right), but below it a single top-to-bottom gradient sat as
@@ -260,6 +269,14 @@ direction 2026-09-12). The gradient now has four stops: it opens at 60%, **dips 
 height — where the crop puts the two faces** — and closes back to 62%/74% for the credibility strip
 and the 12px regulatory line, which run over the subject's light sweater and need the cover. Dark
 keeps the same shape, heavier throughout (86/60/74/82).
+
+**The testimonials live in the hero again, in one set of markup.** From `lg` they are the
+right-hand column of a `lg:grid-cols-[1.5fr_1fr]` grid, glass over the photo, as they were before
+2026-09-08; below `lg` that wrapper is a plain block, so they simply fall after the credibility strip
+*and* its regulatory line — the fine print belongs with the strip it qualifies, so the quotes go
+under both (client direction 2026-09-13). No duplicate markup and no second copy of the quotes:
+`KeyBenefits` lost its third column and is now `md:grid-cols-2`, and `quotes` is imported by the hero
+instead.
 
 **Per-section persona accents still apply**, but now *within* a section: `KeyBenefits` puts
 `.accent-patient` and `.accent-clinician` on its two cards side by side, and `ChooseJourney`
@@ -417,7 +434,7 @@ Home page (`src/lib/components/home/`) — three sections since the 0831 rebuild
 
 | Component | Notes |
 |---|---|
-| `KeyBenefits.svelte` | **Section 1**: a three-column row — the two audience cards (each in its own accent scope) plus the two docx testimonials in a `.surface-panel` beside them. The docx key-benefits headline is **split across the two card titles** (`h2` each), so the section has no headline of its own and is labelled by both — `aria-labelledby="benefits-patients benefits-clinicians"`. Inside a card: persona chip + serif title, that audience's problem sentence, a hairline, then the three benefits as **ticks** (bare check icon in `--accent-ink`, no chip). The testimonial column is `md:col-span-2 lg:col-span-1` — at `md` three columns squeeze the serif titles, so it drops below the pair. |
+| `KeyBenefits.svelte` | **Section 1**: a two-column row of audience cards, each in its own accent scope. It carried the two docx testimonials as a third `.surface-panel` column from 2026-09-08 until they moved back to the hero (2026-09-13) — hence `md:grid-cols-2` with no `lg` step. The docx key-benefits headline is **split across the two card titles** (`h2` each), so the section has no headline of its own and is labelled by both — `aria-labelledby="benefits-patients benefits-clinicians"`. Inside a card: persona chip + serif title, that audience's problem sentence, a hairline, then the three benefits as **ticks** (bare check icon in `--accent-ink`, no chip). |
 | `HowItWorks.svelte` | **Section 2**: header + intro, the `ProductCallouts` diagram in a `.surface-card`, then a `[2fr_3fr]` row pairing the second-line explanation with the 30-second animation. |
 | `ChooseJourney.svelte` | **Section 3**: three journey cards (`.accent-pill`, each in its own accent scope) + the Support Center shortcut. **Carries `id="support"`** — see §2. |
 | `WhatItIs.svelte`, `ProofStats.svelte`, `PersonaSection.svelte`, `Voices.svelte` | **Parked** — the pre-0831 home page. Not rendered; their CMS-approved copy is kept for the Support Center build. |
