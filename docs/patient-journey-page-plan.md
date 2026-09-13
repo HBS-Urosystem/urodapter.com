@@ -18,11 +18,11 @@
 >
 > | # | Section | Component | Docx |
 > |---|---|---|---|
-> | 1 | Hero (headline on the photo) + intro + 4 benefit cards + indications | `patients/WhyChoose.svelte` | Section 1 |
+> | 1 | Hero (headline on the photo) + intro + 4 benefits as an `AutoAccordion` + indications | `patients/WhyChoose.svelte` | Section 1 |
 > | — | bridge (arrow) | `SectionBridge` | Section 2 bridge text |
-> | 2 | Patient experiences — 4 testimonials + "read all" band | `patients/PatientStories.svelte` | Section 2 |
+> | 2 | Patient experiences — 4 stories as an `AutoAccordion` + "read all" band | `patients/PatientStories.svelte` | Section 2 |
 > | — | bridge (quote) | `SectionBridge` | Section 3 bridge text |
-> | 3 | Evidence & outcomes — stats, chart, consensus, clinician slider | `patients/EvidenceOutcomes.svelte` | Section 3 |
+> | 3 | Evidence & outcomes — stat row, then chart / consensus / clinician quotes as an `AutoAccordion` | `patients/EvidenceOutcomes.svelte` | Section 3 |
 > | — | bridge (arrow) | `SectionBridge` | Section 5 bridge text |
 > | 4 | What happens next — CTA tiers, dive-deep band, closing band | `patients/NextSteps.svelte` | Section 5 |
 >
@@ -298,6 +298,55 @@ conditions, patients share the same goal: making treatment as comfortable as pos
 tinted `rounded-2xl` band; right, four icon chips: **IC/BPS · Chronic UTI · Recurrent UTI ·
 Bladder Cancer**. Chips are informational (not links) for now; later they can deep-link to
 Support Center condition pages. Mobile: sentence, then chips in a 2×2 grid.
+
+---
+
+## 6a. Sections 1–3 as autonomous accordions *(2026-09-13)*
+
+All three content sections now use `AutoAccordion` (design system §6a). **The page goes
+5 479 → 5 110 px desktop and 10 256 → 8 760 px mobile (12,6 → 10,8 screens).** Section 4
+(`NextSteps`) is deliberately excluded: its three tiers are the conversion path and each card is
+itself an `<a>`, so putting two of three behind an interaction works against what the section is
+for.
+
+| Section | Desktop | Mobile |
+|---|---:|---:|
+| 1 `WhyChoose` — the four benefits | 1 188 → **1 231** px | 2 016 → **1 793** px |
+| 2 `PatientStories` — the four stories | 729 → **731** px | 1 930 → **1 430** px |
+| 3 `EvidenceOutcomes` — chart / consensus / quotes | 1 273 → **859** px | — |
+
+Two of those are bought **entirely for the phone**, and Section 1 actually costs desktop height.
+That was the deliberate trade: desktop was already fine at 5.7 screens, mobile was 12.6. Worth
+knowing before judging the desktop column.
+
+- **Section 1's headers carry no icon chip.** With one, each row is 60 px and the 4-item list is
+  296 px — taller than the 208 px grid it replaces. Without, rows are 46 px, the list is 251 px,
+  and the icon moves into the pane. All four benefit *titles* stay visible; only the bodies
+  collapse, and auto-advance walks a reader through all four anyway.
+- **Section 2's pane keeps each story's own "read my story" link**, so the four per-card links
+  the grid had are all still there (verified in the DOM).
+
+### Section 3 in detail
+
+The chart, the expert consensus and the clinician quotes are three parallel answers to the
+section's own question — each with its own visual — so they became three `AutoAccordion` items
+with three panes instead of three stacked blocks (design system §6a). **1 273 → 859 px desktop;
+the page goes 5 479 → 5 065 px desktop and 10 256 → 9 482 px mobile.**
+
+- The three `StatCard`s stay a visible row above it. They are the glanceable reassurance and
+  cost only ~170 px — exactly the content that should *not* be behind an interaction on this
+  page.
+- `OutcomesChart` and `ClinicianQuotes` both took a **required** `heading`, which duplicated the
+  accordion header once they moved into panes. Both are now optional; pass them only when the
+  component is used standalone.
+- The quotes pane still contains the manual `ClinicianQuotes` slider. It works — the slider is
+  manual and the accordion pauses on any interaction — but a slider inside an accordion pane is
+  a wrinkle. Promoting the three quotes to accordion items would remove it, at the cost of
+  retiring `ClinicianQuotes`.
+- **`WhyChoose` and `PatientStories` were deliberately left as grids.** The saving would be
+  small (~150 px desktop), and for `PatientStories` three peer stories visible at once *is* the
+  reassurance the section exists to give. That is a judgement about those two sections, not a
+  rule.
 
 ---
 

@@ -16,6 +16,12 @@ képest, amit az architektúra-doksi ráoszt.
 > Ez a dokumentum **elemzés, nem végrehajtott változás.** A 4. pont javaslatai egy későbbi körre
 > szólnak; a komponens- és content-fájlok a doksi írásakor változatlanok.
 
+> **Frissítés — 2026-09-13.** Az 1. pont mérései elavultak: hat szekció `AutoAccordion`-re állt
+> át (design system §6a), lásd a 6. pontot a lap alján. **Klinikus oldal: 7 105 → 5 947 px
+> asztali** (7,9 → 6,6 képernyő), **12 726 → 9 719 px mobil** (15,7 → 12,0 képernyő).
+> **Páciens oldal: 5 479 → 5 110 px asztali**, **10 256 → 8 760 px mobil** (12,6 → 10,8 képernyő). Az 1. pont
+> (`ProofStats` bekötése a homepage-re) és a kereszt-duplikáció (3. pont) **továbbra is nyitott**.
+
 ---
 
 ## 1. Mérési adatok
@@ -208,3 +214,89 @@ bizalomépítés egy része a homepage-en már megtörtént, mire a látogató i
 3. **`#support` továbbra is placeholder.** Minden „read more" link egy kártyára görget, nem
    tartalomra. Amíg nincs valódi Support Center útvonal, a 3. pont kereszt-duplikációja csak
    csökkenthető, megszüntetni nem lehet.
+
+---
+
+## 6. Mi valósult meg — `AutoAccordion` *(2026-09-13)*
+
+A rövidítés nem a 4. pont tartalom-áthelyezéseivel indult, hanem egy **prezentációs**
+változással: minden olyan szekció, ami "több párhuzamos blokk, mindegyik saját vizuállal"
+szerkezetű, egyszerre egy elemet mutat, a többi egy kattintásra marad. A minta a Whoop
+"Built to be worn 24/7" moduljából jön; a feltételeket a
+[design-system.md §6a](design-system.md) rögzíti.
+
+### Klinikus oldal
+
+| Szekció | Asztali | Mobil |
+|---|---:|---:|
+| `ClinicalValue` (Section 1) | 1 172 → **1 052** px | 2 265 → **1 717** px |
+| `ClinicalEvidence` (Section 2) | 967 → **533** px | 1 931 → **1 134** px |
+| `SocialProof` (Section 3) | 1 375 → **1 058** px | 3 019 → **2 083** px |
+| `Implementation` (Section 4) | 820 → **532** px | 1 723 → **998** px |
+| **Oldal összesen** | 7 105 → **5 947** px (7,9 → 6,6 képernyő) | 12 726 → **9 719** px (15,7 → 12,0 képernyő) |
+
+### Páciens oldal
+
+| Szekció | Asztali | Mobil |
+|---|---:|---:|
+| `WhyChoose` (Section 1) | 1 188 → **1 231** px | 2 016 → **1 793** px |
+| `PatientStories` (Section 2) | 729 → **731** px | 1 930 → **1 430** px |
+| `EvidenceOutcomes` (Section 3) | 1 273 → **859** px | — |
+| **Oldal összesen** | 5 479 → **5 110** px | 10 256 → **8 760** px (12,6 → 10,8 képernyő) |
+
+A páciens oldal Section 1–2 nyeresége **kizárólag mobilra szól** — asztalin a Section 1
+kifejezetten *nőtt* 43 px-szel. Tudatos csere: az asztali oldal 5,7 képernyővel eleve rendben
+volt, a mobil 12,6-tal nem. A Section 4 (`NextSteps`) szándékosan **nem** akkordeon: a három CTA
+a konverziós út, mindegyik kártya maga egy `<a>` — kettőt interakció mögé tenni pont az ellen
+dolgozna, amiért a szekció létezik.
+
+Mérve `localhost:5199`-en, 1280×900 és 375×812 nézetben, ugyanúgy, mint az 1. pont alapmérése.
+Az oldalmagasság **minden elemnél azonos** (a panelek egy rácscellában vannak egymásra rakva),
+így a lap nem ugrik, amíg az akkordeon lépked.
+
+### Amit a 4. pont javaslataiból ez megoldott
+
+- **1. pont (Section 1 tömörítés).** Megvalósult, méghozzá a docx saját mondata szerint: a
+  *group* lett az akkordeon eleme, a három benefit pedig a panel — "1 box for the 3 patient
+  benefit, 1 box for the clinician benefit … can be sliders as well to save space".
+- **4. pont (a két Support Center kártya).** Nem olvadtak össze — ahhoz a kliensnek kell
+  megmondania, melyik szöveg marad —, de egymás mellé kerültek, ami ~135 px-et hoz.
+
+### Ami továbbra is nyitott
+
+- **3. pont — kereszt-duplikáció.** Változatlan: a Lovász / Pothoven / Buford tanulmányok és a
+  klinikus idézetek továbbra is két oldalon szerepelnek. Az akkordeon a *hosszt* csökkenti, a
+  *duplikációt* nem — minden tartalom benne marad a DOM-ban (szándékosan: keresők és AEO
+  számára a szekció nem lett szegényebb, csak rövidebb). Ez csak a Support Center útvonallal
+  oldható meg.
+- **4. pont 3. javaslata — páciens idézetek 3 → 1 a klinikus oldalon.** Az akkordeon elrejti a
+  tömegüket, de mind a hat idézet ott van. A tényleges válogatás kliens-jóváhagyást igényel.
+- **A `ProofStats` bekötése a homepage-re** (4. pont 1. javaslata).
+
+### A mérés, ami kétszer megmentette a munkát
+
+Egy fejléc-sor ~60 px ikonchippel, ~46 px anélkül, plusz ~56 px a pause-gomb. Egy négyelemű
+lista tehát 296 / 251 px, **mielőtt** a panel egyáltalán számítana — egy 4-oszlopos kártyarács
+(208 px asztali) ellenében az akkordeon **hosszabb**. Ez kétszer derült ki mérésből, nem
+becslésből: a klinikus Section 1 első verziója (6 elem) 22 px-et hozott és újra kellett építeni
+(2 elem = 2 csoport), a páciens `WhyChoose` pedig csak azért éri meg, mert a fejlécéről lekerült
+az ikonchip.
+
+### Ismert szépséghiba
+
+A páciens Section 3 harmadik panelje a meglévő `ClinicianQuotes` manuális slidert tartalmazza —
+slider egy akkordeon-panelen belül. Működik (a slider manuális, az akkordeon pedig megáll az
+első interakcióra), de érdemes visszatérni rá: ha a három idézet önálló akkordeon-elem lesz, a
+beágyazás megszűnik, cserébe a `ClinicianQuotes` komponens nyugdíjazható.
+
+### Nyitott kérdés a kliens felé
+
+A Section 2 három docx-címkéje most fejlécként, normál szedéssel jelenik meg, ahol eddig verzál
+"eyebrow" volt — így láthatóvá vált, hogy az első Title Case, a másik kettő sentence case:
+
+- "Published Clinical Series — Feasibility at Scale"
+- "Real-world clinical experience — Patient acceptance"
+- "International expert review — Professional recognition"
+
+A szöveg docx-hű, ezért **nem nyúltunk hozzá**. Ha a kliens egységesíti, egy sor a
+`clinicians.ts`-ben.

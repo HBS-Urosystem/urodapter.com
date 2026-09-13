@@ -390,8 +390,9 @@ things. Icon chips inside cards stay `bg-(--color-patient-soft)` / white as befo
    - Use sparingly: bridges, card grids, column blocks — not every element.
 2. **Link arrow** — `group-hover:translate-x-1 transition-transform` on a `→`.
 3. **Bridge arrow nudge** — gentle 4px loop, disabled under reduced motion.
+4. **The accordion rail** — the progress fill in `AutoAccordion`, §6a.
 
-Anything new must justify itself against these three. No parallax, 3D, cursor effects, or
+Anything new must justify itself against these four. No parallax, 3D, cursor effects, or
 autoplaying video — wrong register for anxious patients on a regulated medical page.
 
 **Sliders/carousels are a last resort**, and when content genuinely demands one
@@ -400,6 +401,87 @@ the box height fits the longest slide (no layout jump); crossfade opacity only, 
 `motion-reduce:transition-none`; `aria-live="polite"`, labelled dot + prev/next buttons. A
 content *grid* (Section 4 testimonials) beats a carousel — the Section 4 carousel mockup was
 rejected exactly because it hides content behind interaction.
+
+---
+
+## 6a. The autonomous accordion (`AutoAccordion`) *(2026-09-13)*
+
+One item open at a time, its detail in the pane beside it, advancing on its own. Modelled on
+Whoop's "Built to be worn 24/7" module. **This is a deliberate, bounded exception to §6's
+"manual only, never auto-advance"** — read the conditions before reaching for it.
+
+**Why the exception was granted.** The clinician page ran 7 105 px / 7.9 screens desktop and
+12 726 px / 15.7 screens mobile, the patient page 5 479 / 10 256
+([page-length-audit.md](page-length-audit.md)). The sections that were worst are all the same
+shape — "several parallel blocks, each with its own visual" — which is the shape an accordion
+is actually for. Stacking them cost thousands of pixels to say three things that are read one
+at a time anyway.
+
+**Where it is applied.** Both journey pages, eight sections (2026-09-13): clinician Sections 1–4,
+patient Sections 1–3. Patient `NextSteps` is deliberately **not** one — see below.
+
+**Not for CTAs.** Patient/clinician `NextSteps` stays a visible grid. Its three tiers are the
+conversion path and each card is itself an `<a>`; putting two of three behind an interaction
+works directly against what the section is for. Length is not the thing to optimise there.
+
+**Conditions. All of them, or use a grid instead:**
+
+- **Nothing leaves the DOM.** Collapsed bodies are clipped (`grid-template-rows: 0fr`), hidden
+  panes are `visibility: hidden` — both still rendered, so every claim, footnote and citation
+  is in the HTML for crawlers and AEO. The section gets shorter, not lighter.
+- **The page must not move.** All panes stack in one grid cell so the box is as tall as the
+  tallest — the §6 slider rule. Verified: page height is identical across every item, on both
+  pages, desktop and mobile.
+- **Reduced motion is fully manual.** No exceptions, no separate branch — see below.
+- **A pause control** (WCAG 2.2.2), and opening an item pauses it: the reader chose that item,
+  so nothing should move under them. The control flips to "Play".
+- **The pane must not repeat the header.** A pane component that renders its own title
+  duplicates the accordion header — `OutcomesChart` and `ClinicianQuotes` both took a required
+  `heading` and had to be made optional. Check this when putting an existing block in a pane.
+- **Measure before assuming it shortens anything.** A header row is ~60 px with an icon chip and
+  ~46 px without, plus ~56 px for the pause control. So a 4-item list is 296 px / 251 px before
+  the pane is even considered, and against a 4-up card grid (208 px desktop) an accordion makes
+  the section *longer*. It paid for itself twice by being measured, not predicted: clinician
+  Section 1 was rebuilt from six items to two after the first shape saved 22 px, and patient
+  `WhyChoose` only works because its headers drop the icon chip.
+
+**On testimonials (§6's rejected carousel).** §6 records that a Section 4 carousel mockup was
+rejected for hiding quotes behind interaction. Clinician Section 3 and patient Section 3 now do
+put quotes in an accordion, **deliberately and with the client's call** (2026-09-13). What keeps
+the original objection answered: the quote itself is the *pane*, which is on screen the whole
+time — it is the short theme label that collapses, not the quote. The clinician/patient split
+the docx and the 2026-09-02 client comment both care about survives as the accordion's two
+labelled `role="group"` runs.
+
+**How it advances — the one mechanism worth understanding.** The progress rail *is* the timer:
+the fill animates `scaleY(0 → 1)` over `--ac-dwell`, and its `animationend` opens the next item.
+Three things fall out of that for free rather than needing their own code:
+
+| | |
+|---|---|
+| Pause / resume | one `animation-play-state` — the rail freezes where it is |
+| Reduced motion | no animation → no `animationend` → **nothing auto-advances**, ever |
+| Background tab | the browser stops the animation clock, so the page never advances unseen |
+
+A `@media (prefers-reduced-motion: reduce)` block kills the animation in CSS *as well as* the
+JS `matchMedia` check, because the CSS also covers the pre-hydration window.
+
+**Other specifics:**
+
+- `inView` **fails open** (starts `true`; the IntersectionObserver only ever *pauses*). If
+  IntersectionObserver is missing or never delivers, the accordion still runs rather than
+  sitting frozen on item 1.
+- Headers are real `<button>`s in an `<h3>`, with `aria-expanded` / `aria-controls`; panels are
+  `role="region"` + `aria-labelledby`, `inert` when closed. Arrow / Home / End move between
+  headers (ARIA APG).
+- **Inactive headers are `text-slate-500 dark:text-slate-400`, not dimmed opacity.** Whoop uses
+  `opacity: 0.4`; at our sizes that fails AA. The slate pair is the project's established
+  secondary-text colour and passes.
+- **Panes sharing one box must share one surface.** `surface-card` throughout — a pane that
+  switches to `surface-panel` reads as a glitch when it fades in where a card just was.
+- Dwell defaults to reading time (~2.6 words/s + 3 s for the pane, clamped 7–16 s); `seconds`
+  overrides per item. Dwell is presentation, so it lives in the content file's item list next to
+  the ids, never as copy.
 
 ---
 
@@ -429,6 +511,7 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 | `ProductCallouts.svelte` | The 3×3 device diagram — see §8. Callouts may carry an optional `description` (the client's technical figure notes); it is hidden below `sm`, where a corner cell is ~80px wide. |
 | `VideoFacade.svelte` | Click-to-load video; **nothing is fetched until the viewer presses play**. `sources={{ webm?, mp4 }}` → a self-hosted native `<video>` (preferred: no third party is contacted at all); `videoId` → a `youtube-nocookie` embed. Neither → "Coming soon" placeholder. Also `poster`, `caption`, `duration`. **Never show a fake duration.** |
 | `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. |
+| `AutoAccordion.svelte` | The autonomous accordion — **see §6a for the conditions of use, which are binding.** Props: `items` (`{id, title, body?, icon?, seconds?}`), `controlLabel` (names the pause button), `autoplay`, and a `panel` snippet rendered once per item. Optional `group` on an item labels a run of consecutive items and wraps it in a `role="group"`. Takes its accent from the enclosing scope. |
 
 Home page (`src/lib/components/home/`) — three sections since the 0831 rebuild:
 
@@ -444,12 +527,12 @@ Patient page (`src/lib/components/patients/`) — four sections since the 0831 r
 
 | Component | Notes |
 |---|---|
-| `WhyChoose.svelte` | **Section 1**: the hero photo with the serif `h1` in a frosted glass panel **on** the image (docx: "text on top/top-right"), the intro sentence below it, then the four benefit cards and the `IndicationsStrip`. LCP image → `fetchpriority="high"`. The panel is `self-end sm:self-start` — at 375px the crop puts the subject's face at the top, so the headline drops to the bottom. |
-| `PatientStories.svelte` | Section 2: header + testimonial grid + "more stories" (`SupportCenterCard` reuse). |
-| `OutcomesChart.svelte` | *(now in `shared/`)* Two single-series labeled-bar lists on a shared 0–100% scale. |
-| `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. |
-| `EvidenceOutcomes.svelte` | Section 3 composition: stat cards (serif first-word highlight + citation) → chart + consensus callout → quotes slider. |
-| `NextSteps.svelte` | Section 4 composition: CTA tiers (primary wears the home audience-card gradient via scoped `.cta-primary`; others = home support-card neutral), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
+| `WhyChoose.svelte` | **Section 1**: the hero photo with the serif `h1` in a frosted glass panel **on** the image (docx: "text on top/top-right"), the intro sentence below it, then the four benefits as an `AutoAccordion` (§6a) and the `IndicationsStrip`. Its headers carry **no icon chip** — with one the 4-item list is 296 px against a 208 px grid; without, 251 px, and the icon moves to the pane. All four benefit *titles* stay visible; only the bodies collapse. *Trades +43 px desktop for −223 px mobile — the only section here that costs desktop height, taken because mobile is the viewport that is too long.* LCP image → `fetchpriority="high"`. The panel is `self-end sm:self-start` — at 375px the crop puts the subject's face at the top, so the headline drops to the bottom. |
+| `PatientStories.svelte` | **Section 2**: header + the four stories as an `AutoAccordion` (§6a) — theme label in the list; quote, attribution and that person's "read my story" link in the pane — then "more stories" (`SupportCenterCard` reuse). *729 → 731 px desktop (unchanged), 1 930 → 1 430 px mobile — this one is bought entirely for the phone.* |
+| `OutcomesChart.svelte` | *(now in `shared/`)* Two single-series labeled-bar lists on a shared 0–100% scale. `heading`/`intro` are **optional** — inside an accordion pane the item header already carries them. |
+| `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. `heading` is **optional** for the same reason as `OutcomesChart`'s. It now lives inside an `AutoAccordion` pane — a manual slider nested in an accordion pane is a wrinkle worth revisiting (promoting the three quotes to accordion items would remove it, at the cost of retiring this component). |
+| `EvidenceOutcomes.svelte` | **Section 3**: stat cards stay a visible row, then chart / expert consensus / clinician quotes become an `AutoAccordion` (§6a) — three parallel answers to "what does the research show?", each with its own visual. *1 273 → 859 px desktop.* |
+| `NextSteps.svelte` | **Not an accordion** (§6a — CTAs stay visible). Section 4 composition: CTA tiers (primary wears the home audience-card gradient via scoped `.cta-primary`; others = home support-card neutral), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
 | `HowItWorks.svelte` | **Parked** — "how does it work?" is a homepage question now. Kept for the homepage rebuild; not rendered. |
 
 Clinician page (`src/lib/components/clinicians/`) — six sections since the 0831 restructure; the
@@ -457,10 +540,10 @@ route is composition only. All of them take the accent from the page's `.accent-
 
 | Component | Notes |
 |---|---|
-| `ClinicalValue.svelte` | **Section 1**: serif `h1` + accent rule + two intro paragraphs, `ImagePlaceholder` beside them (the hero photo is still a pending client asset), then two labelled groups of three `BenefitCard`s — "For Your Practice" / "For Your Patients". Two labelled rows, **not** cards nested inside a box: that would stack surfaces. |
-| `ClinicalEvidence.svelte` | **Section 2**: three named study blocks — a `<dl>` row of three serif figures (Lovász), `DonutStat` + a two-row bar list (Pothoven), and a recognition `.surface-panel` (Buford). |
-| `SocialProof.svelte` | **Section 3**: clinician `TestimonialCard` grid + a `tint` Support Center band, the three "Trusted Worldwide" `StatCard`s, then the patient quote grid + a `solid` Support Center band. Two bands in one section: the first is tinted so only the last one is loud (§4). |
-| `Implementation.svelte` | **Section 4**: five indication icon cards, the six-item workflow checklist in a `.surface-panel`, and the three-step learning `<ol>` with static ↓ marks + resource pills. |
+| `ClinicalValue.svelte` | **Section 1**: serif `h1` + accent rule + two intro paragraphs, `ImagePlaceholder` beside them (the hero photo is still a pending client asset), then the two benefit groups as an `AutoAccordion` (§6a) — the **group** is the item and its three benefits are the pane, which is the docx's "1 box for the 3 patient benefit, 1 box for the clinician benefit … can be sliders as well to save space" almost literally. Keeping a group's three benefits together also keeps them comparable. *1 172 → 1 052 px desktop, 2 265 → 1 717 px mobile — the modest desktop figure is because the hero row and header, not the benefits, are most of this section.* |
+| `ClinicalEvidence.svelte` | **Section 2**: the same three named studies, now an `AutoAccordion` (§6a) — each study's docx label is the header, its descriptor the summary line, and its visual the pane: a `<dl>` row of three serif figures (Lovász), `DonutStat` + a two-row bar list (Pothoven), the recognition figure (Buford). All three panes are `surface-card`. Footnotes and citations stay in the panes. *967 → 533 px desktop, 1 931 → 1 134 px mobile.* |
+| `SocialProof.svelte` | **Section 3**: the "Trusted Worldwide" `StatCard`s stay a visible row (glanceable trust, ~150px), then all six quotes are one `AutoAccordion` (§6a) with the docx's two headings as `group` labels — theme label in the list, quote + attribution in the pane. The two Support Center cards sit side by side below (the audit's §4.4 merge still needs the client to say which copy survives). *1 375 → 1 058 px desktop, 3 019 → 2 083 px mobile.* |
+| `Implementation.svelte` | **Section 4**: the docx's three blocks as an `AutoAccordion` (§6a) — each block title is already a claim, and the pane answers it: five indication icon chips (chips in one card, **not** five nested cards — that would stack surfaces, §4), the six-item workflow checklist, and the three-step learning `<ol>` with static ↓ marks + resource pills. Only the indications block has a docx lead sentence, so only that item reveals a body. *820 → 532 px desktop, 1 723 → 998 px mobile.* |
 | `NextSteps.svelte` | **Section 5**: three CTA tiers, one link each. Primary tier is `.accent-pill`, not the patient page's scoped gradient. |
 | `SupportClosing.svelte` | **Section 6**: the Support Center box **and** the docx's closing statement in one full-bleed band — a bridge or a second band stacked here would put two tinted surfaces back to back. |
 | `WhatIsIt.svelte`, `Mechanism.svelte` | **Parked** — "what is it?" / "how does it work?" are homepage questions now. Kept for the homepage rebuild; not rendered. |

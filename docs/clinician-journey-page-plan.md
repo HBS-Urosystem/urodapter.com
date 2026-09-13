@@ -69,13 +69,13 @@ homepage rebuild. `ClinicianHero`, `ClinicalBenefits`, `Indications`, `EvidenceA
 
 ```
 SiteHeader (solid, .nav-gradient teal)
-1  ClinicalValue      Clinical Value for You and Your Patients   hero + 2 × 3 BenefitCards
+1  ClinicalValue      Clinical Value for You and Your Patients   hero + AutoAccordion: 2 groups × 3 benefits
    bridge (arrow)
-2  ClinicalEvidence   What the Clinical Evidence Shows           3 figures · ring + bars · review
+2  ClinicalEvidence   What the Clinical Evidence Shows           AutoAccordion: 3 figures · ring + bars · review
    bridge (quote)
-3  SocialProof        Trusted in everyday clinical practice      clinician quotes · numbers · patient quotes
+3  SocialProof        Trusted in everyday clinical practice      numbers · AutoAccordion: 3 clinician + 3 patient quotes
    bridge (arrow)
-4  Implementation     Easy to introduce into clinical practice   indications · workflow · learning path
+4  Implementation     Easy to introduce into clinical practice   AutoAccordion: indications · workflow · learning path
    bridge (quote)
 5  NextSteps          What would you like to do now?             3 CTA tiers
    SupportClosing     Support Center box + the closing statement
@@ -90,6 +90,32 @@ of the closing band. Copy lives in
 canvas, every `.surface-*`, every `.tint-band` and the nav gradient — no teal is hardcoded
 anywhere in the components.
 
+### Section 1 — the two benefit groups *(AutoAccordion since 2026-09-13)*
+
+The docx asked for this compression itself: *"the 3-3 cards/group can be placed on a shared box
+(1 box for the 3 patient benefit, 1 box for the clinician benefit) … The boxes with the 3-3
+cards can be sliders as well to save space."* So the **group** is the accordion item and its
+three benefits are the pane — one shared box per group, one open at a time. Keeping a group's
+three benefits together also keeps them comparable, which is how a reader uses them.
+**1 172 → 1 052 px desktop, 2 265 → 1 717 px mobile.** The desktop figure is modest because the
+hero row (433 px) and the section header, not the benefits, are most of this section.
+
+### Section 3 — social proof *(AutoAccordion since 2026-09-13)*
+
+The "Trusted Worldwide" `StatCard`s stay a visible row — they are the glanceable trust signal
+and cost only ~150 px. All six quotes are then one accordion, with the docx's two headings
+(*"What clinicians say about UroDapter"* / *"What patients say about UroDapter?"*) as `group`
+labels on two `role="group"` runs. Theme label in the list, quote and attribution in the pane.
+
+This reverses design system §6's "a grid beats a carousel, the quotes stay visible" call for
+this section, on an explicit 2026-09-13 client decision. What keeps the original objection
+answered: the **quote is the pane**, on screen the whole time — it is the short theme label
+that collapses, not the quote. The clinician/patient split that the 2026-09-02 client comment
+is about survives intact. **1 375 → 1 058 px desktop, 3 019 → 2 083 px mobile.**
+
+The two Support Center cards now sit side by side rather than stacked (~135 px). The audit's
+§4.4 *merge* still needs the client to say which copy survives.
+
 ### Section 2 — how the three studies are drawn
 
 | Block | Docx ask | Built as |
@@ -101,13 +127,26 @@ anywhere in the components.
 `DonutStat` draws the arc with the validated `--chart-continuing` token (never the raw persona
 accent — design system §1); the SVG is `aria-hidden` and the percentage is real text.
 
+**Since 2026-09-13 the three blocks are an `AutoAccordion`** (design system §6a), not three
+stacked cards: each study's docx label is the header, its descriptor line the summary (Buford:
+its recognition sentence), and the visual above is the pane. All three panes are `surface-card`
+— a pane that switched to `surface-panel` read as a glitch when it faded in where a card had
+been. Every footnote and citation is still in the DOM. **967 → 533 px desktop, 1 931 → 1 134 px
+mobile.**
+
 ### Section 4 — the three implementation blocks
 
-1. **"Suitable for the patients you already treat"** — five icon cards (Recurrent UTI · Chronic UTI
-   · IC/BPS · Irradiation cystitis · Bladder cancer). Same grid the old `Indications` section used;
-   `IndicationsStrip` is still only good for ~4 chips.
-2. **"Fits into your existing workflow"** — the docx's six ✓ items as a two-column checklist in a
-   `.surface-panel`.
+**Since 2026-09-13 these are an `AutoAccordion`** (design system §6a). Each block title already
+reads as a claim, so it became the header and its content the pane. Only block 1 has a lead
+sentence in the docx, so only that item reveals a body. **820 → 532 px desktop, 1 723 → 998 px
+mobile.**
+
+1. **"Suitable for the patients you already treat"** — five indication icon chips (Recurrent UTI ·
+   Chronic UTI · IC/BPS · Irradiation cystitis · Bladder cancer) in **one** `surface-card`. They
+   were five separate cards before; inside a pane that stacks surfaces (design system §4), so the
+   per-item card went away and the icon chips stayed. `IndicationsStrip` is still only good for
+   ~4 chips.
+2. **"Fits into your existing workflow"** — the docx's six ✓ items as a two-column checklist.
 3. **"Easy to learn. Supported from the start"** — the three-step `<ol>` with the docx's ↓ arrows
    between steps (static marks, not motion), and the four support resources as accent pills.
 

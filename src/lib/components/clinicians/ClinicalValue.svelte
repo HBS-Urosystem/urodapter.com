@@ -1,8 +1,12 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/reveal';
-  import { hero, clinicalValue } from '$lib/content/clinicians';
-  import BenefitCard from '$lib/components/shared/BenefitCard.svelte';
+  import { hero, clinicalValue, clinicalValueItems } from '$lib/content/clinicians';
+  import AutoAccordion from '$lib/components/shared/AutoAccordion.svelte';
   import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
+
+  // Each accordion item is one group, so the pane looks its three benefits up
+  // by the group title rather than by position.
+  const benefitsByGroup = new Map(clinicalValue.groups.map((group) => [group.title, group.items]));
 </script>
 
 <!-- Section 1 (0831 docx) — "Clinical Value for You and Your Patients".
@@ -46,14 +50,36 @@
     </h2>
   </div>
 
-  {#each clinicalValue.groups as group (group.title)}
-    <div class="mt-10">
-      <h3 class="font-display font-semibold text-navy-950 dark:text-white text-xl">{group.title}</h3>
-      <div use:reveal class="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {#each group.items as item (item.title)}
-          <BenefitCard title={item.title} body={item.body} icon={item.icon} />
-        {/each}
-      </div>
-    </div>
-  {/each}
+  <!-- The docx's own compression ask for this section: "the 3-3 cards/group can
+       be placed on a shared box (1 box for the 3 patient benefit, 1 box for the
+       clinician benefit) … can be sliders as well to save space". The
+       AutoAccordion (§6a) is that shared box: one group open at a time, its
+       three benefits in the pane. The group headers carry no body, so the list
+       never changes height. -->
+  <div use:reveal class="mt-10">
+    <AutoAccordion items={clinicalValueItems} controlLabel="the clinical benefits">
+      {#snippet panel(item)}
+        <div class="rounded-2xl surface-card p-6 sm:p-8 h-full">
+          <ul class="space-y-6">
+            {#each benefitsByGroup.get(item.title) ?? [] as benefit (benefit.title)}
+              <li class="flex items-start gap-4">
+                <span
+                  class="w-10 h-10 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center shrink-0"
+                  aria-hidden="true"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={benefit.icon} /></svg>
+                </span>
+                <div>
+                  <h4 class="font-semibold text-navy-950 dark:text-white text-pretty">{benefit.title}</h4>
+                  <p class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300 text-pretty">
+                    {benefit.body}
+                  </p>
+                </div>
+              </li>
+            {/each}
+          </ul>
+        </div>
+      {/snippet}
+    </AutoAccordion>
+  </div>
 </section>

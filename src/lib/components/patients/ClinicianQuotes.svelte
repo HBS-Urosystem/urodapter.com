@@ -1,11 +1,13 @@
 <script lang="ts">
   type Quote = { quote: string; author: string; org: string };
 
+  // `heading` is optional for the same reason as OutcomesChart's: inside an
+  // AutoAccordion pane the item header already names the block.
   let {
-    heading,
+    heading = undefined,
     quotes,
     disclaimer,
-  }: { heading: string; quotes: Quote[]; disclaimer: string } = $props();
+  }: { heading?: string; quotes: Quote[]; disclaimer: string } = $props();
 
   let index = $state(0);
 
@@ -20,10 +22,12 @@
 <!-- Manual slider only — no auto-advance (calm register; the docx offers
      either). All quotes are stacked in one grid cell so the box height fits
      the longest quote and never jumps between slides. -->
-<div class="rounded-2xl surface-panel p-6 sm:p-10">
-  <h3 class="font-semibold text-navy-950 dark:text-white">{heading}</h3>
+<div class="rounded-2xl surface-card p-6 sm:p-10 h-full">
+  {#if heading}
+    <h3 class="font-semibold text-navy-950 dark:text-white">{heading}</h3>
+  {/if}
 
-  <div class="mt-6 grid" aria-live="polite">
+  <div class="{heading ? 'mt-6' : ''} grid" aria-live="polite">
     {#each quotes as q, i (q.author)}
       <blockquote
         class="col-start-1 row-start-1 transition-opacity duration-300 motion-reduce:transition-none {i === index

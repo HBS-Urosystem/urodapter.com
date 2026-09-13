@@ -1,9 +1,15 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/reveal';
-  import { stories } from '$lib/content/patients';
-  import TestimonialCard from '$lib/components/shared/TestimonialCard.svelte';
+  import { stories, storyItems } from '$lib/content/patients';
+  import AutoAccordion from '$lib/components/shared/AutoAccordion.svelte';
   import SupportCenterCard from '$lib/components/shared/SupportCenterCard.svelte';
   import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
+
+  // `storyItems` is built from `stories.testimonials` in order; the pane looks
+  // its story up by item id rather than by position.
+  const storyById = new Map(
+    storyItems.map((item, i) => [item.id, stories.testimonials[i]])
+  );
 </script>
 
 <!-- `#stories` is a cross-page anchor target: the clinician journey's "Read all
@@ -29,18 +35,38 @@
     </div>
   </div>
 
-  <div use:reveal class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    {#each stories.testimonials as t (t.author)}
-      <TestimonialCard
-        theme={t.theme}
-        icon={t.icon}
-        quote={t.quote}
-        author={t.author}
-        meta={t.meta}
-        linkLabel={t.linkLabel}
-        href={t.href}
-      />
-    {/each}
+  <!-- The four stories are an AutoAccordion (design system §6a) rather than a
+       four-up grid. The quote is the pane, on screen the whole time — what
+       collapses is the theme label. Desktop barely changes; the section is
+       1 930 px on a 375 px screen, where four stacked cards are nearly all of
+       it, and that is what this buys back. -->
+  <div use:reveal class="mt-10">
+    <AutoAccordion items={storyItems} controlLabel="the patient stories">
+      {#snippet panel(item)}
+        {@const story = storyById.get(item.id)}
+        {#if story}
+          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full flex flex-col justify-center">
+            <span class="font-display text-4xl leading-none text-(--accent-ink)" aria-hidden="true">&ldquo;</span>
+            <blockquote class="mt-3">
+              <p class="text-base sm:text-lg leading-relaxed text-navy-900 dark:text-slate-100 text-pretty">
+                {story.quote}
+              </p>
+              <footer class="mt-5 pt-4 border-t border-slate-100 dark:border-white/10 text-sm">
+                <span class="font-semibold text-navy-950 dark:text-white">{story.author}</span>
+                <span class="block mt-0.5 text-xs text-slate-500 dark:text-slate-400">{story.meta}</span>
+              </footer>
+            </blockquote>
+            <a
+              href={story.href}
+              class="group mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink) rounded-sm self-start"
+            >
+              {story.linkLabel}
+              <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+            </a>
+          </div>
+        {/if}
+      {/snippet}
+    </AutoAccordion>
   </div>
 
   <div use:reveal class="mt-6">

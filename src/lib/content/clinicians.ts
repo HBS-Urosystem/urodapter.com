@@ -190,6 +190,20 @@ export const clinicalValue = {
   ],
 };
 
+// Section 1's accordion (design system §6a), and a near-literal reading of the
+// docx: "the 3-3 cards/group can be placed on a shared box (1 box for the 3
+// patient benefit, 1 box for the clinician benefit) … The boxes with the 3-3
+// cards can be sliders as well to save space." So the *group* is the item and
+// its three benefits are the pane — one shared box per group, one shown at a
+// time. Keeping a group's three benefits together also keeps them comparable,
+// which is how a reader actually uses them.
+export const clinicalValueItems = clinicalValue.groups.map((group, i) => ({
+  id: group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+  title: group.title,
+  icon: [iconShieldCheck, iconFaceSmile][i],
+  seconds: 12,
+}));
+
 // ---------------------------------------------------------------------------
 // SECTION 2 — What the Clinical Evidence Shows
 // docx bridge + intro, then three named evidence blocks. Figures, labels and
@@ -260,6 +274,36 @@ export const evidence = {
     icon: iconGlobe,
   },
 };
+
+// The Section 2 accordion reads these three in order (design system §6a).
+// Every string is one of the docx fields above — the header is each study's
+// own label, the summary line is its descriptor (Buford: its finding), and
+// the figures, footnotes and citation stay in the pane beside it. `seconds`
+// is presentation, not copy: how long an item holds before the next opens,
+// tuned to how much its pane asks the reader to take in.
+export const evidenceItems = [
+  {
+    id: "series",
+    title: evidence.series.label,
+    body: evidence.series.title,
+    icon: evidence.series.icon,
+    seconds: 9,
+  },
+  {
+    id: "real-world",
+    title: evidence.realWorld.label,
+    body: evidence.realWorld.title,
+    icon: evidence.realWorld.icon,
+    seconds: 12,
+  },
+  {
+    id: "review",
+    title: evidence.review.label,
+    body: evidence.review.body,
+    icon: evidence.review.icon,
+    seconds: 10,
+  },
+];
 
 // ---------------------------------------------------------------------------
 // SECTION 3 — Social proof
@@ -367,6 +411,28 @@ export const socialProof = {
   },
 };
 
+// Section 3's accordion (design system §6a). The six quotes are one list, with
+// the docx's two headings as the group labels — the clinician/patient split is
+// load-bearing here (a 2026-09-02 client comment is specifically about which
+// quotes sit on which page), so it survives as a labelled `role="group"` run.
+// Header is the theme label; the quote and its attribution are the pane.
+export const socialProofItems = [
+  ...socialProof.clinicians.items.map((item) => ({
+    id: `clinician-${item.author.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+    title: item.theme,
+    icon: item.icon,
+    group: socialProof.clinicians.heading,
+    seconds: 9,
+  })),
+  ...socialProof.patients.items.map((item) => ({
+    id: `patient-${item.author.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+    title: item.theme,
+    icon: item.icon,
+    group: socialProof.patients.heading,
+    seconds: 9,
+  })),
+];
+
 // ---------------------------------------------------------------------------
 // SECTION 4 — Implementation
 // docx: bridge, title + intro, then three blocks — the indications the reader
@@ -421,6 +487,32 @@ export const implementation = {
     ],
   },
 };
+
+// Section 4's accordion (design system §6a). Each of the docx's three
+// implementation blocks becomes one item: its own title is the header — each
+// already reads as a claim the pane then answers — and only the indications
+// block has a lead sentence in the docx, so only that item reveals a body.
+export const implementationItems = [
+  {
+    id: "indications",
+    title: implementation.indications.title,
+    body: implementation.indications.intro,
+    icon: iconBladder,
+    seconds: 9,
+  },
+  {
+    id: "workflow",
+    title: implementation.workflow.title,
+    icon: iconArrowPath,
+    seconds: 11,
+  },
+  {
+    id: "learning",
+    title: implementation.learning.title,
+    icon: iconBook,
+    seconds: 10,
+  },
+];
 
 // ---------------------------------------------------------------------------
 // SECTION 5 — What happens next?
