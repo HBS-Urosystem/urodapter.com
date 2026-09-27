@@ -1,7 +1,7 @@
 <script lang="ts">
+  import SiteHeader from '$lib/components/SiteHeader.svelte';
   import UroDapterHero from '$lib/components/UroDapterHero.svelte';
   import SectionBridge from '$lib/components/shared/SectionBridge.svelte';
-  import KeyBenefits from '$lib/components/home/KeyBenefits.svelte';
   import HowItWorks from '$lib/components/home/HowItWorks.svelte';
   import ChooseJourney from '$lib/components/home/ChooseJourney.svelte';
   import { bridgeHowItWorks, bridgeJourney } from '$lib/content/home';
@@ -49,22 +49,28 @@
 
 <!-- 0831 architecture: the homepage answers journey Steps 1–3 for both
      personas and hands over to the journey pages. Structure follows
-     "3. page_content.docx": hero (headline, subheadline, credibility and the
-     two testimonials overlaid on the opening image) → key benefits → how it
-     works → choose your journey. -->
+     "3. page_content.docx", reworked by the owner on 2026-09-27
+     (docs/home-hero-redesign/plan.md): hero (headline, CTAs, the two audience
+     cards and the rotating testimonials on the framed photo, credibility) →
+     bridge (each audience's problem, then the idea) → how it works → choose
+     your journey. The header sits on the page gradient now, so it is outside
+     <main> and the hero is inside it. -->
 <div class="bg-page-gradient text-navy-950 dark:text-white transition-colors min-h-screen">
-  <UroDapterHero />
+  <SiteHeader variant="page" />
 
   <main class="pb-16">
-    <!-- Section 1: key benefits, one card per audience -->
-    <KeyBenefits />
+    <UroDapterHero />
 
-    <SectionBridge variant={bridgeHowItWorks.variant} emphasis={bridgeHowItWorks.emphasis} />
+    <SectionBridge
+      variant={bridgeHowItWorks.variant}
+      problems={bridgeHowItWorks.problems}
+      emphasis={bridgeHowItWorks.emphasis}
+    />
 
     <!-- Section 2: how it works -->
     <HowItWorks />
 
-    <SectionBridge variant={bridgeJourney.variant} lead={bridgeJourney.lead} emphasis={bridgeJourney.emphasis} />
+    <SectionBridge variant={bridgeJourney.variant} emphasis={bridgeJourney.emphasis} />
 
     <!-- Section 3: choose your journey + Support Center shortcut -->
     <ChooseJourney />

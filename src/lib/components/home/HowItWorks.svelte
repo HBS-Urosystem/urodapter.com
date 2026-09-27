@@ -11,7 +11,10 @@
      the annotated product figure, then the animation beside the explanation.
      The callout labels are the patient-facing set (the personas doc is explicit
      that patients are not after specifications). -->
-<section aria-labelledby="how-it-works-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
+<!-- #how-it-works is the hero's "See how it works" target; scroll-mt clears
+     the header. It lands past the bridge band on purpose (the band is the
+     lead-in for someone reading down). -->
+<section id="how-it-works" aria-labelledby="how-it-works-heading" class="max-w-7xl mx-auto px-5 sm:px-8 scroll-mt-24">
   <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-12 items-center">
     <div>
       <h2
@@ -37,6 +40,7 @@
       sources={howItWorks.video.sources}
       poster={howItWorks.video.poster}
       caption={howItWorks.video.caption}
+      captionPosition="above"
       duration={howItWorks.video.duration}
     />
 

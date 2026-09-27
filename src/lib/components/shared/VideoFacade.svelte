@@ -6,6 +6,7 @@
     sources = null,
     poster = null,
     caption,
+    captionPosition = 'below',
     duration,
   }: {
     videoId?: string | null;
@@ -14,6 +15,8 @@
     sources?: { webm?: string; mp4: string } | null;
     poster?: string | null;
     caption: string;
+    /** 'above' makes the caption the video's lead-in (home page); default 'below'. */
+    captionPosition?: 'above' | 'below';
     duration: string;
   } = $props();
 
@@ -27,6 +30,9 @@
      `videoId` = a youtube-nocookie embed. With neither, it renders a branded
      "Coming soon" placeholder instead. -->
 <figure>
+  {#if captionPosition === 'above'}
+    <figcaption class="mb-3 text-[clamp(0.875rem,0.8rem+0.3vw,1rem)] font-medium text-navy-950 dark:text-white">{caption}</figcaption>
+  {/if}
   <div class="relative rounded-2xl overflow-hidden aspect-video border border-slate-200/70 dark:border-white/10 bg-navy-900">
     {#if playing && sources}
       <!-- The client's animation carries burned-in (open) captions. Add a
@@ -92,7 +98,9 @@
       <span class="absolute bottom-3 right-3 text-xs font-medium text-white bg-navy-950/80 rounded-md px-2 py-1">{duration}</span>
     {/if}
   </div>
-  <figcaption class="mt-3 text-sm text-slate-600 dark:text-slate-300">{caption}</figcaption>
+  {#if captionPosition === 'below'}
+    <figcaption class="mt-3 text-sm text-slate-600 dark:text-slate-300">{caption}</figcaption>
+  {/if}
 </figure>
 
 <style>

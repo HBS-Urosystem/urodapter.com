@@ -76,145 +76,204 @@ const iconSparkles =
 const iconBookOpen =
 	'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253';
 
+// plus-circle
+const iconPlusCircle = 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z';
+
 // ---------------------------------------------------------------------------
-// HERO — docx: headline + subheadline sit ON the opening image. The docx also
-// says "cards or text elements might be inserted on the opening image" so the
-// reader does not have to scroll far, which is why the credibility strip and
-// the two testimonials are overlaid here rather than given their own sections.
+// HERO — owner-approved mockup copy (design canvas "UroDapter Hero", owner
+// direction 2026-09-27; docs/home-hero-redesign/plan.md D1–D8). It replaces the
+// docx-verbatim hero wording: the headline, subheadline, CTAs, product chip,
+// audience cards and the header's "Contact us" are mockup copy, not docx copy.
+// The docx's two "why heroes care" problem lines are unchanged — they moved to
+// the first bridge (`bridgeHowItWorks`). The regulatory line is kept (D8).
 // ---------------------------------------------------------------------------
+
+// "See how it works" lands on the How It Works heading, past the bridge band.
+const howItWorksHref = (resolve('/') + '#how-it-works') as ResolvedPathname;
 
 export const hero = {
-	// Two lines of ONE headline — a manual line break in the hero lockup, not an
-	// eyebrow + remainder split.
-	headlineLines: ['Catheter-Free', 'Bladder Instillation'],
+	// U+2011 non-breaking hyphen: the headline must never break after "Catheter-".
+	headline: 'Catheter‑free bladder instillation',
 	body: 'A simple way to perform bladder instillations without catheterization.',
-	productAlt: 'UroDapter catheter-free bladder instillation device',
+	regulatoryPill: {
+		label: 'CE marked · FDA listed · ISO 13485 certified QMS',
+		// Narrow screens: the pill has to stay on one line.
+		labelShort: 'CE marked · FDA listed · ISO 13485',
+		icon: iconShieldCheck,
+	},
+	primaryCta: { label: 'See how it works', href: howItWorksHref },
+	// TODO(placeholder): contact route — pending links resolve to #support until it exists
+	secondaryCta: { label: 'Talk to our team', href: supportHref },
+	product: {
+		title: 'Sterile, single-use syringe adapter',
+		// Owner wording 2026-09-27: "standard Luer syringe" (D12).
+		body: 'Connects to a standard Luer syringe and creates a temporary seal during treatment.',
+		alt: 'UroDapter catheter-free bladder instillation device',
+	},
+	// Shown above the audience cards only while they sit under the photo
+	// (single column); from md they overlap the photo and need no label.
+	choosePathLabel: 'Choose your path',
 };
 
-// docx "Credibility — short, peak infos". Two of the four items are offered as
-// alternatives in the docx; the choice is noted per item.
-export const heroTrustStats = [
+// The credibility strip. docx "Credibility — short, peak infos"; every item
+// carries a sub-line, so no claim stands without a figure or a next step
+// (owner direction 2026-09-27).
+export const heroTrustStats: {
+	title: string;
+	sub?: string;
+	link?: { label: string; externalHref: string };
+	icon: string;
+	emphasis?: boolean;
+}[] = [
 	// docx: "1 Million+ Uses / 1 Million+ Procedures" → Procedures, in the
 	// numeral style the rest of the site already uses.
-	{ value: '1,000,000+', label: 'Procedures worldwide', icon: iconUsers },
+	{ title: '1,000,000+', sub: 'procedures worldwide', icon: iconUsers, emphasis: true },
 	{
-		value: 'Scientifically',
-		label: 'validated',
+		title: 'Scientifically validated',
+		// The three journals the site already cites: Int J Urol (Lovász, 2019),
+		// Continence (Pothoven et al., 2025), Neurourol Urodyn (Buford et al., 2025).
+		sub: 'Peer-reviewed in 3 journals',
 		// microscope: eyepiece + body tube, arm curving down to the base,
 		// stage slide, and the bench line it stands on
 		icon: 'M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2ZM9 14h2M14 22a7 7 0 1 0 0-14h-1M6 18h8M3 22h18',
 	},
 	// docx: "Available Internationally / Used in XY Countries" → the wording
 	// without a figure. The country count is an open client item: 30+, 50+ and
-	// 85 are all in circulation (see home-page-plan.md).
-	{ value: 'Available', label: 'internationally', icon: iconGlobe },
+	// 85 are all in circulation (see home-page-plan.md). The webshop — a live
+	// off-site destination — stands in as the next step until one is settled.
+	{
+		title: 'Available internationally',
+		link: { label: 'Visit our webshop', externalHref: 'https://www.urosystem.com/shop' },
+		icon: iconGlobe,
+	},
 	// docx: "FDA Registered (?) / CE Marked / MDR". The client's own question
 	// mark is answered by the approved CMS wording: the device is *listed* with
 	// the FDA, never "FDA approved" or "FDA registered".
-	{ value: 'CE marked', label: 'and FDA listed', icon: iconShieldCheck },
+	{ title: 'CE marked & FDA listed', sub: 'ISO 13485 certified QMS', icon: iconShieldCheck },
 ];
 
 // blocks/index/regulatory.en.md + blocks/company/quality.en.md — the one line
 // that keeps the regulatory facts on the site now that the journey pages point
-// at the Support Center for them.
+// at the Support Center for them. Kept unchanged under the strip (D8).
 export const heroRegulatory =
 	'UroDapter® holds required CE certification and is listed with the U.S. Food and Drug Administration (FDA). The quality management system behind it is certified to ISO 13485.';
 
-// ---------------------------------------------------------------------------
-// SECTION 1 — the key benefits, one card per audience.
-// The docx's key-benefits headline ("A Better Experience for Patients. A
-// Practical Solution for Clinicians.") is split across the two card titles, so
-// each card owns its half; there is no separate section headline repeating it.
-// The docx's two "why heroes care" lines sit inside the cards, between the
-// title and the list — the problem each audience has, then what changes.
-// ---------------------------------------------------------------------------
-
 // docx: "1-1 testimonials – should be put to different place than the rest of
-// the list", i.e. away from the credibility strip on the hero. They sit as the
-// third column of the key-benefits row (client direction 2026-09-08).
+// the list", i.e. away from the credibility strip. They rotate in a glass panel
+// on the hero photo (owner direction 2026-09-27, D3). `seconds` is the dwell —
+// presentation, like AutoAccordion's — sized to each quote's reading time.
 export const quotes = {
-	pill: 'Trusted by patients and clinicians worldwide',
+	// Region label for screen readers.
+	label: 'Testimonials',
 	items: [
 		{
 			quote:
 				'I now have confidence, less apprehension, more predictability, and an overall better quality of life.',
-			author: 'Hannah, 27, female IC/BPS patient',
+			author: 'Hannah, 27 · IC/BPS patient',
+			seconds: 7,
 		},
 		{
 			quote:
 				'Perfect for quick, targeted bladder treatments — especially when repeated instillations are needed. Less discomfort, more efficiency, better experience.',
 			author: 'Dr. Parekattil, Avant Concierge Urology',
 			subAuthor: 'Winter Garden, Florida, USA',
+			seconds: 9,
 		},
 	],
 };
 
-export const keyBenefits = {
-	columns: [
-		{
-			id: 'patients',
-			// One half of the docx key-benefits headline.
-			title: 'A Better Experience for Patients',
-			accentClass: 'accent-patient',
-			icon: iconHeart,
-			// docx "Why Heroes Care / Why it matters" — patients.
-			problem:
-				'Repeated bladder treatments can be stressful, uncomfortable and emotionally exhausting.',
-			items: [
-				'Catheter-free treatment',
-				'Greater comfort',
-				'Less anxiety',
-			],
-		},
-		{
-			id: 'clinicians',
-			title: 'A Practical Solution for Clinicians',
-			accentClass: 'accent-clinician',
-			// plus-circle
-			icon: 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z',
-			// docx "Why Heroes Care / Why it matters" — clinicians. Minimally
-			// corrected: "is associated with complications, procedural burden and
-			// creates discomfort" mixed two constructions.
-			problem:
-				'Catheterization for bladder instillations is associated with complications and procedural burden, and creates discomfort for patients.',
-			items: [
-				'Better patient experience',
-				'Reduced catheter-related complications',
-				'Simple integration into practice',
-			],
-		},
-	],
-};
+// The two audience cards on the hero photo — owner-approved mockup copy
+// (2026-09-27, D5). The whole card is the link. The docx problem sentences
+// that used to open these cards now lead the first bridge (D6).
+export const heroAudienceCards = [
+	{
+		id: 'patients',
+		accentClass: 'accent-patient',
+		icon: iconHeart,
+		eyebrow: 'I’m a patient',
+		title: 'A better experience for patients',
+		items: ['Catheter-free treatment', 'Greater comfort', 'Less anxiety'],
+		linkLabel: 'What to expect',
+		href: patientsHref,
+	},
+	{
+		id: 'clinicians',
+		accentClass: 'accent-clinician',
+		icon: iconPlusCircle,
+		eyebrow: 'I’m a clinician',
+		title: 'A practical solution for clinicians',
+		// Owner wording 2026-09-27: "patient compliance" (D13) and "Fewer …" (D6).
+		items: [
+			'Better patient compliance',
+			'Fewer catheter-related complications',
+			'Simple integration into practice',
+		],
+		linkLabel: 'Clinical use & evidence',
+		href: cliniciansHref,
+	},
+];
 
 // ---------------------------------------------------------------------------
 // SECTION 2 — How It Works (docx: "[Title written out]")
-// Both paragraphs and the video caption are docx-verbatim. The product diagram
-// reuses the patient-facing callout labels already approved for the patient
-// journey page — the personas doc is explicit that patients are not looking for
+// The intro, the detail's middle sentence and the "Luer" wording are owner
+// wording (2026-09-27, D9–D12); the rest is docx-verbatim. The product diagram
+// reuses the patient-facing callout labels approved for the patient journey
+// page — the personas doc is explicit that patients are not looking for
 // technical specifications.
 // ---------------------------------------------------------------------------
 
 export const bridgeHowItWorks = {
 	variant: 'quote' as const,
-	// docx's own "[Main headline/introductory explanation]" line.
+	// The two docx "why heroes care" lines, moved here from the key-benefit cards
+	// (owner direction 2026-09-27, D6): the audience problems, then the idea that
+	// answers them.
+	problems: [
+		{
+			id: 'patients',
+			label: 'For patients',
+			accentClass: 'accent-patient',
+			icon: iconHeart,
+			// docx "Why Heroes Care / Why it matters" — patients.
+			text: 'Repeated bladder treatments can be stressful, uncomfortable and emotionally exhausting.',
+		},
+		{
+			id: 'clinicians',
+			label: 'For clinicians',
+			accentClass: 'accent-clinician',
+			icon: iconPlusCircle,
+			// docx "Why Heroes Care / Why it matters" — clinicians. Minimally
+			// corrected: "is associated with complications, procedural burden and
+			// creates discomfort" mixed two constructions.
+			text: 'Catheterization for bladder instillations is associated with complications and procedural burden, and creates discomfort for patients.',
+		},
+	],
+	// docx's own "[Main headline/introductory explanation]" line — unchanged.
 	emphasis: 'A simple idea can make a remarkable difference.',
 };
 
 export const howItWorks = {
 	heading: 'How It Works',
+	// Owner wording 2026-09-27 (D9), grammar-corrected. Replaces the two-sentence
+	// docx intro — its "may … for many patients" hedge is flagged to the client
+	// (home-page-plan.md, open items).
 	intro:
-		'UroDapter is a sterile, single-use syringe adapter that allows medication to be delivered into the bladder without inserting a catheter in both female and male patients. It offers a simple, catheter-free bladder instillation approach that may make treatment more comfortable for many patients.',
+		'UroDapter is a sterile, single-use syringe adapter that enables medication to be delivered into the bladder without catheter insertion, making treatment more comfortable for both male and female patients.',
+	// docx-verbatim except the middle sentence (owner wording 2026-09-27, D10)
+	// and "standard Luer syringe" (D12).
 	detail:
-		'UroDapter is placed at the urethral opening, where it forms a temporary, watertight seal while only the short rounded tip is inserted. During instillation, the patient is asked to relax the urethral sphincter, allowing the medication to pass gently through the urethra into the bladder without the need for catheterization. The procedure uses a standard syringe and integrates easily into existing bladder instillation routines.',
+		'UroDapter is placed at the urethral opening, where it forms a temporary, watertight seal while only the short rounded tip is inserted. During instillation, only the medication passes gently through the urethra into the bladder. The procedure uses a standard Luer syringe and integrates easily into existing bladder instillation routines.',
 	// Patient-facing labels (approved for the patient journey page); the leader
-	// lines carry the label→device association, so no icons here.
+	// lines carry the label→device association, so no icons here. They now
+	// differ from the patient page in one label: "standard Luer syringe" (owner
+	// wording 2026-09-27, D12) — the patient page still says "standard syringe".
 	callouts: [
 		{ label: 'Creates a temporary seal during treatment', icon: '' },
 		{ label: 'Only the short, rounded tip enters the urethra', icon: '' },
-		{ label: 'Connects to a standard syringe', icon: '' },
+		{ label: 'Connects to a standard Luer syringe', icon: '' },
 		{ label: 'Designed to be gentle and comfortable', icon: '' },
 	],
 	video: {
+		// docx-verbatim; on the home page it sits above the video as its lead-in (D11).
 		caption: 'Watch this short animation to see how UroDapter works.',
 		duration: '0:30',
 		// Client asset: Urodapter_anim_30sec_EN_230309.mp4, re-encoded for the
@@ -229,17 +288,20 @@ export const howItWorks = {
 
 // ---------------------------------------------------------------------------
 // SECTION 3 — Choose Your Journey + the Support Center shortcut.
-// docx card copy verbatim. The hrefs are the real routes — they used to be
-// on-page anchors (#patients …) that no longer exist.
+// docx card copy verbatim, except the clinician card's "patient compliance"
+// (owner wording 2026-09-27, D13). The hrefs are the real routes — they used to
+// be on-page anchors (#patients …) that no longer exist.
 // ---------------------------------------------------------------------------
 
 export const bridgeJourney = {
 	variant: 'arrow' as const,
-	lead: 'That is the whole idea.',
-	emphasis: 'Choose the path that fits you best.',
+	// Owner direction 2026-09-27 (D14): the bridge carries the section name; the
+	// visible h2 above the cards goes (it stays in the DOM as sr-only).
+	emphasis: 'Choose Your Journey',
 };
 
 export const journey = {
+	// Rendered as the section's sr-only h2 (D14).
 	heading: 'Choose Your Journey',
 	cards: [
 		{
@@ -251,7 +313,7 @@ export const journey = {
 		{
 			id: 'clinician',
 			title: 'I’m a Clinician',
-			copy: 'See how UroDapter can improve patient experience while fitting into your clinical workflow.',
+			copy: 'See how UroDapter can improve patient compliance while fitting into your clinical workflow.',
 			href: cliniciansHref,
 		},
 		{

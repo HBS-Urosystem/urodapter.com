@@ -118,6 +118,7 @@ page. Persona CTAs are deliberately *not* included — `.accent-pill`, `.surface
 | `AutoAccordion` rail + fill, header icon chips, play/pause button, focus outlines | The accordion's group label |
 | The `→` story/testimonial links + their focus rings | Section eyebrows |
 | The hairline rules under display headlines (`WhyChoose`, `AudienceStub`) | `StatCard` / `BenefitCard` / `IndicationsStrip` chips, page canvas, cards, nav |
+| Home hero: "See how it works" (`.brand-pill`), the regulatory pill's shield, the audience cards' ticks, the quote rotator's dot fill + focus rings, the webshop link | The audience cards' chips, eyebrows and borders |
 
 **Known limit — the clinician page in light mode.** The logo teal is 19.5° from `--color-clinician`
 in OKLCH, and `#096b6e` is within 19° / 0.01 L of the clinician ink `#236e61`: on `/clinicians` the
@@ -195,134 +196,116 @@ links to it rather than reproducing it.
 ### The home page
 
 Same rhythm, on the neutral `.bg-page-gradient` canvas. **Rebuilt 2026-09-08 from
-`0831/3. page_content.docx`** — see [home-page-plan.md](home-page-plan.md):
+`0831/3. page_content.docx`; the hero was redesigned on 2026-09-27 (owner direction —
+[home-hero-redesign/plan.md](home-hero-redesign/plan.md))**. See [home-page-plan.md](home-page-plan.md):
 
 ```
-UroDapterHero        ← headline + subheadline on the photo, product chip,
-                       credibility strip + regulatory line. One column, ending
-                       just below the regulatory line.
-                       Renders no <main> and no page wrapper — the route owns both.
-KeyBenefits          ← two audience cards + the testimonial column beside them
-SectionBridge          "A simple idea can make a remarkable difference."
-HowItWorks   #how-it-works   ← intro, ProductCallouts, explanation, the 30s animation
-SectionBridge
-ChooseJourney #support ← three journey cards + the Support Center shortcut
+SiteHeader (page)    ← in the route, before <main>: transparent on the page gradient
+<main>
+UroDapterHero        ← copy (pill, h1, body, CTAs) · framed photo + QuoteRotator ·
+                       product chip · HeroAudienceCards · credibility strip ·
+                       regulatory line
+SectionBridge (quote + problems)
+                       "For patients" / "For clinicians" problem lines, a rule,
+                       then "A simple idea can make a remarkable difference."
+HowItWorks   #how-it-works   ← intro, ProductCallouts, caption → 30s animation, detail
+SectionBridge (arrow)  "Choose Your Journey"
+ChooseJourney #support ← sr-only h2, three journey cards + the Support Center shortcut
+</main>
 ```
 
-**The credibility strip lives on the hero photo on purpose.** The docx opens by asking that "the
-reader doesn't have to scroll down too much… cards or text elements might be inserted on the
-opening image" — that is why credibility is overlaid rather than given a section of its own, and
-it is the one place the page departs from docx order.
+**Owner direction 2026-09-27 (D1–D8), reversing four earlier decisions.** Recorded here so
+they are not "fixed" back:
 
-**The hero is no longer short, and that was a deliberate reversal.** It was ~530px at 1280 until the
-brand lockup took a row of its own under the copy (~705px), and the testimonials then came back
-into it (client direction 2026-09-13), which leaves it ~705px at 1280 — they fit in the right-hand
-column without adding height — but **~913–999px below `lg`**, where they stack. The testimonials had
-been moved out to the key-benefits row on 2026-09-08 precisely to reclaim ~240px; that decision is
-now reversed. The height matters beyond looks: the band's aspect is the input to every crop anchor
-below, so anything that changes the hero's height invalidates them.
+- **The hero is no longer always dark** (D1). It has no background of its own; the route's
+  `.bg-page-gradient` shows through, light in light mode and navy in dark. Every colour in it
+  comes as a light/dark pair, and `SiteHeader` has a matching `page` variant.
+- **No logo + product lockup** (D2). Both logo SVGs left the hero; the header carries the brand.
+  In their place is a **product chip** (image + title + one line).
+- **Not a single column any more.** From `lg` the hero is two columns: copy + chip left, the
+  **framed photo** with the audience cards overlapping its bottom edge right.
+- **No separate key-benefits section.** `KeyBenefits` is deleted: its two cards became
+  `HeroAudienceCards` on the photo (whole card is the link), and its two docx problem sentences
+  moved — verbatim — into the first bridge (D6).
+- **The testimonials rotate** (D3) — the second bounded exception to "never auto-advance", §6.
+- **The regulatory line stays** (D8), under the credibility strip at every width, next to the
+  new regulatory pill above the headline and the strip's CE/FDA item.
 
-**The hero photo now shows at every width** (client direction 2026-09-10). It used to be dropped
-below 960px in favour of plain navy, because the single-column content covered it and cropped the
-subject's face. It is back on small screens with a different anchor: below `md` the photo starts
-*under* the `SiteHeader` and runs behind the product chip and the rest of the column; from `md` up
-it is full-bleed behind the header as before. That switch is done by moving the *containing block*
-— the wrapper around the photo is `relative md:static`, so the same `absolute inset-0` boxes
-resolve against the wrapper on small screens and against the section on large ones. Don't replace
-this with a hardcoded `top` offset: the header grows when the mobile menu opens, and the
-containing-block version follows it for free.
+Hero, card and header-CTA copy is owner-approved mockup copy, not docx copy (D5); see
+home-page-plan.md for provenance and the claims flagged to the client.
 
-**The brand lockup sits below the hero copy at every width, left-aligned to it.** The lockup is
-the UroDapter logo plus the product chip, and **the two always share a row** (client direction
-2026-09-27). The headline row is `flex flex-col gap-6 lg:gap-10`, so the lockup stacks under the
-copy. It was centred on the copy column until the logo joined it
-(2026-09-11), and that stopped working: a centred lockup occupies the middle of the frame, and any
-crop that keeps the clinician in shot puts the patient's face in the middle too, so the two collide
-at *every* anchor in 400–640px. Left-aligning frees the right half of the frame for both subjects
-(client direction 2026-09-12, chosen over cropping the clinician or covering the patient). Until
-2026-09-27 the row turned at `lg`: the product image sat right of the headline and the horizontal
-logo took a row of its own under the copy, centred on the text column — the client wants the logo
-and the product together, so don't split them again. It was also briefly hoisted *above* the copy
-with `order-first`; at 768–1023px that read as part of the header rather than the hero. Don't put
-it back, and don't re-centre it.
+**Fluid first** *(owner direction 2026-09-27, applied to the whole hero)*. Sizes are continuous,
+not stepped: type and spacing are `clamp()`s, the headline scales with **its own column** via
+container query units (`cqi`), and layout is intrinsic wherever a switch is only about room —
+the CTA row is `flex-wrap w-fit` with `grow` items (side by side while both fit, full-width
+stack when not), the audience cards are `repeat(auto-fit, minmax(min(100%, 16.5rem), 1fr))`,
+the right-hand column is `calc(32% + 18.3rem)`, and the pill label and the strip's 2 → 4 columns
+are **container** queries on the element that actually runs out of room. Media queries are left
+only for the two structural moves no fluid value can express (48rem, 64rem — where blocks
+change place). New components should follow the same order of preference: fluid value →
+intrinsic layout → container query → media query.
 
-**The two logo versions are sized by their ink, not their boxes, and never both show.** Both SVGs
-carry internal padding — the artwork fills 73.5% of the square viewBox's height and 63.6% of the
-horizontal one's — so matching box heights would leave them visibly shorter than the product image.
-The heights are therefore `productHeight / inkFraction`: the square lockup is `h-[3.4rem]`
-(54px box → 40px of ink) and `sm:h-[5.44rem]` (87px → 64px), the horizontal one `lg:h-[8.65rem]`
-(138px → 88px). Measured, the ink lands within 0.4px of the product image at every breakpoint
-(client direction 2026-09-12).
+**One DOM order, three placements.** The markup is in the phone reading order — copy → media
+(photo + quote panel) → product chip → cards — and `grid-template-areas` moves blocks at the two
+structural steps, so the chip and the quote panel each exist once:
 
-Placement follows from how much frame the row can spare. Ink-matched, the horizontal lockup is
-~196px wide, so below `md` it would push that row onto the patient's face — at 640px it cuts the
-clinician from 67% of her width to 29%. The square lockup therefore runs below 768px. From `md` the
-visible window is wide enough (69% of the frame at 768px vs 58% at 640px) that the horizontal one
-costs nothing — measured at 768px it leaves the lockup ending at 60.8%, still clear of her head at
-66%, with the clinician unchanged at 75% (client direction 2026-09-12). So: square below 768px,
-horizontal from 768px up, always beside the product image. The `md` height is `md:h-[6.29rem]`
-(101px box → 64px of ink). At `lg` the row is ~430px wide (270px logo + 16px gap + 128px chip ink),
-which roughly matches the 448px `max-w-md` body above it, so left-aligned it still tracks the copy.
-The hero keeps its ~705px height at 1280: the lockup row is 138px, the same as the logo-only row it
-replaced.
+| | Placement |
+|---|---|
+| < 48rem | DOM order. Photo 7:5; the quote panel overlaps its bottom edge in flow (`-mt-14 mx-3`); chip under the panel; "Choose your path" eyebrow; cards stacked (or paired, when each gets 16.5rem). |
+| 48–64rem | `"copy" "chip" "media" "cards"`. Photo 16:9; panel glass over its top-left; cards paired, overlapping the photo's bottom. |
+| ≥ 64rem | `"copy media" "copy cards" "chip cards"`, rows `auto auto 1fr`. |
 
-Both lockups are decorative (`alt=""`,
-`aria-hidden`): `SiteHeader` already carries the brand as a link. They are plain `<img>`, not
-`enhanced:img` — that transform is raster-only.
+The ≥ 64rem areas are deliberate. **Row 1 holds nothing but the photo**, so the cards (rows 2–3)
+always start at the photo's bottom edge and their negative margin (`clamp(5rem, 2rem + 5vw,
+6rem)`) overlaps it by the same amount at every width. The copy spans rows 1–2 so, when it is
+taller than the photo (1024–1280px), row 2 takes the difference and the chip still starts right
+under the copy. The first version pinned the cards to `max(copy, photo)` instead and they
+overlapped the photo by only 18px at 1024. **The cards stay in flow** — only the negative margin
+pulls them up — so taller cards push the credibility strip down (≥ 48px clear, measured) rather
+than sliding under it.
 
-**The photo's crop anchor is stepped across five breakpoints, all measured.** Below `lg` the hero
-band is portrait, so `object-cover` matches its *height* and overflows horizontally: the crop is
-purely horizontal, `object-position`'s Y value does nothing, and its X value decides what sits behind
-the brand lockup. Two goals pull against each other — the lockup must stay left of ~66% (the
-patient's head runs ~66–78%) while the window must reach ~88% for the clinician (~85–100%) to be in
-shot.
+**The photo is a framed media block**, not a full-bleed background: `rounded-3xl`, no overlay,
+no mask, no text on it except the glass quote panel and cards. The full-bleed era's stepped crop
+anchors, sub-`lg` cap and mask, overlay gradients and lockup-collision rules are all gone. The box
+is narrower than the 16:9 source at every width, so the crop is horizontal and only
+`object-position` X matters; it is `100%` (right-anchored) throughout. The aspect per placement is
+**measured, not the plan's starting 4:3**: at 4:3 the quote panel ended 3–6px short of the
+patient's left eye at 1024–1280, so the right-hand column uses 3:2.
 
-Restoring the testimonials (2026-09-13) made the band far taller below `lg` — 999px at 375 against
-635px before — which narrowed the window to ~21% of the frame and cropped the clinician out
-entirely. The fix is `.hero-photo`: below `lg` the photo is capped at `max-height: 40rem` and masked
-to fade out over its last quarter, so the band's aspect stays near what it was before the quotes
-came back and the quotes sit on the navy base below the fade. From `lg` the cap and mask are
-removed — the hero is landscape there and crops vertically instead. With the cap in place:
+Faces, measured against the source (patient's eyes at 67.6–73.5% of its width, mouth 69–73%;
+clinician's face 82.6–89.6%), with the taller (doctor's) slide:
 
-| viewport | anchor | lockup ends at | patient whole | clinician shown |
-|----------|--------|----------------|---------------|-----------------|
-| 375      | 73%    | 65.0%          | yes           | 0% — see below  |
-| 430      | 79%    | 65.3%          | yes           | 13%             |
-| 480      | 84%    | 64.7%          | yes           | 38%             |
-| 640      | 88%    | 61.8%          | yes           | 65%             |
-| 768      | 88%    | 61.5%          | yes           | 73%             |
-| 1023     | 88%    | 41.9%          | yes           | 91%             |
-| 1024     | 75%    | 45.1% — under the copy | yes | full |
-| 1280     | 75%    | 36.1% — under the copy | yes | full |
+| viewport | photo box | panel → patient's eye | covered | clinician |
+|---|---|---|---|---|
+| 375 | 335×239 (7:5) | panel under the photo | nothing | face in frame |
+| 560 | 520×371 (7:5) | panel under the photo | nothing | face in frame |
+| 768 | 704×396 (16:9) | 76px clear | nothing | whole |
+| 900 | 836×470 (16:9) | 88px clear | nothing | whole |
+| 1024 | 600×400 (3:2) | 30px clear | hair bun only | whole |
+| 1280 / 1440 | 681×454 (3:2) | 33px clear | hair bun only | whole |
 
-375 is the one width where she still cannot appear: the window there is ~33% of the frame, too
-narrow to hold lockup + patient + clinician at once, and the lockup has only ~1% of headroom before
-it reaches the patient's face. That is geometry, not a tuning miss.
+**The quote panel is 7/6 of one card** (D4): a card is `(100% − 2 × 1.25rem inset − 1rem gap) / 2`
+of the photo box, so the panel is `calc((100% - 3.5rem) * 7 / 12)` and its left edge lines up with
+the patient card's (365px vs 313px cards at 1280). The inset and gap are fixed for exactly this
+reason — make them fluid and the calc has to follow.
 
-400px and 480px are expressed in rem (`min-[25rem]`, `min-[30rem]`) so they sort correctly against
-Tailwind's rem breakpoints. **Re-measure before touching any of this**, and re-measure again if the
-hero's height moves at all. These numbers are void if the hero photo is ever swapped, since they
-encode where the two subjects stand in *this* frame.
+**Glass contrast, measured on the worst 2% of the blurred photo behind each panel.** Plan values
+failed twice in light mode, so the glass was made more opaque (the rule: raise the glass, never
+lighten the text): the quote panel is `bg-white/80` (slate-600 sub-line 4.44 → ≥ 4.99:1) and
+`dark:bg-navy-950/65`; the cards are `bg-white/85` (clinician eyebrow ≥ 4.95:1) and
+`dark:bg-navy-900/75`. Re-measure if the photo is ever swapped — every number in this section
+encodes where the two subjects stand in *this* frame.
 
-**The sub-`lg` overlay dips where the faces are.** Above 1024px the horizontal fade leaves the
-subjects almost clear (4–6% at the right), but below it a single top-to-bottom gradient sat as
-heavily on the faces as on the background and the people read far darker than on desktop (client
-direction 2026-09-12). The gradient now has four stops: it opens at 60%, **dips to 42% at 38%
-height — where the crop puts the two faces** — and closes back to 62%/74% for the credibility strip
-and the 12px regulatory line, which run over the subject's light sweater and need the cover. Dark
-keeps the same shape, heavier throughout (86/60/74/82).
+**Heights** (2026-09-27, vs the pre-redesign baseline): at 1280 the hero is 949px and `/` is
+2 940px (baseline: 705px hero + 373px `KeyBenefits`, 2 973px page); at 375 the hero is ~2 060px
+and `/` ~4 820px (baseline 1 063 + 750px, 4 470px). The desktop page is slightly shorter; the
+phone page is longer, because the problem sentences now open the first bridge instead of sharing
+the cards, and the cards, chip and strip all stack.
 
-**The testimonials live in the hero again, in one set of markup.** From `lg` they are the
-right-hand column of a `lg:grid-cols-[1.5fr_1fr]` grid, glass over the photo, as they were before
-2026-09-08; below `lg` that wrapper is a plain block, so they simply fall after the credibility strip
-*and* its regulatory line — the fine print belongs with the strip it qualifies, so the quotes go
-under both (client direction 2026-09-13). No duplicate markup and no second copy of the quotes:
-`KeyBenefits` lost its third column and is now `md:grid-cols-2`, and `quotes` is imported by the hero
-instead.
-
-**Per-section persona accents still apply**, but now *within* a section: `KeyBenefits` puts
-`.accent-patient` and `.accent-clinician` on its two cards side by side, and `ChooseJourney`
-scopes each journey card. The old page's blue → teal → purple *lane* structure is retired.
+**Per-section persona accents still apply**, but *within* a section: `HeroAudienceCards` and the
+first bridge's problem row put `.accent-patient` / `.accent-clinician` on their two halves side
+by side, and `ChooseJourney` scopes each journey card. The old blue → teal → purple *lane*
+structure is retired.
 
 **`#support` is load-bearing.** `SiteHeader`'s "Support Center" nav item and every pending
 "learn more" link across the site resolve to it; it is the id on `ChooseJourney`'s Support Center
@@ -353,9 +336,9 @@ sticky header does not cover the heading.
 | Patient page `h1` | `text-[clamp(1.75rem,3.8vw,2.6rem)] leading-[1.15]` |
 | Section `h2` | `text-[clamp(1.6rem,3.2vw,2.25rem)] leading-tight` |
 | Bridge emphasis | `font-display font-semibold text-[clamp(1.35rem,2.6vw,1.9rem)]` |
-| Home hero `h1` | `font-bold tracking-tight text-[clamp(1.9rem,4.5vw,3rem)]` (still sans) |
+| Home hero `h1` | `font-bold tracking-[-0.035em] leading-none text-balance text-[clamp(2.75rem,19.2cqi-1.27rem,4.75rem)]` (still sans). Sized by its **column** (`@container` on the copy block): 44px at 375, 73px in the 486px desktop column, 76px cap. One string; "Catheter‑free" uses U+2011 so it never breaks after the hyphen (5.8em wide in the system sans — the cqi slope keeps it on one line with room for wider fallback fonts). |
 | Body | `text-base leading-relaxed text-slate-600 dark:text-slate-300` + `text-pretty` |
-| Home key-benefit cards | problem line + ticks `leading-snug`, ticks `space-y-2` (tighter than body, client direction 2026-09-27) |
+| Home audience cards | serif `h2` `text-[clamp(1.25rem,1.7vw,1.5rem)]`, ticks `text-[15px] leading-snug space-y-2` (tighter than body, client direction 2026-09-27) |
 | Small print | `text-xs text-slate-500` |
 | Eyebrow | `text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300` |
 
@@ -435,8 +418,10 @@ things. Icon chips inside cards stay `bg-(--color-patient-soft)` / white as befo
 3. **Bridge arrow nudge** — gentle 4px loop, disabled under reduced motion.
 4. **The accordion rail** — the progress fill in `AutoAccordion`, §6a. Drawn in
    `--brand-ink`, not the persona accent (see *The brand highlight*, §1).
+5. **The quote rotator's dot** — the active dot's fill in the home hero's `QuoteRotator`, the same
+   timer mechanism as the accordion rail (§6b), also in `--brand-ink`.
 
-Anything new must justify itself against these four. No parallax, 3D, cursor effects, or
+Anything new must justify itself against these five. No parallax, 3D, cursor effects, or
 autoplaying video — wrong register for anxious patients on a regulated medical page.
 
 **Sliders/carousels are a last resort**, and when content genuinely demands one
@@ -445,6 +430,9 @@ the box height fits the longest slide (no layout jump); crossfade opacity only, 
 `motion-reduce:transition-none`; `aria-live="polite"`, labelled dot + prev/next buttons. A
 content *grid* (Section 4 testimonials) beats a carousel — the Section 4 carousel mockup was
 rejected exactly because it hides content behind interaction.
+
+Two bounded exceptions auto-advance, each under the conditions listed with it: the
+`AutoAccordion` (§6a) and the home hero's `QuoteRotator` (§6b).
 
 ---
 
@@ -529,14 +517,45 @@ JS `matchMedia` check, because the CSS also covers the pre-hydration window.
 
 ---
 
+## 6b. The home hero's quote rotator (`QuoteRotator`) *(owner direction 2026-09-27)*
+
+The two docx testimonials rotate in one glass panel on the hero photo. **The second bounded
+exception to §6's "never auto-advance"** — granted by the owner (D3) for a two-quote panel that
+would otherwise double the space the photo gives up to text. It meets the same conditions as
+§6a, with the same mechanism:
+
+- **The active dot is the timer.** Its fill animates `scaleX(0 → 1)` over `--qr-dwell` (the item's
+  `seconds` — 7 s for Hannah's 17 words, 9 s for the doctor's 23 — kept in the content file next
+  to the quote), and its `animationend` shows the next quote, wrapping.
+- **Held** — `animation-play-state: paused`, the fill freezes where it is — on hover and on focus
+  within the panel (pure CSS, `:hover` / `:focus-within`), when the panel is out of view (an
+  IntersectionObserver that **fails open**), and when the tab is hidden (`visibilityState`; the
+  document timeline keeps running in a background tab, so without this the fill would complete
+  unseen and advance the moment the tab came back).
+- **Paused by the reader** with a visible pause/play button (WCAG 2.2.2), or by clicking a dot:
+  the reader chose that quote, so nothing moves under them.
+- **Reduced motion is fully manual**: the button is not rendered, the fill has no animation, and
+  a `@media (prefers-reduced-motion: reduce)` block kills it in CSS too (covers pre-hydration).
+- **Nothing leaves the DOM and nothing moves.** Both quotes stack in one grid cell (the panel is
+  as tall as the longer — measured identical on both slides), crossfade opacity + `visibility`
+  over 0.4 s, inactive slides are `inert`. The footer is pushed to the bottom so both
+  attributions sit on the controls' row.
+- **APG carousel semantics**: `<section aria-roledescription="carousel" aria-label>`, slides
+  `role="group" aria-roledescription="slide" aria-label="1 of 2"` holding `<blockquote>` +
+  `<footer>`, `aria-live="off"` while it rotates and `"polite"` when it is paused or held. The
+  controls come first in the DOM (focus order: CTAs → quote controls → cards) but are drawn on
+  the attribution row. Dots are 5px / a 14px pill inside 24×24 hit areas (WCAG 2.5.8).
+
+---
+
 ## 7. Components
 
 Shared (`src/lib/components/`):
 
 | Component | Notes |
 |---|---|
-| `SiteHeader.svelte` | `variant: 'overlay'` (transparent, over the home hero photo) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar). Owns nav + mobile menu. Overlay is unchanged; only `solid` carries the primary-colour gradient. |
-| `UroDapterHero.svelte` | Home hero: headline + subheadline over the photo, product chip, the four-item credibility strip and the one-line regulatory statement. Consumes `SiteHeader variant="overlay"`. Renders **no** `<main>` and **no** page wrapper — the route owns both. **Single column** (`lg:max-w-[62%]`), so the photo's subjects stay clear; the audience glass cards and the testimonial stack that used to sit here are gone (see §2). |
+| `SiteHeader.svelte` | `variant: 'page'` (transparent on the page gradient, scheme-aware text — the home page, rendered by the route before `<main>`) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar, white text). Owns nav + mobile menu. A **"Contact us"** pill closes the nav on every page (and the mobile menu); it points at `#support` until a contact route exists (`TODO(placeholder)`). The nav gap is fluid (`clamp(1rem, 2.5vw - 0.5rem, 2rem)`) so links + pill fit at 768px. |
+| `UroDapterHero.svelte` | Home hero (2026-09-27): regulatory pill, sans `h1`, body, brand-pill + outline CTAs, the framed photo with `QuoteRotator`, the product chip, `HeroAudienceCards`, the credibility strip (every item has a sub-line; the webshop link is off-site) and the regulatory line. Renders **no** header, **no** `<main>` and **no** page wrapper — the route owns all three. Placement rules and measurements: §2 *The home page*. |
 
 `src/lib/components/shared/` — used by more than one page. **These take their accent from the
 enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out of
@@ -544,7 +563,7 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 
 | Component | Notes |
 |---|---|
-| `SectionBridge.svelte` | `variant: 'arrow' \| 'quote'`, props `lead` (optional), `emphasis`. Full-bleed tinted band. **The page's separator — always exactly one between sections.** Omit `lead` when the bridge copy is a single sentence — a sentence stays in one element. |
+| `SectionBridge.svelte` | `variant: 'arrow' \| 'quote'`, props `lead` (optional), `emphasis`, `problems` (optional, quote variant only). Full-bleed tinted band. **The page's separator — always exactly one between sections.** Omit `lead` when the bridge copy is a single sentence — a sentence stays in one element. `problems` (`{id, label, text, icon, accentClass}[]`) adds a row of labelled audience statements above the emphasis — side by side when each gets 20rem, stacked below — and then the band shows **no quote glyph** and the rule sits **above** the emphasis, as the divider between problem and answer (the answer is the site's own line, not a quote). Without it the band renders exactly as before. The arrow variant centres its row (`sm:justify-center`), which only moves bridges shorter than the row (home's "Choose Your Journey"). |
 | `BenefitCard.svelte` | Icon chip + title + body, optional `source` citation line (design system §9 — a card that carries a clinical claim carries its source). **Its chip+title treatment is the shared vocabulary** the testimonial theme labels rhyme with. |
 | `TestimonialCard.svelte` | Theme chip+label (BenefitCard vocabulary), real `<blockquote>`/`<footer>`, optional story link (omit `linkLabel`/`href` when a grid shares one "read all" band, as the clinician page does). |
 | `StatCard.svelte` | Icon chip + serif `highlight` + body + optional `source` citation. Extracted from `EvidenceOutcomes`; also the home page's "The numbers" row. |
@@ -553,17 +572,18 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 | `OutcomesChart.svelte` | Two single-series labeled-bar lists on a shared 0–100% scale. Thin `h-2` bars, data-end-only rounding, recessive track, label+value as real text on every row (the bars are decoration over an accessible list), source line. Series colours: the validated `--chart-*` tokens only. *(Promoted from `patients/` 2026-08-26, when the clinician page needed it.)* |
 | `DonutStat.svelte` | Single-value completion ring (the clinician docx's "large 74% continuation ring"). Arc drawn with `--chart-continuing` — **never the raw persona accent** (§1) — `stroke-linecap="round"`, SVG `aria-hidden`, percentage + caption as real text. Props `value` (0–100) + `caption`. |
 | `ProductCallouts.svelte` | The 3×3 device diagram — see §8. Callouts may carry an optional `description` (the client's technical figure notes); it is hidden below `sm`, where a corner cell is ~80px wide. |
-| `VideoFacade.svelte` | Click-to-load video; **nothing is fetched until the viewer presses play**. `sources={{ webm?, mp4 }}` → a self-hosted native `<video>` (preferred: no third party is contacted at all); `videoId` → a `youtube-nocookie` embed. Neither → "Coming soon" placeholder. Also `poster`, `caption`, `duration`. **Never show a fake duration.** |
+| `VideoFacade.svelte` | Click-to-load video; **nothing is fetched until the viewer presses play**. `sources={{ webm?, mp4 }}` → a self-hosted native `<video>` (preferred: no third party is contacted at all); `videoId` → a `youtube-nocookie` embed. Neither → "Coming soon" placeholder. Also `poster`, `caption`, `duration`. **Never show a fake duration.** `captionPosition`: `'below'` (default) \| `'above'` — the caption becomes the video's lead-in, first child of the `<figure>` (home page only). |
 | `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. |
 | `AutoAccordion.svelte` | The autonomous accordion — **see §6a for the conditions of use, which are binding.** Props: `items` (`{id, title, body?, icon?, seconds?}`), `controlLabel` (names the pause button), `autoplay`, and a `panel` snippet rendered once per item. Optional `group` on an item labels a run of consecutive items and wraps it in a `role="group"`. Takes its accent from the enclosing scope. |
 
-Home page (`src/lib/components/home/`) — three sections since the 0831 rebuild:
+Home page (`src/lib/components/home/`) — two sections below the hero since the 2026-09-27 redesign:
 
 | Component | Notes |
 |---|---|
-| `KeyBenefits.svelte` | **Section 1**: a two-column row of audience cards, each in its own accent scope. It carried the two docx testimonials as a third `.surface-panel` column from 2026-09-08 until they moved back to the hero (2026-09-13) — hence `md:grid-cols-2` with no `lg` step. The docx key-benefits headline is **split across the two card titles** (`h2` each), so the section has no headline of its own and is labelled by both — `aria-labelledby="benefits-patients benefits-clinicians"`. Inside a card: persona chip + serif title, that audience's problem sentence, a hairline, then the three benefits as **ticks** (bare check icon in `--accent-ink`, no chip). |
-| `HowItWorks.svelte` | **Section 2**: header + intro, the `ProductCallouts` diagram in a `.surface-card`, then a `[2fr_3fr]` row pairing the second-line explanation with the 30-second animation. |
-| `ChooseJourney.svelte` | **Section 3**: three journey cards (`.accent-pill`, each in its own accent scope) + the Support Center shortcut. **Carries `id="support"`** — see §2. |
+| `HeroAudienceCards.svelte` | The two audience cards in the hero (replaced `KeyBenefits`, 2026-09-27). Each `<article>` in its own `.accent-*` scope: persona chip + eyebrow, serif `h2` (ids `benefits-patients` / `benefits-clinicians`), brand-teal ticks, and a footer link whose `::after` stretches over the card — the **whole card is the link** and the focus ring surrounds it. Intrinsic grid (`minmax(min(100%, 16.5rem), 1fr)`); wrapper `flex-col` + `article h-full` keep both cards one height with the footers level. No `use:reveal` (above the fold). |
+| `QuoteRotator.svelte` | The hero's rotating testimonial panel — **see §6b for its conditions**. Props `items` (`{quote, author, subAuthor?, seconds?}`), `label`, `class` (placement only). |
+| `HowItWorks.svelte` | **Section 2**, `id="how-it-works"` + `scroll-mt-24` (the hero's "See how it works" target): header + intro, the `ProductCallouts` diagram in a `.surface-card`, then a `[3fr_2fr]` row pairing the 30-second animation (caption **above** it) with the second-line explanation. |
+| `ChooseJourney.svelte` | **Section 3**: three journey cards (`.accent-pill`, each in its own accent scope) + the Support Center shortcut. Its `h2` is `sr-only` — the bridge above reads "Choose Your Journey" (D14). **Carries `id="support"`** — see §2. |
 | `WhatItIs.svelte`, `ProofStats.svelte`, `PersonaSection.svelte`, `Voices.svelte` | **Parked** — the pre-0831 home page. Not rendered; their CMS-approved copy is kept for the Support Center build. |
 | `AudienceStub.svelte` | The `/partners` placeholder page: persona canvas + solid nav + "coming soon" roadmap + CTA panel. Replace with a real journey, don't extend. |
 

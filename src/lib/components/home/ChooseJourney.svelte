@@ -16,14 +16,11 @@
      sweep, where clinician teal and distributor violet drop white text under
      4.5:1 (design system §4). -->
 <section aria-labelledby="journey-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <h2
-    id="journey-heading"
-    class="font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
-  >
-    {journey.heading}
-  </h2>
+  <!-- The bridge above reads "Choose Your Journey" (D14), so the heading is
+       screen-reader only: it keeps the section's label and the page outline. -->
+  <h2 id="journey-heading" class="sr-only">{journey.heading}</h2>
 
-  <div use:reveal class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+  <div use:reveal class="grid grid-cols-1 sm:grid-cols-3 gap-4">
     {#each journey.cards as card (card.id)}
       <div class={accentClass[card.id]}>
         <a

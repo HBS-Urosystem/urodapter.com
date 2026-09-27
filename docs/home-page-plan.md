@@ -1,5 +1,59 @@
 # Home Page — Design & Build Plan
 
+> ## 2026-09-27 — hero redesign (owner direction)
+>
+> **Status: built and verified.** Plan and decisions D1–D14:
+> [home-hero-redesign/plan.md](home-hero-redesign/plan.md); layout rules, measurements and the
+> fluid approach: [design-system.md §2 *The home page*](design-system.md) and §6b.
+>
+> ### Shipped structure (supersedes the 2026-09-08 table below for the hero and Section 1)
+>
+> | # | Block | Component | Source |
+> |---|---|---|---|
+> | — | Hero: regulatory pill, headline, body, "See how it works" / "Talk to our team", product chip, framed photo with the rotating testimonials, two audience cards (whole card = link), credibility strip, regulatory line | `UroDapterHero`, `home/HeroAudienceCards`, `home/QuoteRotator` | Owner-approved mockup copy (2026-09-27); testimonials and regulatory line unchanged |
+> | — | bridge (quote + problems): "For patients" / "For clinicians" problem lines, then *"A simple idea can make a remarkable difference."* | `SectionBridge` (`problems`) | docx "Why Heroes Care" lines, verbatim (moved out of the cards) + the docx How-It-Works headline |
+> | 2 | How It Works — one-sentence intro, product diagram, caption above the 30-second animation, explanation | `home/HowItWorks.svelte` | docx, with owner wording D9–D12 |
+> | — | bridge (arrow): *"Choose Your Journey"* | `SectionBridge` | owner wording (D14) |
+> | 3 | Choose Your Journey (sr-only `h2`, 3 cards) + Support Center shortcut | `home/ChooseJourney.svelte` | docx, clinician card D13 |
+>
+> `KeyBenefits` is deleted. `SiteHeader variant="page"` is rendered by the route before `<main>`,
+> and the hero is now inside `<main>`.
+>
+> ### Copy provenance
+>
+> - **Owner-approved mockup copy (2026-09-27), not docx copy:** the hero headline, body, CTAs,
+>   regulatory pill, product chip, the two audience cards, "Choose your path", the strip's
+>   sub-lines, and the header's "Contact us".
+> - **Still docx-verbatim:** the two problem sentences (now in the first bridge), the two
+>   testimonials, the video caption, the Choose Your Journey cards except D13.
+> - **Owner wording (D9–D14):** the How It Works intro and the detail's middle sentence,
+>   "standard Luer syringe" (hero chip, callout, detail), "patient compliance" (hero card tick and
+>   journey card), and the "Choose Your Journey" bridge.
+>
+> ### Open items (for the owner/client, not blockers)
+>
+> 1. **Contact destination.** "Contact us" and "Talk to our team" point at `#support` as
+>    placeholders (`TODO(placeholder): contact route`). A contact route or form is needed.
+> 2. **Card deep links (optional).** "What to expect" and "Clinical use & evidence" go to the page
+>    roots; deep links (`/clinicians#…`) could replace them once those sections carry stable ids.
+> 3. **Client sign-off.** The hero copy now differs from the client docx (D5/D6). Record the
+>    client's acknowledgement here.
+> 4. **Strip sub-lines.** "Peer-reviewed in 3 journals" counts the three journals the site cites
+>    (Int J Urol 2019, Continence 2025, Neurourol Urodyn 2025); a fuller publication list could
+>    replace it. The webshop link stands in for a country count until one is settled.
+> 5. **Claim wording to confirm with the client** (implemented as the owner stated; the design
+>    system says claims must not be strengthened):
+>    - **D9** drops the hedge: "may make treatment more comfortable for many patients" became
+>      "making treatment more comfortable for both male and female patients".
+>    - **D13** "patient compliance" is a new clinical-benefit claim; design system §9 expects a
+>      source. The closest cited evidence on the site is the continuation data in Pothoven et al.,
+>      *Continence*, 2025.
+> 6. **"Luer" on the other pages.** Still "standard syringe" in the patient callout
+>    (`patients.ts`), the clinician Implementation body and the clinician spec list
+>    (`clinicians.ts`). Left alone to keep this change on `/`.
+> 7. **Page length.** At 1280 `/` went 2 973 → 2 940px; at 375 it went 4 470 → ~4 820px, because
+>    the problem sentences now open the first bridge and the hero stacks cards, chip and strip.
+
 > ## 2026-09-08 — rebuilt from `3. page_content.docx`
 >
 > **Status: built and verified.** Light + dark, 375 / 768 / 1280, `npm run check` (0 errors),
