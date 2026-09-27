@@ -183,7 +183,7 @@
                 <button
                   class="ac-header w-full text-left cursor-pointer rounded-sm transition-colors
                          flex items-center gap-3
-                         focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--accent-ink)
+                         focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--brand-ink)
                          {i === active
                     ? 'text-navy-950 dark:text-white'
                     : 'text-slate-500 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white'}"
@@ -195,8 +195,8 @@
                 >
                   {#if item.icon}
                     <span
-                      class="w-9 h-9 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25
-                             text-(--accent-ink) flex items-center justify-center shrink-0"
+                      class="w-9 h-9 rounded-full bg-(--brand-soft) border border-(--brand-ink)/20 dark:border-(--brand-ink)/25
+                             text-(--brand-ink) flex items-center justify-center shrink-0"
                       aria-hidden="true"
                     >
                       <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
@@ -238,9 +238,9 @@
           <div class="pl-12">
             <button
             type="button"
-            class="w-9 h-9 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25
-                   text-(--accent-ink) flex items-center justify-center cursor-pointer transition-colors
-                   hover:bg-(--accent-ink)/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent-ink)"
+            class="w-9 h-9 rounded-full bg-(--brand-soft) border border-(--brand-ink)/20 dark:border-(--brand-ink)/25
+                   text-(--brand-ink) flex items-center justify-center cursor-pointer transition-colors
+                   hover:bg-(--brand-ink)/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand-ink)"
               aria-label={paused ? `Play ${controlLabel}` : `Pause ${controlLabel}`}
               onclick={() => (paused = !paused)}
             >
@@ -295,7 +295,9 @@
     inset-inline-start: 0;
     width: 2px;
     border-radius: 999px;
-    background: var(--accent-ink);
+    /* Progress rail is an interaction affordance, so it carries the brand
+       highlight rather than the persona accent (design system §1). */
+    background: var(--brand-ink);
   }
   .ac-track {
     opacity: 0.2;

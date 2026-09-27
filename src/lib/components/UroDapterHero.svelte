@@ -49,7 +49,7 @@
            400px    73%    lockup ends ~65%, clinician out of frame
            480px    76%    lockup ends ~65%, clinician out of frame
            640px    80%    lockup ends ~65%, clinician ~20% at 640, ~50% at 1023
-           1024px   75%    desktop; lockup sits beside the headline, ends ~52%
+           1024px   75%    desktop; lockup under the copy, ends ~45% (36% at 1280)
          Re-measure (lockup rect vs. band rect, converted to source %) before
          changing any of these, and re-measure again if the hero's height moves —
          the band's aspect is the input to all of it. -->
@@ -76,24 +76,22 @@
         class="lg:min-h-[26rem] pt-10 sm:pt-14 lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-x-10 lg:items-start"
       >
         <div>
-          <!-- Under 1024px this row stacks, so the brand lockup lands under the
-               copy rather than beside it, aligned to the copy's left edge. It
-               was centred on the copy column until the lockup grew a logo: a
-               centred lockup sits on the middle of the frame, and any crop that
-               keeps the clinician in shot puts the patient's face there too, so
-               the two collided at every width in 400–640px. Left-aligning frees
-               the right half of the frame for both subjects (client direction
-               2026-09-12, chosen over cropping the clinician or covering the
-               patient). From lg up both width caps lift and the row turns, so
-               the lockup sits right of the headline.
+          <!-- The brand lockup — logo plus product image, always side by side
+               (client direction 2026-09-27) — sits under the copy at every
+               width, aligned to the copy's left edge. It was centred on the copy
+               column until the lockup grew a logo: a centred lockup sits on the
+               middle of the frame, and any crop that keeps the clinician in shot
+               puts the patient's face there too, so the two collided at every
+               width in 400–640px. Left-aligning frees the right half of the
+               frame for both subjects (client direction 2026-09-12, chosen over
+               cropping the clinician or covering the patient).
                It briefly sat above the copy (`order-first`) — that read as part
-               of the header rather than the hero; don't put it back. -->
-          <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
-            <!-- `lg:flex-initial` so the column is as wide as the copy, not as
-                 wide as the 62% track. As `flex-1` it grew to fill, which left
-                 a ~300px void between the text and the product image and pinned
-                 the image to the far right of the track. -->
-            <div class="flex-1 min-w-0 max-w-xl lg:max-w-none lg:flex-initial">
+               of the header rather than the hero; don't put it back. From lg the
+               product image used to sit beside the headline with the logo alone
+               under the copy; the client wants the two together, so don't split
+               them again. -->
+          <div class="flex flex-col gap-6 lg:gap-10">
+            <div class="min-w-0 max-w-xl lg:max-w-none">
               <h1
                 class="font-bold tracking-tight leading-[1.05] text-[clamp(1.9rem,4.5vw,3rem)]"
               >
@@ -103,20 +101,9 @@
               <p class="mt-4 text-slate-200 text-base sm:text-lg max-w-md">
                 {hero.body}
               </p>
-              <!-- From lg the horizontal lockup gets a row of its own under the
-                   copy, centred on the text column, while the product image
-                   stays beside the headline. Height is ink-matched to that image
-                   (88px) the same way the square one is: the artwork fills 63.6%
-                   of this viewBox, so the box is 88/0.636. -->
-              <img
-                src={logoHorizontal}
-                alt=""
-                aria-hidden="true"
-                class="hidden lg:block mx-auto mt-10 w-auto h-[8.65rem]"
-              />
             </div>
             <div
-              class="w-full max-w-xl lg:w-auto lg:max-w-none shrink-0 flex items-center justify-start gap-3 sm:gap-4"
+              class="w-full max-w-xl flex items-center justify-start gap-3 sm:gap-4"
             >
               <!-- Lockup left of the chip, sized so its *ink* matches the
                    product image's height, not its box: the artwork fills 73.5%
@@ -140,7 +127,7 @@
                 src={logoHorizontal}
                 alt=""
                 aria-hidden="true"
-                class="hidden shrink-0 w-auto md:block md:h-[6.29rem] lg:hidden"
+                class="hidden shrink-0 w-auto md:block md:h-[6.29rem] lg:h-[8.65rem]"
               />
               <div
                 class="shrink-0 w-24 sm:w-32 lg:w-40 aspect-4/3 flex items-center justify-center p-4"

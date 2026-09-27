@@ -32,7 +32,7 @@
       >
         {heading}
       </h1>
-      <div class="mt-7 h-0.5 w-12 rounded-full bg-(--accent-ink)/60" aria-hidden="true"></div>
+      <div class="mt-7 h-0.5 w-12 rounded-full bg-(--brand-ink)/60" aria-hidden="true"></div>
       <p class="mt-6 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
         {body}
       </p>

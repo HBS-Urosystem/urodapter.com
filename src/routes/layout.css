@@ -13,6 +13,11 @@
   --color-clinician: #2c8979;
   --color-distributor: #8764b9;
 
+  /* Brand highlight — the UroDapter logo teal. It is the ONLY colour in
+     UroDapter_logo_horizontal.svg / _square.svg, and unlike the three persona
+     colours it is constant on every journey page (see the brand scope below). */
+  --color-brand: #75c6c9;
+
   /* Editorial serif for display headlines (patient-facing pages; 2026 direction) */
   --font-display: 'Source Serif 4 Variable', ui-serif, Georgia, serif;
 }
@@ -33,6 +38,63 @@
     --chart-trying: #0284c7;
     --chart-continuing: #059669;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Brand highlight scope. `--color-brand` (#75c6c9) is the logo teal, used to
+   highlight a title phrase or a button on ANY journey page. It is deliberately
+   NOT part of the .accent-* scopes: the persona accent changes per page, the
+   brand highlight is the constant that ties the journeys together. Declared
+   once on :root — never redeclare it inside .accent-patient/-clinician/-etc.
+
+   The logo teal is a LIGHT colour (L 0.78 in OKLCH). Measured:
+     · as text on white .................. 1.97:1  → unusable in light mode
+     · as text on navy-900 ............... 8.84:1  → excellent in dark mode
+     · as a fill under navy-950 text ..... 9.62:1  → excellent in BOTH modes
+   So the family splits by job, and each token is measured, not guessed:
+
+   --brand-ink    the readable text/border/icon colour. Light mode darkens the
+                  logo hue to oklch(0.48 0.08 198.7) = #096b6e — same hue as the
+                  logo (198.3° vs 198.7°), 6.29:1 on white and >=4.60:1 on every
+                  card/canvas/bridge tint of all three personas. Dark mode uses
+                  the raw logo teal (7.9-8.8:1 on the navy surfaces).
+   --brand-fill   the bright logo teal as a button/chip background. Identical in
+                  both schemes — it needs no swap because the text on it is navy,
+                  not white. NEVER put white text on it (1.97:1).
+   --brand-soft   tint for highlight chips and underlines.
+
+   Hue caution (measured): the logo teal sits 19.5 deg from --color-clinician in
+   OKLCH, and #096b6e is within 19 deg / 0.01 L of the clinician ink #236e61. On
+   the CLINICIAN page the two are hard to tell apart as small text, so highlight
+   with the bright forms there (.brand-pill, --brand-fill, --brand-soft), which
+   separate by lightness, rather than with --brand-ink next to clinician ink.
+--------------------------------------------------------------------------- */
+:root {
+  --brand-ink: #096b6e;
+  --brand-fill: var(--color-brand);
+  --brand-soft: color-mix(in srgb, var(--color-brand) 10%, white);
+  /* The only text colour that is safe on --brand-fill. */
+  --brand-on-fill: var(--color-navy-950);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-ink: var(--color-brand);
+    --brand-soft: color-mix(in srgb, var(--color-brand) 14%, transparent);
+  }
+}
+
+/* Bright brand button — the counterpart to .accent-pill (persona fill + white
+   text). This one is logo teal + navy text, so it reads as "UroDapter" rather
+   than "this page's persona", and it is the same in light and dark. The colour
+   is set here rather than by a utility class at each call site because white
+   text on this fill measures 1.97:1 — the one mistake that must be impossible
+   to make by accident. */
+.brand-pill {
+  background: var(--brand-fill);
+  color: var(--brand-on-fill);
+}
+.brand-pill:hover {
+  background: color-mix(in srgb, var(--brand-fill) 92%, black);
 }
 
 /* ---------------------------------------------------------------------------

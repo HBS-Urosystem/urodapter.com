@@ -17,7 +17,7 @@
     {#if variant === 'arrow'}
       <div use:reveal class="flex flex-col sm:flex-row items-center gap-5 sm:gap-7 max-w-3xl mx-auto text-center sm:text-left">
         <span
-          class="w-14 h-14 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center shrink-0 text-(--accent-ink)"
+          class="w-14 h-14 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center shrink-0 text-(--brand-ink)"
           aria-hidden="true"
         >
           <svg class="w-6 h-6 arrow-nudge" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" /></svg>
@@ -33,7 +33,7 @@
           class="mx-auto w-14 h-14 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 shadow-sm flex items-center justify-center"
           aria-hidden="true"
         >
-          <span class="font-display text-4xl leading-none text-(--accent-ink) translate-y-2">&ldquo;</span>
+          <span class="font-display text-4xl leading-none text-(--brand-ink) translate-y-2">&ldquo;</span>
         </span>
         {#if lead}
           <p class="mt-6 text-lg text-navy-900 dark:text-slate-100">{lead}</p>
@@ -41,7 +41,7 @@
         <p class="{lead ? 'mt-3' : 'mt-6'} font-display font-semibold text-navy-950 dark:text-white text-[clamp(1.35rem,2.6vw,1.9rem)] leading-snug text-balance">
           {emphasis}
         </p>
-        <div class="mt-6 h-0.5 w-12 mx-auto rounded-full bg-(--accent-ink)/50 dark:bg-(--accent-ink)/60" aria-hidden="true"></div>
+        <div class="mt-6 h-0.5 w-12 mx-auto rounded-full bg-(--brand-ink)/50 dark:bg-(--brand-ink)/60" aria-hidden="true"></div>
       </div>
     {/if}
   </div>

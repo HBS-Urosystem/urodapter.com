@@ -39,22 +39,22 @@
             </h2>
           </div>
 
-          <p class="mt-5 text-base leading-relaxed text-slate-600 dark:text-slate-300 text-pretty">
+          <p class="mt-5 text-base leading-snug text-slate-600 dark:text-slate-300 text-pretty">
             {column.problem}
           </p>
 
-          <ul class="mt-6 pt-6 border-t border-slate-100 dark:border-white/10 space-y-3.5">
+          <ul class="mt-6 pt-6 border-t border-slate-100 dark:border-white/10 space-y-2">
             {#each column.items as item (item)}
               <li class="flex items-start gap-3">
                 <svg
-                  class="w-5 h-5 shrink-0 mt-0.5 text-(--accent-ink)"
+                  class="w-5 h-5 shrink-0 mt-px text-(--accent-ink)"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="2.5"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 ><path stroke-linecap="round" stroke-linejoin="round" d={checkIcon} /></svg>
-                <span class="text-base leading-relaxed text-slate-700 dark:text-slate-200 text-pretty">{item}</span>
+                <span class="text-base leading-snug text-slate-700 dark:text-slate-200 text-pretty">{item}</span>
               </li>
             {/each}
           </ul>

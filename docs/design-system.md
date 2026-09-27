@@ -31,6 +31,7 @@ Defined in `@theme` (Tailwind v4) in `layout.css`:
 | `--color-patient` | `#18438a` | **Patient** persona accent |
 | `--color-clinician` | `#2c8979` | **Clinician** persona accent |
 | `--color-distributor` | `#8764b9` | **Distributor** persona accent |
+| `--color-brand` | `#75c6c9` | **Brand highlight** — the logo teal. Constant on every page |
 | `--font-display` | `Source Serif 4 Variable` | Editorial serif for display headlines |
 
 Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not a scale):
@@ -82,6 +83,48 @@ Two rules that are easy to get wrong:
 **Persona colour rule:** each audience page uses its own accent. The patient page uses
 `--color-patient` everywhere an accent appears. When building the clinician/distributor pages,
 **parameterise** — don't hardcode blue. Shared components should take the accent from the page.
+
+### The brand highlight — `--brand-*` *(2026-09-22)*
+
+A second, **page-independent** accent: `#75c6c9`, the only colour in
+`UroDapter_logo_horizontal.svg`. Where `--accent-*` says *which audience you are reading*, the
+brand teal says *this is UroDapter* — so it is declared once on `:root` and the `.accent-*` scopes
+never touch it. Do not redeclare it inside a persona scope.
+
+| Token | Light | Dark | Role |
+|---|---|---|---|
+| `--color-brand` | `#75c6c9` | `#75c6c9` | Raw logo teal. Tailwind: `text-brand`, `bg-brand`. |
+| `--brand-ink` | `#096b6e` | `#75c6c9` | Readable text / icon / border colour. |
+| `--brand-fill` | `#75c6c9` | `#75c6c9` | Bright button & chip background. |
+| `--brand-soft` | 10% teal in white | 14% teal alpha | Chip tint. |
+| `--brand-on-fill` | `--color-navy-950` | same | The **only** safe text colour on `--brand-fill`. |
+| `.brand-pill` | `--brand-fill` + navy text | same | Brand button; the counterpart to `.accent-pill`. |
+
+**Why the split by job.** The logo teal is light (OKLCH L 0.78). Measured: 1.97:1 as text on white
+(unusable), 8.84:1 as text on navy-900, 9.62:1 as a *fill* under navy-950 text. So light mode
+darkens it along its own hue to `oklch(0.48 0.08 198.7)` = `#096b6e` — 198.3° against the logo's
+198.7°, 6.29:1 on white and ≥4.60:1 on every card / canvas / bridge tint of all three personas —
+while `--brand-fill` needs no scheme swap at all, because the text on it is navy, not white.
+**Never put white text on the teal** (1.97:1); `.brand-pill` sets the text colour itself so that
+mistake cannot be made by accident.
+
+**Where it is used** (2026-09-22): interaction affordances and highlight marks, on every journey
+page. Persona CTAs are deliberately *not* included — `.accent-pill`, `.surface-solid` bands and the
+`NextSteps` cards keep their audience colour.
+
+| Brand teal | Still persona |
+|---|---|
+| `SectionBridge` arrow chip, quote glyph, rule | Bridge band tint (`--band-accent`) |
+| `AutoAccordion` rail + fill, header icon chips, play/pause button, focus outlines | The accordion's group label |
+| The `→` story/testimonial links + their focus rings | Section eyebrows |
+| The hairline rules under display headlines (`WhyChoose`, `AudienceStub`) | `StatCard` / `BenefitCard` / `IndicationsStrip` chips, page canvas, cards, nav |
+
+**Known limit — the clinician page in light mode.** The logo teal is 19.5° from `--color-clinician`
+in OKLCH, and `#096b6e` is within 19° / 0.01 L of the clinician ink `#236e61`: on `/clinicians` the
+two are hard to tell apart, so the highlight reads as cohesion rather than emphasis. Dark mode is
+fine (the bright teal separates clearly from `emerald-300`). If light-mode emphasis is wanted
+there, separate by **lightness** — use the bright forms (`.brand-pill`, `--brand-fill`,
+`--brand-soft`) rather than `--brand-ink` next to clinician ink.
 
 ### Dark-mode accent swap (important)
 
@@ -172,7 +215,7 @@ opening image" — that is why credibility is overlaid rather than given a secti
 it is the one place the page departs from docx order.
 
 **The hero is no longer short, and that was a deliberate reversal.** It was ~530px at 1280 until the
-horizontal lockup took a row of its own under the copy (~705px), and the testimonials then came back
+brand lockup took a row of its own under the copy (~705px), and the testimonials then came back
 into it (client direction 2026-09-13), which leaves it ~705px at 1280 — they fit in the right-hand
 column without adding height — but **~913–999px below `lg`**, where they stack. The testimonials had
 been moved out to the key-benefits row on 2026-09-08 precisely to reclaim ~240px; that decision is
@@ -189,18 +232,21 @@ resolve against the wrapper on small screens and against the section on large on
 this with a hardcoded `top` offset: the header grows when the mobile menu opens, and the
 containing-block version follows it for free.
 
-**Under 1024px the brand lockup sits below the hero copy, left-aligned to it.** The headline row
-is `flex flex-col gap-6 lg:flex-row`, so below `lg` the lockup — the UroDapter logo plus the product
-chip — stacks under the copy. It was centred on the copy column until the logo joined it
+**The brand lockup sits below the hero copy at every width, left-aligned to it.** The lockup is
+the UroDapter logo plus the product chip, and **the two always share a row** (client direction
+2026-09-27). The headline row is `flex flex-col gap-6 lg:gap-10`, so the lockup stacks under the
+copy. It was centred on the copy column until the logo joined it
 (2026-09-11), and that stopped working: a centred lockup occupies the middle of the frame, and any
 crop that keeps the clinician in shot puts the patient's face in the middle too, so the two collide
 at *every* anchor in 400–640px. Left-aligning frees the right half of the frame for both subjects
-(client direction 2026-09-12, chosen over cropping the clinician or covering the patient). From
-`lg` up both width caps lift, the row turns, and the lockup sits right of the headline. It was also
-briefly hoisted *above* the copy with `order-first`; at 768–1023px that read as part of the header
-rather than the hero. Don't put it back, and don't re-centre it.
+(client direction 2026-09-12, chosen over cropping the clinician or covering the patient). Until
+2026-09-27 the row turned at `lg`: the product image sat right of the headline and the horizontal
+logo took a row of its own under the copy, centred on the text column — the client wants the logo
+and the product together, so don't split them again. It was also briefly hoisted *above* the copy
+with `order-first`; at 768–1023px that read as part of the header rather than the hero. Don't put
+it back, and don't re-centre it.
 
-**The two logo lockups are sized by their ink, not their boxes, and never share a row.** Both SVGs
+**The two logo versions are sized by their ink, not their boxes, and never both show.** Both SVGs
 carry internal padding — the artwork fills 73.5% of the square viewBox's height and 63.6% of the
 horizontal one's — so matching box heights would leave them visibly shorter than the product image.
 The heights are therefore `productHeight / inkFraction`: the square lockup is `h-[3.4rem]`
@@ -214,16 +260,11 @@ clinician from 67% of her width to 29%. The square lockup therefore runs below 7
 visible window is wide enough (69% of the frame at 768px vs 58% at 640px) that the horizontal one
 costs nothing — measured at 768px it leaves the lockup ending at 60.8%, still clear of her head at
 66%, with the clinician unchanged at 75% (client direction 2026-09-12). So: square below 768px,
-horizontal beside the product image 768–1023px, and from `lg` horizontal again but in a row of its
-own under the copy, centred on the text column, with the product image beside the headline. The
-`md` height is `md:h-[6.29rem]` (101px box → 64px of ink).
-
-At `lg`, `lg:flex-initial` on the copy column is what keeps the product image *next to* the text. As
-`flex-1` the column grew to fill the whole 62% track, leaving a ~300px void and pinning the image to
-the track's right edge (client direction 2026-09-12). The column is now as wide as the copy itself —
-411px at 1024, 448px from ~1120 where `max-w-md` on the body caps it — with a 40px gap to the image,
-and the headline still holds two lines at every width from 1024 up. The horizontal lockup centres on
-that narrower column, so it tracks the copy rather than the track.
+horizontal from 768px up, always beside the product image. The `md` height is `md:h-[6.29rem]`
+(101px box → 64px of ink). At `lg` the row is ~430px wide (270px logo + 16px gap + 128px chip ink),
+which roughly matches the 448px `max-w-md` body above it, so left-aligned it still tracks the copy.
+The hero keeps its ~705px height at 1280: the lockup row is 138px, the same as the logo-only row it
+replaced.
 
 Both lockups are decorative (`alt=""`,
 `aria-hidden`): `SiteHeader` already carries the brand as a link. They are plain `<img>`, not
@@ -251,7 +292,8 @@ removed — the hero is landscape there and crops vertically instead. With the c
 | 640      | 88%    | 61.8%          | yes           | 65%             |
 | 768      | 88%    | 61.5%          | yes           | 73%             |
 | 1023     | 88%    | 41.9%          | yes           | 91%             |
-| 1280     | 75%    | 51.9% — beside the headline | yes | full |
+| 1024     | 75%    | 45.1% — under the copy | yes | full |
+| 1280     | 75%    | 36.1% — under the copy | yes | full |
 
 375 is the one width where she still cannot appear: the window there is ~33% of the frame, too
 narrow to hold lockup + patient + clinician at once, and the lockup has only ~1% of headroom before
@@ -313,6 +355,7 @@ sticky header does not cover the heading.
 | Bridge emphasis | `font-display font-semibold text-[clamp(1.35rem,2.6vw,1.9rem)]` |
 | Home hero `h1` | `font-bold tracking-tight text-[clamp(1.9rem,4.5vw,3rem)]` (still sans) |
 | Body | `text-base leading-relaxed text-slate-600 dark:text-slate-300` + `text-pretty` |
+| Home key-benefit cards | problem line + ticks `leading-snug`, ticks `space-y-2` (tighter than body, client direction 2026-09-27) |
 | Small print | `text-xs text-slate-500` |
 | Eyebrow | `text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300` |
 
@@ -390,7 +433,8 @@ things. Icon chips inside cards stay `bg-(--color-patient-soft)` / white as befo
    - Use sparingly: bridges, card grids, column blocks — not every element.
 2. **Link arrow** — `group-hover:translate-x-1 transition-transform` on a `→`.
 3. **Bridge arrow nudge** — gentle 4px loop, disabled under reduced motion.
-4. **The accordion rail** — the progress fill in `AutoAccordion`, §6a.
+4. **The accordion rail** — the progress fill in `AutoAccordion`, §6a. Drawn in
+   `--brand-ink`, not the persona accent (see *The brand highlight*, §1).
 
 Anything new must justify itself against these four. No parallax, 3D, cursor effects, or
 autoplaying video — wrong register for anxious patients on a regulated medical page.

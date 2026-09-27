@@ -58,7 +58,7 @@
             </blockquote>
             <a
               href={story.href}
-              class="group mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink) rounded-sm self-start"
+              class="group mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-(--brand-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--brand-ink) rounded-sm self-start"
             >
               {story.linkLabel}
               <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>

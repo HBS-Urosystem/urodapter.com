@@ -40,7 +40,7 @@
         >
           {hero.headline}
         </h1>
-        <div class="mt-5 h-0.5 w-12 rounded-full bg-patient/60 dark:bg-sky-300/60" aria-hidden="true"></div>
+        <div class="mt-5 h-0.5 w-12 rounded-full bg-(--brand-ink)/60" aria-hidden="true"></div>
       </div>
     </div>
   </div>

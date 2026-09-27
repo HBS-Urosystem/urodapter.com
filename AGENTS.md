@@ -28,6 +28,12 @@ an enclosing `.accent-patient` / `.accent-clinician` / `.accent-distributor` sco
 patient blue in them, and never declare `--surface-accent` / `--band-accent` / `--nav-accent` on a
 styled element — that breaks retinting (design system §1).
 
+**Brand highlight:** `--brand-ink` / `--brand-fill` / `--brand-soft` / `.brand-pill` are the logo
+teal (`--color-brand`, `#75c6c9`). They are *page-independent* — declared once on `:root`, never
+inside an `.accent-*` scope — and carry the interaction affordances and highlight marks
+(accordion rail and chips, bridge icons, story links, headline rules). Persona CTAs keep their
+audience colour. Full rationale, measurements and the clinician-page caveat: design system §1.
+
 When a structural or design decision changes, update `docs/design-system.md` (and the page plan)
 in the same change so the docs don't drift from the code.
 
