@@ -31,7 +31,7 @@ Defined in `@theme` (Tailwind v4) in `layout.css`:
 | `--color-patient` | `#18438a` | **Patient** persona accent |
 | `--color-clinician` | `#2c8979` | **Clinician** persona accent |
 | `--color-distributor` | `#8764b9` | **Distributor** persona accent |
-| `--color-brand` | `#75c6c9` | **Brand highlight** — the logo teal. Constant on every page |
+| `--color-brand` | `#02979d` light / `#78c7c9` dark | **Brand highlight** — the logo teal. Constant on every page, scheme-aware (2026-09-28) |
 | `--font-display` | `Source Serif 4 Variable` | Editorial serif for display headlines |
 
 Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not a scale):
@@ -86,27 +86,34 @@ Two rules that are easy to get wrong:
 
 ### The brand highlight — `--brand-*` *(2026-09-22)*
 
-A second, **page-independent** accent: `#75c6c9`, the only colour in
-`UroDapter_logo_horizontal.svg`. Where `--accent-*` says *which audience you are reading*, the
+A second, **page-independent** accent: the logo teal, **`#02979d` in light mode and `#78c7c9` in
+dark** (owner direction 2026-09-28 — until then it was a single `#75c6c9`, the colour the logo SVG
+files still carry). Where `--accent-*` says *which audience you are reading*, the
 brand teal says *this is UroDapter* — so it is declared once on `:root` and the `.accent-*` scopes
 never touch it. Do not redeclare it inside a persona scope.
 
 | Token | Light | Dark | Role |
 |---|---|---|---|
-| `--color-brand` | `#75c6c9` | `#75c6c9` | Raw logo teal. Tailwind: `text-brand`, `bg-brand`. |
-| `--brand-ink` | `#096b6e` | `#75c6c9` | Readable text / icon / border colour. |
-| `--brand-fill` | `#75c6c9` | `#75c6c9` | Bright button & chip background. |
+| `--color-brand` | `#02979d` | `#78c7c9` | The brand colour. Tailwind: `text-brand`, `bg-brand`. The header logo uses it. |
+| `--brand-bright` | `#78c7c9` | `#78c7c9` | The bright teal, scheme-independent: dark mode's `--color-brand`, and the logo on surfaces that are dark in both schemes (the journey pages' `.nav-gradient` header). |
+| `--brand-ink` | `#096b6e` | `#78c7c9` | Readable text / icon / border colour. |
+| `--brand-fill` | `#02979d` | `#78c7c9` | Button & chip background (under navy text). |
 | `--brand-soft` | 10% teal in white | 14% teal alpha | Chip tint. |
-| `--brand-on-fill` | `--color-navy-950` | same | The **only** safe text colour on `--brand-fill`. |
-| `.brand-pill` | `--brand-fill` + navy text | same | Brand button; the counterpart to `.accent-pill`. |
+| `--brand-on-fill` | `#fff` | `--color-navy-950` | Text on `--brand-fill`. White in light mode by owner direction (2026-09-28) — **3.55:1, AA only for large text**; navy in dark, where white would be 1.9:1. |
+| `.brand-pill` | `--brand-fill` + white text | `--brand-fill` + navy text | Brand button; the counterpart to `.accent-pill`. |
 
-**Why the split by job.** The logo teal is light (OKLCH L 0.78). Measured: 1.97:1 as text on white
-(unusable), 8.84:1 as text on navy-900, 9.62:1 as a *fill* under navy-950 text. So light mode
-darkens it along its own hue to `oklch(0.48 0.08 198.7)` = `#096b6e` — 198.3° against the logo's
-198.7°, 6.29:1 on white and ≥4.60:1 on every card / canvas / bridge tint of all three personas —
-while `--brand-fill` needs no scheme swap at all, because the text on it is navy, not white.
-**Never put white text on the teal** (1.97:1); `.brand-pill` sets the text colour itself so that
-mistake cannot be made by accident.
+**Why the split by job.** Measured: light `#02979d` (OKLCH L 0.62, hue 199.8°) is 3.55:1 on white —
+enough for the logo, a focus ring or a fill (≥ 3:1), not for small text — and 5.33:1 as a *fill*
+under navy-950 text (4.59:1 on its 8%-darker hover). Dark `#78c7c9` (L 0.78, 197.8°) is 8.95:1 as
+text on navy-900 and 9.74:1 as a fill under navy-950 text. So light-mode *text* keeps its own,
+darker ink, `oklch(0.48 0.08 198.3)` = `#096b6e` — the same hue, 6.29:1 on white and ≥4.60:1 on
+every card / canvas / bridge tint of all three personas. **Text on the fill is set per scheme by
+`.brand-pill` itself** (`--brand-on-fill`): white in light mode at the owner's request
+(2026-09-28), navy in dark. White on the light fill is **3.55:1 (4.12:1 on hover) — below AA's
+4.5:1 for normal-size text**; the button's 16px semibold label counts as normal text. It would pass
+if the label were large text (≥ 18.66px bold) or the fill darker; **the owner accepted the
+3.55:1 (2026-09-28)** — don't "fix" it without asking. White on the
+dark-mode fill would be 1.9:1, so never set it there.
 
 **Where it is used** (2026-09-22): interaction affordances and highlight marks, on every journey
 page. Persona CTAs are deliberately *not* included — `.accent-pill`, `.surface-solid` bands and the
@@ -120,11 +127,11 @@ page. Persona CTAs are deliberately *not* included — `.accent-pill`, `.surface
 | The hairline rules under display headlines (`WhyChoose`, `AudienceStub`) | `StatCard` / `BenefitCard` / `IndicationsStrip` chips, page canvas, cards, nav |
 | Home hero: "See how it works" (`.brand-pill`), the regulatory pill's shield, the audience cards' ticks, the quote rotator's dot fill + focus rings, the webshop link | The audience cards' chips, eyebrows and borders |
 
-**Known limit — the clinician page in light mode.** The logo teal is 19.5° from `--color-clinician`
+**Known limit — the clinician page in light mode.** The logo teal is ~20° from `--color-clinician`
 in OKLCH, and `#096b6e` is within 19° / 0.01 L of the clinician ink `#236e61`: on `/clinicians` the
 two are hard to tell apart, so the highlight reads as cohesion rather than emphasis. Dark mode is
 fine (the bright teal separates clearly from `emerald-300`). If light-mode emphasis is wanted
-there, separate by **lightness** — use the bright forms (`.brand-pill`, `--brand-fill`,
+there, separate by **lightness** — use the fill forms (`.brand-pill`, `--brand-fill`,
 `--brand-soft`) rather than `--brand-ink` next to clinician ink.
 
 ### Dark-mode accent swap (important)
@@ -558,7 +565,7 @@ Shared (`src/lib/components/`):
 
 | Component | Notes |
 |---|---|
-| `SiteHeader.svelte` | `variant: 'page'` (transparent on the page gradient, scheme-aware text — the home page, rendered by the route before `<main>`) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar, white text). Owns nav + mobile menu. A **"Contact us"** pill closes the nav on every page (and the mobile menu); it points at `#support` until a contact route exists (`TODO(placeholder)`). The nav gap is fluid (`clamp(1rem, 2.5vw - 0.5rem, 2rem)`) so links + pill fit at 768px. **Brand = the logo, not a text wordmark** (2026-09-28): `UroDapterLogo` in a logo slot that takes the row's leftover width and is a size container — the horizontal logo shows while the slot is ≥ its width (8.875rem = 141.6px at the 56px md+ height), the stacked one where the horizontal would run into the menu. Measured with the system font that is only 768–771px; wider fonts, longer labels or text zoom move the switch with them, and the logo always keeps the nav's 24px gap. Height is fluid below md (44px at 375 → 56px at 768) and fixed from md, so the threshold holds wherever the nav shows. Colour: the logo's own `#75c6c9` (`text-brand`) in both schemes and both variants (owner direction 2026-09-28 — a darkened `--brand-ink` version was tried in light mode and rejected; logotypes are exempt from text contrast). Its focus ring is the same `#75c6c9` (owner direction 2026-09-28) — on the light page that is 1.97:1 against white, below WCAG 2.4.11's 3:1; the darker `--brand-ink` ring was offered and declined. Revisit if an accessibility audit flags it. The header row is 56px tall from md (was 44px). |
+| `SiteHeader.svelte` | `variant: 'page'` (transparent on the page gradient, scheme-aware text — the home page, rendered by the route before `<main>`) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar, white text). Owns nav + mobile menu. A **"Contact us"** pill closes the nav on every page (and the mobile menu); it points at `#support` until a contact route exists (`TODO(placeholder)`). The nav gap is fluid (`clamp(1rem, 2.5vw - 0.5rem, 2rem)`) so links + pill fit at 768px. **Brand = the logo, not a text wordmark** (2026-09-28): `UroDapterLogo` in a logo slot that takes the row's leftover width and is a size container — the horizontal logo shows while the slot is ≥ its width (8.875rem = 141.6px at the 56px md+ height), the stacked one where the horizontal would run into the menu. **The links collapse into the menu button by the same rule** (owner direction 2026-09-28): only when the link row no longer fits beside the *stacked* logo, not at a viewport width. CSS cannot query whether a row's own max-content width fits, so `fitLinks` (an attachment on the `<nav>`) measures it — the row's max-content width, read with one synchronous out-of-flow layout so it works in either state, + the nav gap + the stacked logo's width — before the first paint and again from a `ResizeObserver` on the nav and the row and on `document.fonts.ready`. The server render and the pre-hydration frame fall back to the md breakpoint. The result is three steps, each triggered by room, not width: horizontal logo + links → stacked logo + links → horizontal logo + menu button. Measured with the system font: links + horizontal logo from 772px, links + stacked logo 687–771px (24.05px gap at 687), menu button at 686px and below; wider fonts, longer labels or text zoom move both switches with them. Logo height is fluid below md (44px at 375 → 56px at 768) and fixed from md. Colour: the brand colour, `text-brand` (`#02979d` light, `#78c7c9` dark), on the `page` variant (the light ring is 3.55:1 on white, clear of WCAG 2.4.11's 3:1); on the `solid` bar — dark in both schemes — always `--brand-bright` (`#78c7c9`), focus ring included (owner direction 2026-09-28). The header row is 56px tall from md (was 44px). |
 | `UroDapterLogo.svelte` | The client's logo inlined (`variant: 'horizontal' \| 'stacked'`), `fill="currentColor"`, `aria-hidden` (the wrapping link carries the label). Paths are unchanged from `$lib/assets/hero/UroDapter_logo_horizontal.svg` / `_square.svg`; each viewBox is cropped to the artwork's ink (measured with `getBBox()`), because the source files carry 20–30% padding. Size it by `h-*` + `w-auto`. |
 | `UroDapterHero.svelte` | Home hero (2026-09-27): regulatory pill, sans `h1`, body, brand-pill + outline CTAs, the framed photo with `QuoteRotator`, the product chip, `HeroAudienceCards`, the credibility strip (every item has a sub-line; the webshop link is off-site) and the regulatory line. Renders **no** header, **no** `<main>` and **no** page wrapper — the route owns all three. Placement rules and measurements: §2 *The home page*. |
 
