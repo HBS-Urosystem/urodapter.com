@@ -281,13 +281,17 @@ clinician's face 82.6–89.6%), with the taller (doctor's) slide:
 | 560 | 520×371 (7:5) | panel under the photo | nothing | face in frame |
 | 768 | 704×396 (16:9) | 76px clear | nothing | whole |
 | 900 | 836×470 (16:9) | 88px clear | nothing | whole |
-| 1024 | 600×400 (3:2) | 30px clear | hair bun only | whole |
-| 1280 / 1440 | 681×454 (3:2) | 33px clear | hair bun only | whole |
+| 1024 | 600×400 (3:2) | 76px clear | nothing | whole |
+| 1280 / 1440 | 682×455 (3:2) | 85px clear | nothing | whole |
 
-**The quote panel is 7/6 of one card** (D4): a card is `(100% − 2 × 1.25rem inset − 1rem gap) / 2`
-of the photo box, so the panel is `calc((100% - 3.5rem) * 7 / 12)` and its left edge lines up with
-the patient card's (365px vs 313px cards at 1280). The inset and gap are fixed for exactly this
-reason — make them fluid and the calc has to follow.
+**The quote panel is sized in cards.** A card is `(100% − 2 × 1.25rem inset − 1rem gap) / 2` of
+the photo box, and the panel's left edge always lines up with the patient card's. At md (48–64rem)
+it is **7/6 of a card** (D4, `calc((100% - 3.5rem) * 7 / 12)` — 455px vs 390px cards at 900). From
+lg it is **exactly one card** (`calc((100% - 3.5rem) / 2)`), so it squares up with the patient card
+below it (owner direction 2026-09-28: at 7/6 it read as slightly too wide). Measured: 272px at
+1024, 313px at 1280/1440, both edges flush with the card; the narrower panel is taller (241px at
+1024, 225px at 1280) but still clears the cards by 52px / 109px. The inset and gap are fixed for
+exactly this reason — make them fluid and the calc has to follow.
 
 **Glass contrast, measured on the worst 2% of the blurred photo behind each panel.** Plan values
 failed twice in light mode, so the glass was made more opaque (the rule: raise the glass, never
@@ -554,7 +558,8 @@ Shared (`src/lib/components/`):
 
 | Component | Notes |
 |---|---|
-| `SiteHeader.svelte` | `variant: 'page'` (transparent on the page gradient, scheme-aware text — the home page, rendered by the route before `<main>`) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar, white text). Owns nav + mobile menu. A **"Contact us"** pill closes the nav on every page (and the mobile menu); it points at `#support` until a contact route exists (`TODO(placeholder)`). The nav gap is fluid (`clamp(1rem, 2.5vw - 0.5rem, 2rem)`) so links + pill fit at 768px. |
+| `SiteHeader.svelte` | `variant: 'page'` (transparent on the page gradient, scheme-aware text — the home page, rendered by the route before `<main>`) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar, white text). Owns nav + mobile menu. A **"Contact us"** pill closes the nav on every page (and the mobile menu); it points at `#support` until a contact route exists (`TODO(placeholder)`). The nav gap is fluid (`clamp(1rem, 2.5vw - 0.5rem, 2rem)`) so links + pill fit at 768px. **Brand = the logo, not a text wordmark** (2026-09-28): `UroDapterLogo` in a logo slot that takes the row's leftover width and is a size container — the horizontal logo shows while the slot is ≥ its width (8.875rem = 141.6px at the 56px md+ height), the stacked one where the horizontal would run into the menu. Measured with the system font that is only 768–771px; wider fonts, longer labels or text zoom move the switch with them, and the logo always keeps the nav's 24px gap. Height is fluid below md (44px at 375 → 56px at 768) and fixed from md, so the threshold holds wherever the nav shows. Colour: the logo's own `#75c6c9` (`text-brand`) in both schemes and both variants (owner direction 2026-09-28 — a darkened `--brand-ink` version was tried in light mode and rejected; logotypes are exempt from text contrast). Its focus ring is the same `#75c6c9` (owner direction 2026-09-28) — on the light page that is 1.97:1 against white, below WCAG 2.4.11's 3:1; the darker `--brand-ink` ring was offered and declined. Revisit if an accessibility audit flags it. The header row is 56px tall from md (was 44px). |
+| `UroDapterLogo.svelte` | The client's logo inlined (`variant: 'horizontal' \| 'stacked'`), `fill="currentColor"`, `aria-hidden` (the wrapping link carries the label). Paths are unchanged from `$lib/assets/hero/UroDapter_logo_horizontal.svg` / `_square.svg`; each viewBox is cropped to the artwork's ink (measured with `getBBox()`), because the source files carry 20–30% padding. Size it by `h-*` + `w-auto`. |
 | `UroDapterHero.svelte` | Home hero (2026-09-27): regulatory pill, sans `h1`, body, brand-pill + outline CTAs, the framed photo with `QuoteRotator`, the product chip, `HeroAudienceCards`, the credibility strip (every item has a sub-line; the webshop link is off-site) and the regulatory line. Renders **no** header, **no** `<main>` and **no** page wrapper — the route owns all three. Placement rules and measurements: §2 *The home page*. |
 
 `src/lib/components/shared/` — used by more than one page. **These take their accent from the
@@ -572,7 +577,7 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 | `OutcomesChart.svelte` | Two single-series labeled-bar lists on a shared 0–100% scale. Thin `h-2` bars, data-end-only rounding, recessive track, label+value as real text on every row (the bars are decoration over an accessible list), source line. Series colours: the validated `--chart-*` tokens only. *(Promoted from `patients/` 2026-08-26, when the clinician page needed it.)* |
 | `DonutStat.svelte` | Single-value completion ring (the clinician docx's "large 74% continuation ring"). Arc drawn with `--chart-continuing` — **never the raw persona accent** (§1) — `stroke-linecap="round"`, SVG `aria-hidden`, percentage + caption as real text. Props `value` (0–100) + `caption`. |
 | `ProductCallouts.svelte` | The 3×3 device diagram — see §8. Callouts may carry an optional `description` (the client's technical figure notes); it is hidden below `sm`, where a corner cell is ~80px wide. |
-| `VideoFacade.svelte` | Click-to-load video; **nothing is fetched until the viewer presses play**. `sources={{ webm?, mp4 }}` → a self-hosted native `<video>` (preferred: no third party is contacted at all); `videoId` → a `youtube-nocookie` embed. Neither → "Coming soon" placeholder. Also `poster`, `caption`, `duration`. **Never show a fake duration.** `captionPosition`: `'below'` (default) \| `'above'` — the caption becomes the video's lead-in, first child of the `<figure>` (home page only). |
+| `VideoFacade.svelte` | Click-to-load video; **nothing is fetched until the viewer presses play**. `sources={{ webm?, mp4 }}` → a self-hosted native `<video>` (preferred: no third party is contacted at all); `videoId` → a `youtube-nocookie` embed. Neither → "Coming soon" placeholder. Also `poster`, `caption`, `duration`. **Never show a fake duration.** `captionPosition`: `'below'` (default) \| `'above'` — the caption becomes the video's lead-in, first child of the `<figure>` (home page only). `posterBar` (optional, 0–1): the height fraction of a caption bar burned into the bottom of a 16:9 poster — the duration pill is then centred in it (`bottom: posterBar × 50%` + `translate-y-1/2`) and scales with the video in `cqi` so it fits the bar even at phone width (~21px). A fixed `bottom-3` only lined up at one width (2026-09-28). The home poster's bar is 83/720, measured; re-measure if the poster is re-exported. Without it the pill keeps its fixed `bottom-3 right-3`. |
 | `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. |
 | `AutoAccordion.svelte` | The autonomous accordion — **see §6a for the conditions of use, which are binding.** Props: `items` (`{id, title, body?, icon?, seconds?}`), `controlLabel` (names the pause button), `autoplay`, and a `panel` snippet rendered once per item. Optional `group` on an item labels a run of consecutive items and wraps it in a `role="group"`. Takes its accent from the enclosing scope. |
 

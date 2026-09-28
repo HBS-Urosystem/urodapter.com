@@ -86,10 +86,12 @@
       </div>
 
       <!-- The photo box, with the one testimonial panel. From md the panel is
-           glass over the photo's top-left, 7/6 of a card wide (D4): a card is
-           (100% − 2 × 1.25rem inset − 1rem gap) / 2, so the panel is that × 7/6,
-           and its left edge lines up with the patient card's. Below md it
-           overlaps the photo's bottom edge in normal flow. -->
+           glass over the photo's top-left, its left edge lined up with the
+           patient card's. A card is (100% − 2 × 1.25rem inset − 1rem gap) / 2 of
+           the box. At md the panel is that × 7/6 (D4); from lg it is exactly one
+           card wide, so it squares up with the patient card below it (owner
+           direction 2026-09-28). Below md it overlaps the photo's bottom edge in
+           normal flow. -->
       <div class="hero-media relative">
         <div class="hero-photo relative rounded-3xl overflow-hidden shadow-xl shadow-navy-950/10 dark:shadow-none">
           <!-- The box is narrower than the 16:9 source at every width, so the
@@ -107,7 +109,7 @@
         <QuoteRotator
           items={quotes.items}
           label={quotes.label}
-          class="z-10 -mt-14 mx-3 md:absolute md:top-6 md:left-5 md:mt-0 md:mx-0 md:w-[calc((100%-3.5rem)*7/12)]"
+          class="z-10 -mt-14 mx-3 md:absolute md:top-6 md:left-5 md:mt-0 md:mx-0 md:w-[calc((100%-3.5rem)*7/12)] lg:w-[calc((100%-3.5rem)/2)]"
         />
       </div>
 

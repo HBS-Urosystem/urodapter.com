@@ -42,6 +42,8 @@ poster). Read these notes before using them:
 >   `bg-white/85` (slate-600 and the clinician eyebrow measured under 4.5:1 at the plan values).
 > - **The hero has no bottom padding**: the bridge's own `my-12 sm:my-16` already supplies the
 >   space under the regulatory line; with both it was ~110px against the mockup's ~57px.
+> - **Quote panel width from lg = one card** (owner direction 2026-09-28, amends D4): at 7/6 it
+>   read as slightly too wide above the patient card. 7/6 is kept at md.
 > - The "Choose Your Journey" arrow bridge is centred (`sm:justify-center`, as in the mockup); the
 >   other arrow bridges fill their row, so they do not move.
 
@@ -97,7 +99,7 @@ removed:
 | D1 | **Background = the page background in both schemes.** The hero drops `bg-navy-950 text-white` and sits on `.bg-page-gradient`: light in light mode, navy in dark mode. | "The hero is always dark" |
 | D2 | **Product chip = product image + title + one line, no logo.** It appears at every width: **under the CTAs from `md` up**, and **under the photo (after the quote panel) below `md`**. Both logo SVGs leave the hero; the header still carries the brand. | The logo + product lockup (client direction 2026-09-12 / 2026-09-27) |
 | D3 | **Testimonials rotate automatically** every few seconds. The dots from the mockup indicate position and can be clicked. Both quotes are included. | §6 "manual only, never auto-advance". A bounded exception like §6a |
-| D4 | **Quote panel on desktop is 7/6 of one audience card's width.** In the first mockup it was about 5/6. | — |
+| D4 | **Quote panel on desktop is 7/6 of one audience card's width.** In the first mockup it was about 5/6. *Amended 2026-09-28 (owner): from lg (≥ 1024px) the panel is exactly one card wide, flush with the patient card; 7/6 stays at md.* | — |
 | D5 | **Mockup copy replaces the approved copy** in the hero, the header CTA and the audience cards. It includes "Contact us" (nav) and "Talk to our team" (secondary CTA), both with **placeholder links**. | The docx-verbatim hero and key-benefits copy |
 | D6 | **The problem sentences move out of the cards into the bridge band below the hero**, docx wording unchanged, labelled "For patients" / "For clinicians". They sit above "A simple idea can make a remarkable difference." (§3, §4.8). The clinician tick reads "Fewer catheter-related complications". | Problem lines inside the key-benefit cards; "Reduced …" |
 | D7 | **"See how it works" uses the brand colour:** `.brand-pill`, logo teal `--brand-fill` with navy text. The mockup's turquoise hex is not used. | — |

@@ -39,6 +39,7 @@
     <VideoFacade
       sources={howItWorks.video.sources}
       poster={howItWorks.video.poster}
+      posterBar={howItWorks.video.posterBar}
       caption={howItWorks.video.caption}
       captionPosition="above"
       duration={howItWorks.video.duration}

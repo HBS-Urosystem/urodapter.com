@@ -279,6 +279,10 @@ export const howItWorks = {
 		// Client asset: Urodapter_anim_30sec_EN_230309.mp4, re-encoded for the
 		// web and self-hosted from /static (no third-party embed).
 		poster: '/urodapter-animation-poster.webp',
+		// The poster's burned-in "Introducing UroDapter." bar: rows 637–720 of
+		// 720 (measured). The duration pill centres in it. Re-measure if the
+		// poster is re-exported.
+		posterBar: 83 / 720,
 		sources: {
 			webm: '/urodapter-animation.webm',
 			mp4: '/urodapter-animation.mp4',

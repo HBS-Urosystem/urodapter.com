@@ -5,6 +5,7 @@
     videoId = null,
     sources = null,
     poster = null,
+    posterBar = null,
     caption,
     captionPosition = 'below',
     duration,
@@ -14,6 +15,12 @@
     // play, and no third party is contacted at all.
     sources?: { webm?: string; mp4: string } | null;
     poster?: string | null;
+    /**
+     * Height of a caption bar burned into the bottom of a 16:9 poster, as a
+     * fraction of the poster's height. The duration pill is centred in it; the
+     * bar scales with the video, so a fixed px offset only fits one width.
+     */
+    posterBar?: number | null;
     caption: string;
     /** 'above' makes the caption the video's lead-in (home page); default 'below'. */
     captionPosition?: 'above' | 'below';
@@ -33,7 +40,7 @@
   {#if captionPosition === 'above'}
     <figcaption class="mb-3 text-[clamp(0.875rem,0.8rem+0.3vw,1rem)] font-medium text-navy-950 dark:text-white">{caption}</figcaption>
   {/if}
-  <div class="relative rounded-2xl overflow-hidden aspect-video border border-slate-200/70 dark:border-white/10 bg-navy-900">
+  <div class="@container relative rounded-2xl overflow-hidden aspect-video border border-slate-200/70 dark:border-white/10 bg-navy-900">
     {#if playing && sources}
       <!-- The client's animation carries burned-in (open) captions. Add a
            <track kind="captions"> WebVTT file here once a transcript exists —
@@ -95,7 +102,22 @@
         <span class="absolute top-3 left-3 text-xs font-medium text-white bg-navy-950/70 backdrop-blur rounded-md px-2 py-1">Coming soon</span>
       {/if}
 
-      <span class="absolute bottom-3 right-3 text-xs font-medium text-white bg-navy-950/80 rounded-md px-2 py-1">{duration}</span>
+      {#if poster && posterBar}
+        <!-- Centred on the poster's own caption bar: `bottom` is a % of the
+             box's height, so it tracks the bar at every width. The pill scales
+             with the video (cqi) so it stays inside the bar, which is only
+             ~21px tall at a 335px-wide phone video — a fixed 24px pill spilled
+             over it. -->
+        <span
+          class="absolute translate-y-1/2 font-medium text-white bg-navy-950/80
+                 right-[clamp(0.5rem,1.8cqi,0.75rem)] rounded-[clamp(0.25rem,0.9cqi,0.375rem)]
+                 px-[clamp(0.375rem,1.2cqi,0.5rem)] py-[clamp(0.125rem,0.6cqi,0.25rem)]
+                 text-[clamp(0.625rem,2.2cqi,0.75rem)] leading-[1.35]"
+          style="bottom: {posterBar * 50}%">{duration}</span
+        >
+      {:else}
+        <span class="absolute bottom-3 right-3 text-xs font-medium text-white bg-navy-950/80 rounded-md px-2 py-1">{duration}</span>
+      {/if}
     {/if}
   </div>
   {#if captionPosition === 'below'}
