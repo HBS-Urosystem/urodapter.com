@@ -13,9 +13,7 @@
      the header, its figures are the pane beside it, and every footnote and
      citation stays in the DOM — the section is shorter, not lighter. -->
 <section aria-labelledby="clinical-evidence-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-(--accent-ink)">
-    {evidence.eyebrow}
-  </p>
+  <p class="eyebrow">{evidence.eyebrow}</p>
   <h2
     id="clinical-evidence-heading"
     class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
@@ -90,6 +88,13 @@
               {review.title}
             </h4>
             <p class="mt-2.5 text-sm text-slate-600 dark:text-slate-300">{review.titleNote}</p>
+            <!-- Buford's finding sentence lives here rather than in the
+                 accordion body: it is ~3 lines against one for the other two
+                 items, and the list column is sized to its tallest body. This
+                 is also the thinnest of the three panes, so it has the room. -->
+            <p class="mt-6 text-sm leading-relaxed text-slate-700 dark:text-slate-200 text-pretty">
+              {review.body}
+            </p>
             <p class="mt-6 text-xs text-slate-500 dark:text-slate-400">{review.source}</p>
           </div>
         {/if}

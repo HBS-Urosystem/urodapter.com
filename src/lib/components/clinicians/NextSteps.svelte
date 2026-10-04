@@ -39,9 +39,7 @@
      gradient: clinician teal drops white text under AA across a gradient sweep
      at this size (design system §4). -->
 <section aria-labelledby="next-steps-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-(--accent-ink)">
-    {nextSteps.eyebrow}
-  </p>
+  <p class="eyebrow">{nextSteps.eyebrow}</p>
   <h2
     id="next-steps-heading"
     class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"

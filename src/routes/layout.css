@@ -3,15 +3,58 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-@theme {
-  --color-navy-950: #08111f;
-  --color-navy-900: #0d1a30;
-  --color-navy-800: #132342;
-  --color-navy-700: #1b2f54;
+/* ---------------------------------------------------------------------------
+   Brand palette — the client's brand guide (owner direction 2026-09-29). Three
+   sets, used in a 60 / 30 / 10 ratio:
 
-  --color-patient: #18438a;
-  --color-clinician: #2c8979;
-  --color-distributor: #8764b9;
+     60% PRIMARY        #072c3f #0b3b54 #52b2d6 #c7e1f0 — the structure on every
+                        page: text, the header, dark mode, the canvas and bands.
+     30% COMPLEMENTARY  the UroDapter product palette — #caa8cf #8376a3 #78c7c9
+                        #02979d #005c5b #706f6f #c6c6c6: persona tints and the
+                        brand highlight.
+     10% SECONDARY      #f9e497 #ef797a #f4ded8 #166b6a #23a0a3 #6fc6ca #09979d
+                        #99c7e0 #3e94b7 (+ white): the pops — eyebrow pills,
+                        highlights.
+
+   Every colour on the site is one of these, or a measured shade of one where
+   small text needs AA on a light surface. Design system §1.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Primary. navy-950 / navy-900 ARE the guide's two primary darks; 800 / 700
+     are lighter steps of the same hue (200°) for raised chips on dark. */
+  --color-navy-950: #072c3f;
+  --color-navy-900: #0b3b54;
+  --color-navy-800: #114a68;
+  --color-navy-700: #18597b;
+  --color-cerulean: #52b2d6;
+  --color-mist: #c7e1f0;
+
+  /* Complementary — the UroDapter product palette. Its two teals are the
+     brand highlight (--color-brand / --brand-bright, below). */
+  --color-lilac: #caa8cf;
+  --color-plum: #8376a3;
+  --color-spruce: #005c5b;
+  --color-graphite: #706f6f;
+  --color-silver: #c6c6c6;
+
+  /* Secondary — the 10%. #09979d is the brand teal to the eye; use --color-brand. */
+  --color-sun: #f9e497;
+  --color-coral: #ef797a;
+  --color-blush: #f4ded8;
+  --color-pine: #166b6a;
+  --color-lagoon: #23a0a3;
+  --color-aqua: #6fc6ca;
+  --color-powder: #99c7e0;
+  --color-steel: #3e94b7;
+
+  /* Personas — each one a palette colour (owner direction 2026-09-29; until
+     then #18438a / #2c8979 / #8764b9, none of which is in the guide). This is
+     the DEEP member of each persona pair: solid fills, the nav bar, white text
+     on top. The bright partner (cerulean / aqua / lilac) tints the surfaces —
+     see the accent scopes below. */
+  --color-patient: #0b3b54;
+  --color-clinician: #166b6a;
+  --color-distributor: #8376a3;
 
   /* Brand highlight — the UroDapter logo teal. Unlike the three persona
      colours it is constant on every journey page (see the brand scope below),
@@ -25,10 +68,11 @@
 }
 
 /* Derived patient-page tints — not in @theme because they are single-purpose
-   surface colors, not a scale */
+   surface colors, not a scale. From the bright partner: a tint of #0b3b54
+   is grey, a tint of cerulean is blue. */
 :root {
-  --color-patient-soft: color-mix(in srgb, var(--color-patient) 7%, white);
-  --color-patient-glow: color-mix(in srgb, var(--color-patient) 30%, transparent);
+  --color-patient-soft: color-mix(in srgb, var(--color-cerulean) 14%, white);
+  --color-patient-glow: color-mix(in srgb, var(--color-cerulean) 30%, transparent);
 
   /* Data-series duo for charts (brand-hue steps snapped to pass the dataviz
      six-checks validator: lightness band, chroma floor, CVD ΔE, contrast) */
@@ -69,11 +113,13 @@
                   (white on #78c7c9 would be 1.9:1).
    --brand-soft   tint for highlight chips and underlines.
 
-   Hue caution (measured): the logo teal sits ~20 deg from --color-clinician in
-   OKLCH, and #096b6e is within 19 deg / 0.01 L of the clinician ink #236e61. On
-   the CLINICIAN page the two are hard to tell apart as small text, so highlight
-   with the fill forms there (.brand-pill, --brand-fill, --brand-soft), which
-   separate by lightness, rather than with --brand-ink next to clinician ink.
+   Hue caution: since 2026-09-29 the clinician pair is also from the teal
+   family (#166b6a ink / #6fc6ca dark) — next to #096b6e / #78c7c9 brand ink
+   it is nearly the same colour. On the CLINICIAN page, highlight with the fill
+   forms (.brand-pill, --brand-fill, --brand-soft), which separate by
+   lightness, rather than with --brand-ink next to clinician ink.
+   Re-measured on the new tints: --brand-ink ≥ 4.85:1 on every card, panel,
+   canvas and band of all three personas.
 --------------------------------------------------------------------------- */
 :root {
   /* The bright brand teal, scheme-independent: dark mode's brand colour, and
@@ -121,154 +167,188 @@
    300-step of the same hue (the convention the home hero already uses:
    patient→sky-300, clinician→emerald-300). --accent-soft is the icon-chip fill.
 
-   Every scope redeclares --accent-soft rather than deriving it from --accent:
+   Every scope redeclares every token rather than deriving one from another:
    a custom property inherits its *substituted* value, so a derived token would
-   keep the ancestor's colour.
---------------------------------------------------------------------------- */
-:root {
-  --accent: var(--color-patient);
-  --accent-ink: var(--color-patient);
-  --accent-soft: color-mix(in srgb, var(--color-patient) 7%, white);
-  --accent-solid: color-mix(in srgb, var(--color-patient) 88%, black);
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --accent-ink: var(--color-sky-300, #7dd3fc);
-    --accent-soft: color-mix(in srgb, var(--color-sky-300, #7dd3fc) 10%, transparent);
-  }
-}
+   keep the ancestor's colour. :root carries the patient set as the default.
 
+   Each persona is a PAIR of palette colours (2026-09-29):
+     deep    #0b3b54 / #166b6a / #8376a3 — --accent, --accent-solid,
+             --surface-deep, --nav-accent: fills under white text.
+     bright  cerulean / aqua / lilac — --surface-accent, --band-accent: the
+             tints. Mixed into white, a deep colour turns grey; the bright one
+             keeps the page colourful.
+   --accent-pop is the persona's 10% secondary pop (the eyebrow pill fill, set
+   under navy text): coral for patients, sun for clinicians and distributors.
+
+   Inks, measured (WCAG, on white / on the deepest .surface-panel tint):
+     patient      #1d6788 (cerulean, darkened) 6.3 / 5.1   dark: #52b2d6
+     clinician    #166b6a (pine, as is)        6.3 / 5.4   dark: #6fc6ca
+     distributor  plum 80% + black (#695e82)   6.0 / 5.0   dark: #caa8cf
+   Re-measure before changing any persona ink.
+--------------------------------------------------------------------------- */
+:root,
 .accent-patient {
   --accent: var(--color-patient);
-  --accent-ink: var(--color-patient);
-  --accent-soft: color-mix(in srgb, var(--color-patient) 7%, white);
-  --accent-solid: color-mix(in srgb, var(--color-patient) 88%, black);
-  --surface-accent: var(--color-patient);
-  --band-accent: var(--color-patient);
-  --nav-accent: var(--color-patient);
+  --accent-ink: #1d6788;
+  --accent-soft: color-mix(in srgb, var(--color-cerulean) 16%, white);
+  --accent-solid: var(--color-patient);
+  --accent-pop: var(--color-coral);
+  --surface-accent: var(--color-cerulean);
+  --surface-deep: var(--color-patient);
+  --band-accent: var(--color-cerulean);
+  --nav-accent: color-mix(in srgb, var(--color-patient) 75%, var(--color-cerulean));
 }
 .accent-clinician {
   --accent: var(--color-clinician);
-  /* Clinician teal is the one persona colour that does NOT clear AA as text:
-     #2c8979 measures 4.23:1 on white, and --accent-ink is by definition the
-     *readable* accent (12–14px eyebrows, links and step numbers use it).
-     Darkened to 80% → 5.9:1 on white and 4.66:1 on the deepest .surface-panel
-     tint, the worst case on the page. Measured, not guessed; re-measure before
-     changing any persona ink. */
-  --accent-ink: color-mix(in srgb, var(--color-clinician) 80%, black);
-  --accent-soft: color-mix(in srgb, var(--color-clinician) 7%, white);
-  --accent-solid: color-mix(in srgb, var(--color-clinician) 88%, black);
-  --surface-accent: var(--color-clinician);
-  --band-accent: var(--color-clinician);
+  --accent-ink: var(--color-clinician);
+  --accent-soft: color-mix(in srgb, var(--color-aqua) 18%, white);
+  --accent-solid: var(--color-clinician);
+  --accent-pop: var(--color-sun);
+  --surface-accent: var(--color-aqua);
+  --surface-deep: var(--color-clinician);
+  --band-accent: var(--color-aqua);
   --nav-accent: var(--color-clinician);
 }
 .accent-distributor {
   --accent: var(--color-distributor);
-  --accent-ink: var(--color-distributor);
-  --accent-soft: color-mix(in srgb, var(--color-distributor) 7%, white);
-  --accent-solid: color-mix(in srgb, var(--color-distributor) 88%, black);
-  --surface-accent: var(--color-distributor);
-  --band-accent: var(--color-distributor);
-  --nav-accent: var(--color-distributor);
+  /* Plum is 4.13:1 under white text and as text on white — just under AA —
+     so its ink and its fills are the plum darkened. */
+  --accent-ink: color-mix(in srgb, var(--color-distributor) 80%, black);
+  --accent-soft: color-mix(in srgb, var(--color-lilac) 20%, white);
+  --accent-solid: color-mix(in srgb, var(--color-distributor) 85%, black);
+  --accent-pop: var(--color-sun);
+  --surface-accent: var(--color-lilac);
+  --surface-deep: color-mix(in srgb, var(--color-distributor) 85%, black);
+  --band-accent: var(--color-lilac);
+  --nav-accent: color-mix(in srgb, var(--color-distributor) 85%, black);
 }
 
+/* Dark: the deep colours vanish on navy, so the ink and chip swap to the
+   bright partner (6–7:1 on the dark canvas). */
 @media (prefers-color-scheme: dark) {
+  :root,
   .accent-patient {
-    --accent-ink: var(--color-sky-300, #7dd3fc);
-    --accent-soft: color-mix(in srgb, var(--color-sky-300, #7dd3fc) 10%, transparent);
+    --accent-ink: var(--color-cerulean);
+    --accent-soft: color-mix(in srgb, var(--color-cerulean) 16%, transparent);
   }
   .accent-clinician {
-    --accent-ink: var(--color-emerald-300, #6ee7b7);
-    --accent-soft: color-mix(in srgb, var(--color-emerald-300, #6ee7b7) 10%, transparent);
+    --accent-ink: var(--color-aqua);
+    --accent-soft: color-mix(in srgb, var(--color-aqua) 16%, transparent);
   }
   .accent-distributor {
-    --accent-ink: var(--color-violet-300, #c4b5fd);
-    --accent-soft: color-mix(in srgb, var(--color-violet-300, #c4b5fd) 10%, transparent);
+    --accent-ink: var(--color-lilac);
+    --accent-soft: color-mix(in srgb, var(--color-lilac) 16%, transparent);
   }
 }
 
-/* Full-bleed tinted band (section bridges + the closing band). The accent is
-   parameterised so persona pages can retint: set --band-accent on the band or
-   an ancestor (defaults to the patient accent). */
+/* Eyebrow — the short label above a section heading, as a pill in the
+   persona's secondary pop (owner direction 2026-09-29: "colour the eyebrows").
+   Navy text on every pop, in both schemes: coral 5.3:1, sun 11.5:1. A
+   @utility, so it sits in Tailwind's utilities layer and margin / display
+   utilities on the same element still apply. The right padding gives back the
+   letter-spacing that trails the last letter, so the label sits centred. */
+@utility eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  padding: 0.3125rem calc(0.75rem - 0.16em) 0.3125rem 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-navy-950);
+  background: var(--accent-pop, var(--color-coral));
+}
+
+/* Full-bleed tinted band (section bridges + the closing band). The base is the
+   primary mist on every page (the 60%); the persona's bright colour comes in
+   as the two glows. Retint with --band-accent on the band or an ancestor
+   (defaults to the patient cerulean). */
 .tint-band {
   background:
-    radial-gradient(760px 340px at 12% -20%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 18%, transparent), transparent 70%),
-    radial-gradient(680px 320px at 92% 120%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 14%, transparent), transparent 70%),
+    radial-gradient(760px 340px at 12% -20%, color-mix(in srgb, var(--band-accent, var(--color-cerulean)) 30%, transparent), transparent 70%),
+    radial-gradient(680px 320px at 92% 120%, color-mix(in srgb, var(--band-accent, var(--color-cerulean)) 22%, transparent), transparent 70%),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--band-accent, var(--color-patient)) 12%, white) 0%,
-      color-mix(in srgb, var(--band-accent, var(--color-patient)) 18%, white) 100%
+      color-mix(in srgb, var(--color-mist) 55%, white) 0%,
+      color-mix(in srgb, var(--color-mist) 85%, white) 100%
     );
 }
 @media (prefers-color-scheme: dark) {
   .tint-band {
     background:
-      radial-gradient(900px 400px at 85% -20%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 42%, transparent), transparent 65%),
-      radial-gradient(700px 360px at 8% 120%, color-mix(in srgb, var(--band-accent, var(--color-patient)) 26%, transparent), transparent 68%),
-      color-mix(in srgb, var(--band-accent, var(--color-patient)) 12%, var(--color-navy-900));
+      radial-gradient(900px 400px at 85% -20%, color-mix(in srgb, var(--band-accent, var(--color-cerulean)) 30%, transparent), transparent 65%),
+      radial-gradient(700px 360px at 8% 120%, color-mix(in srgb, var(--band-accent, var(--color-cerulean)) 18%, transparent), transparent 68%),
+      color-mix(in srgb, var(--band-accent, var(--color-cerulean)) 6%, var(--color-navy-900));
   }
 }
 
 /* ---------------------------------------------------------------------------
-   Colourful patient-page surfaces. Accent is parameterised via --surface-accent
-   (defaults to patient) so the clinician page retints by setting it on an
-   ancestor. Page canvas is deliberately patient-tinted; cards lift off it with
-   a soft accent border + accent-tinted shadow rather than going stark white.
+   Colourful persona surfaces. The tints read --surface-accent (the persona's
+   BRIGHT colour, defaulting to the patient cerulean); the solid band reads
+   --surface-deep (its deep colour). Both are set by the .accent-* scopes —
+   never on the styled element itself (design system §1).
 --------------------------------------------------------------------------- */
 
-/* Persona page canvas — a warmer, more saturated accent gradient than the
-   neutral home .bg-page-gradient (kept separate so the home page is untouched).
-   Pair it with an .accent-* class to pick the persona: the patient page is
-   `bg-persona-page accent-patient`. */
+/* Persona page canvas — the primary mist as the base on every persona page,
+   the persona's bright colour as three glows over it. Pair it with an
+   .accent-* class: the patient page is `bg-persona-page accent-patient`. */
 .bg-persona-page {
   background:
-    radial-gradient(1100px 560px at 88% -6%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 20%, transparent), transparent 62%),
-    radial-gradient(780px 520px at 0% 14%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, transparent), transparent 58%),
-    radial-gradient(960px 640px at 55% 106%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 14%, transparent), transparent 60%),
+    radial-gradient(1100px 560px at 88% -6%, color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 26%, transparent), transparent 62%),
+    radial-gradient(780px 520px at 0% 14%, color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 16%, transparent), transparent 58%),
+    radial-gradient(960px 640px at 55% 106%, color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 18%, transparent), transparent 60%),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 3%, white) 0%,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 8%, white) 40%,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, white) 100%
+      color-mix(in srgb, var(--color-mist) 15%, white) 0%,
+      color-mix(in srgb, var(--color-mist) 35%, white) 40%,
+      color-mix(in srgb, var(--color-mist) 55%, white) 100%
     );
 }
 @media (prefers-color-scheme: dark) {
+  /* Deeper than navy-950 at the top, so slate-400 small print keeps ≥ 4.5:1
+     on the cards that sit on it. */
   .bg-persona-page {
     background:
-      radial-gradient(1200px 620px at 88% -8%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 55%, transparent), transparent 60%),
-      radial-gradient(900px 560px at 0% 18%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 32%, transparent), transparent 56%),
-      radial-gradient(1040px 680px at 55% 108%, color-mix(in srgb, var(--surface-accent, var(--color-patient)) 30%, transparent), transparent 60%),
-      linear-gradient(160deg, #091327 0%, #0b1a35 50%, #0d2247 100%);
+      radial-gradient(1200px 620px at 88% -8%, color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 30%, transparent), transparent 60%),
+      radial-gradient(900px 560px at 0% 18%, color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 16%, transparent), transparent 56%),
+      radial-gradient(1040px 680px at 55% 108%, color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 16%, transparent), transparent 60%),
+      linear-gradient(160deg, #041c29 0%, #062536 50%, var(--color-navy-950) 100%);
   }
 }
 
-/* Content card — gently accent-tinted, lifted by a soft accent border + shadow */
+/* Content card — white, warming to the persona tint, with a visible persona
+   border (2026-09-29: more contrast between card and canvas). */
 .surface-card {
   background: linear-gradient(
     155deg,
-    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 2%, white) 0%,
-    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 10%, white) 100%
+    color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 3%, white) 0%,
+    color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 12%, white) 100%
   );
-  border: 1px solid color-mix(in srgb, var(--surface-accent, var(--color-patient)) 22%, white);
+  border: 1px solid color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 42%, white);
   box-shadow:
-    0 1px 2px color-mix(in srgb, var(--surface-accent, var(--color-patient)) 10%, transparent),
-    0 10px 26px -16px color-mix(in srgb, var(--surface-accent, var(--color-patient)) 40%, transparent);
+    0 1px 2px color-mix(in srgb, var(--surface-deep, var(--color-patient)) 8%, transparent),
+    0 10px 26px -16px color-mix(in srgb, var(--surface-deep, var(--color-patient)) 32%, transparent);
 }
 @media (prefers-color-scheme: dark) {
+  /* Mixed into navy-950, not 900: on the lighter petrol, slate-400 small print
+     would drop under 4.5:1. */
   .surface-card {
     background: linear-gradient(
       155deg,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, var(--color-navy-900)) 0%,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 7%, var(--color-navy-900)) 100%
+      color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 10%, var(--color-navy-950)) 0%,
+      color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 5%, var(--color-navy-950)) 100%
     );
-    border-color: color-mix(in srgb, var(--surface-accent, var(--color-patient)) 42%, transparent);
+    border-color: color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 38%, transparent);
     box-shadow: none;
   }
 }
 
 /* Solid header band — the subpage nav bar. Diagonal navy→accent gradient so
-   the logo (left) stays on deep navy while the bar carries the primary colour.
-   Accent via --nav-accent (defaults to patient) for the clinician page. */
+   the logo (left) stays on deep navy while the bar carries the persona colour.
+   --nav-accent is set per scope to a colour that keeps white text ≥ 4.5:1. */
 .nav-gradient {
   background: linear-gradient(
     100deg,
@@ -278,24 +358,25 @@
   );
 }
 
-/* Solid accent fill — bold primary-colour CTA bands (Support Center invites).
-   Same gradient language as the home audience cards / Section 6 primary CTA,
-   so every "solid patient CTA" on the site matches. White text sits on top. */
+/* Solid accent fill — bold persona CTA bands (Support Center invites, the
+   solid bridge). Deep → a little of the bright partner toward the corner.
+   White text on top, measured at the bright end: patient 8.1:1, clinician
+   4.7:1, distributor 4.3:1 (a corner the text never reaches). */
 .surface-solid {
   background: linear-gradient(
     135deg,
-    var(--surface-accent, var(--color-patient)) 0%,
-    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 85%, white) 100%
+    var(--surface-deep, var(--color-patient)) 0%,
+    color-mix(in srgb, var(--surface-deep, var(--color-patient)) 78%, var(--surface-accent, var(--color-cerulean))) 100%
   );
 }
 @media (prefers-color-scheme: dark) {
-  /* Brighten toward the (text-free) bottom-right corner so the band lifts off
-     the patient-tinted navy canvas; text stays on the darker top-left. */
+  /* Brighter toward the (text-free) bottom-right corner so the band lifts off
+     the dark canvas; text stays on the deep top-left. */
   .surface-solid {
     background: linear-gradient(
       135deg,
-      var(--surface-accent, var(--color-patient)) 0%,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 56%, white) 100%
+      var(--surface-deep, var(--color-patient)) 0%,
+      color-mix(in srgb, var(--surface-deep, var(--color-patient)) 62%, var(--surface-accent, var(--color-cerulean))) 100%
     );
   }
 }
@@ -303,10 +384,10 @@
 /* Flat persona fill for COMPACT solid CTAs (pills, small CTA panels).
    .surface-solid is a wide band: its gradient brightens toward a corner the
    text never reaches. A pill is small enough that its label sits across the
-   whole sweep, and the lighter accents (clinician teal, distributor violet)
-   drop white text under 4.5:1 there. This flat fill — the accent darkened to
-   88% — clears AA for white text at every point, in both schemes, for all
-   three personas. Use .surface-solid for bands, .accent-pill for buttons. */
+   whole sweep, so this one is flat: --accent-solid, which clears AA for white
+   text in both schemes for all three personas (patient 11.9:1, clinician
+   6.3:1, distributor 5.4:1). Use .surface-solid for bands, .accent-pill for
+   buttons. */
 .accent-pill {
   background: var(--accent-solid);
 }
@@ -318,36 +399,45 @@
 .surface-panel {
   background: linear-gradient(
     155deg,
-    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, white) 0%,
-    color-mix(in srgb, var(--surface-accent, var(--color-patient)) 21%, white) 100%
+    color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 16%, white) 0%,
+    color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 26%, white) 100%
   );
-  border: 1px solid color-mix(in srgb, var(--surface-accent, var(--color-patient)) 30%, white);
+  border: 1px solid color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 50%, white);
 }
 @media (prefers-color-scheme: dark) {
   .surface-panel {
     background: linear-gradient(
       155deg,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 22%, var(--color-navy-900)) 0%,
-      color-mix(in srgb, var(--surface-accent, var(--color-patient)) 13%, var(--color-navy-900)) 100%
+      color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 10%, var(--color-navy-950)) 0%,
+      color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 6%, var(--color-navy-950)) 100%
     );
-    border-color: color-mix(in srgb, var(--surface-accent, var(--color-patient)) 48%, transparent);
+    /* No deeper than the card's tint: at 12%+ slate-400 small print falls
+       under 4.5:1 (measured 4.44 clinician). The panel reads as the stronger
+       surface through its border instead. */
+    border-color: color-mix(in srgb, var(--surface-accent, var(--color-cerulean)) 55%, transparent);
   }
 }
 
-/* Page background below heroes: light by default, dark on prefers-color-scheme.
-   Shared by the home page and subpages (moved out of UroDapterHero). */
+/* The home page's neutral canvas: white → primary mist, with a cerulean glow
+   (primary) and a lilac one (complementary) — no persona, since home speaks to
+   all three. */
 .bg-page-gradient {
   background:
-    radial-gradient(1000px 500px at 85% -10%, rgba(47, 111, 237, 0.1), transparent 60%),
-    radial-gradient(700px 450px at 10% 110%, rgba(124, 79, 209, 0.08), transparent 60%),
-    linear-gradient(180deg, #ffffff 0%, #f7f9fc 55%, #eef2f9 100%);
+    radial-gradient(1000px 500px at 85% -10%, color-mix(in srgb, var(--color-cerulean) 18%, transparent), transparent 60%),
+    radial-gradient(700px 450px at 10% 110%, color-mix(in srgb, var(--color-lilac) 22%, transparent), transparent 60%),
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      color-mix(in srgb, var(--color-mist) 22%, white) 55%,
+      color-mix(in srgb, var(--color-mist) 45%, white) 100%
+    );
 }
 @media (prefers-color-scheme: dark) {
   .bg-page-gradient {
     background:
-      radial-gradient(1200px 600px at 85% -10%, rgba(47, 111, 237, 0.35), transparent 60%),
-      radial-gradient(800px 500px at 10% 110%, rgba(124, 79, 209, 0.18), transparent 60%),
-      linear-gradient(135deg, #0a1526 0%, #0d1a30 45%, #101f3b 100%);
+      radial-gradient(1200px 600px at 85% -10%, color-mix(in srgb, var(--color-cerulean) 24%, transparent), transparent 60%),
+      radial-gradient(800px 500px at 10% 110%, color-mix(in srgb, var(--color-plum) 22%, transparent), transparent 60%),
+      linear-gradient(135deg, #041c29 0%, #062536 45%, var(--color-navy-950) 100%);
   }
 }
 

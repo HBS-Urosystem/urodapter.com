@@ -14,6 +14,12 @@
      * so the split survives for screen readers too.
      */
     group?: string;
+    /**
+     * An `.accent-*` class for this item's header, its group label and its
+     * pane — a persona's content on another persona's page (the patient page's
+     * clinician quotes, the clinician page's patient quotes). Omit to inherit.
+     */
+    accentClass?: string;
     /** Dwell override in seconds. Default is derived from `body` length. */
     seconds?: number;
   };
@@ -63,6 +69,31 @@
     return Math.min(16000, Math.max(7000, Math.round(words / 2.6) * 1000 + 3000));
   }
 
+  // --- Keeping the list column a fixed height -------------------------------
+  // Stacking the panes in one grid cell fixes the *pane* column, but the list
+  // column still grew by whatever the open item's body measured, so opening an
+  // item with a longer body than its neighbours pushed the rest of the page
+  // down. (Clinician Section 2: the Buford body is a 22-word sentence, 88px,
+  // against 36px for the other two — at 1152px that made the list taller than
+  // the pane and moved the page by 34px.)
+  //
+  // So reserve the tallest body for every state: a spacer at the end of the
+  // list takes up whatever the open item's body does *not*. List height is then
+  // base + tallest body, whichever item is open. The slack sits at the bottom
+  // of the column, below the pause control, where it reads as plain spacing.
+  let bodyEls = $state<(HTMLElement | undefined)[]>([]);
+  let bodyHeights = $state<number[]>([]);
+
+  // `scrollHeight` reports the natural height even while the row is collapsed
+  // to `0fr` and clipped, so every item can be measured without opening it.
+  function measureBodies() {
+    bodyHeights = bodyEls.map((el) => el?.scrollHeight ?? 0);
+  }
+
+  const reserve = $derived(
+    Math.max(0, (bodyHeights.length ? Math.max(...bodyHeights) : 0) - (bodyHeights[active] ?? 0))
+  );
+
   // Consecutive items sharing a `group` render under one label. Items keep
   // their original index — it drives `active`, the ids and the pane.
   const runs = $derived.by(() => {
@@ -81,6 +112,24 @@
     sync();
     query.addEventListener('change', sync);
 
+    // Bodies re-wrap when the column width changes, so re-measure then. Only
+    // on a *width* change: the spacer alters this element's height, and
+    // re-measuring on that would be a feedback loop.
+    measureBodies();
+    let lastWidth = root?.getBoundingClientRect().width ?? 0;
+    let sizeObserver: ResizeObserver | undefined;
+    if (root && typeof ResizeObserver !== 'undefined') {
+      sizeObserver = new ResizeObserver((entries) => {
+        const width = entries[0]?.contentRect.width ?? 0;
+        if (Math.abs(width - lastWidth) < 0.5) return;
+        lastWidth = width;
+        measureBodies();
+      });
+      sizeObserver.observe(root);
+    }
+    // Text reflows once the display face loads, which changes body heights.
+    document.fonts?.ready.then(measureBodies).catch(() => {});
+
     // Nothing advances while the section is off screen, so a reader who
     // scrolls back finds the item they left rather than item 1.
     let observer: IntersectionObserver | undefined;
@@ -97,6 +146,7 @@
     return () => {
       query.removeEventListener('change', sync);
       observer?.disconnect();
+      sizeObserver?.disconnect();
     };
   });
 
@@ -156,7 +206,7 @@
         <div
           role={run.group ? 'group' : undefined}
           aria-label={run.group}
-          class={run.group ? 'mb-6 last:mb-0' : ''}
+          class={run.group ? `mb-6 last:mb-0 ${run.entries[0].item.accentClass ?? ''}` : ''}
         >
           {#if run.group}
             <p class="pl-5 sm:pl-6 mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-(--accent-ink)">
@@ -165,7 +215,7 @@
           {/if}
           {#each run.entries as { item, index: i } (item.id)}
             <div
-              class="ac-item relative pl-5 sm:pl-6 py-3"
+              class="ac-item relative pl-5 sm:pl-6 py-3 {item.accentClass ?? ''}"
               data-open={i === active ? '' : undefined}
               style="--ac-dwell: {dwell(item)}ms"
             >
@@ -194,9 +244,13 @@
                   onkeydown={(event) => onHeaderKeydown(event, i)}
                 >
                   {#if item.icon}
+                    <!-- The open item's chip is filled (brand fill, ≥ 3:1 for
+                         the icon) — a clear "you are here" beside the rail. -->
                     <span
-                      class="w-9 h-9 rounded-full bg-(--brand-soft) border border-(--brand-ink)/20 dark:border-(--brand-ink)/25
-                             text-(--brand-ink) flex items-center justify-center shrink-0"
+                      class="w-9 h-9 rounded-full border flex items-center justify-center shrink-0 transition-colors
+                             {i === active
+                        ? 'brand-pill border-transparent'
+                        : 'bg-(--brand-soft) border-(--brand-ink)/20 dark:border-(--brand-ink)/25 text-(--brand-ink)'}"
                       aria-hidden="true"
                     >
                       <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
@@ -215,7 +269,7 @@
                 aria-labelledby="{uid}-h{i}"
                 inert={i !== active}
               >
-                <div class="min-h-0 overflow-hidden">
+                <div class="min-h-0 overflow-hidden" bind:this={bodyEls[i]}>
                   {#if item.body}
                     <p
                       class="pt-2.5 text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300 text-pretty
@@ -230,6 +284,10 @@
           {/each}
         </div>
       {/each}
+
+      <!-- Holds the list column at base + tallest body, so opening an item with
+           a longer body than its neighbours cannot push the page down. -->
+      <div class="ac-reserve" style="height: {reserve}px" aria-hidden="true"></div>
 
       {#if autoplay && !reduceMotion}
         <!-- Indented to the header text, not the rail: flush left it reads as
@@ -260,7 +318,7 @@
     <div class="grid">
       {#each items as item, i (item.id)}
         <div
-          class="ac-pane col-start-1 row-start-1"
+          class="ac-pane col-start-1 row-start-1 {item.accentClass ?? ''}"
           class:ac-pane--on={i === active}
           inert={i !== active}
         >

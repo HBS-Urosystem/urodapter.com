@@ -21,7 +21,7 @@
 > | 1 | Hero (headline on the photo) + intro + 4 benefits as an `AutoAccordion` + indications | `patients/WhyChoose.svelte` | Section 1 |
 > | — | bridge (arrow) | `SectionBridge` | Section 2 bridge text |
 > | 2 | Patient experiences — 4 stories as an `AutoAccordion` + "read all" band | `patients/PatientStories.svelte` | Section 2 |
-> | — | bridge (quote) | `SectionBridge` | Section 3 bridge text |
+> | — | bridge (statement) | `SectionBridge` | Section 3 bridge text |
 > | 3 | Evidence & outcomes — stat row, then chart / consensus / clinician quotes as an `AutoAccordion` | `patients/EvidenceOutcomes.svelte` | Section 3 |
 > | — | bridge (arrow) | `SectionBridge` | Section 5 bridge text |
 > | 4 | What happens next — CTA tiers, dive-deep band, closing band | `patients/NextSteps.svelte` | Section 5 |
@@ -125,7 +125,7 @@ src/lib/components/
   SiteHeader.svelte                       ← extracted (prereq)
   patients/
     PatientHero.svelte                    ← Section 1
-    SectionBridge.svelte                  ← both bridges (variant: 'arrow' | 'quote')
+    SectionBridge.svelte                  ← both bridges (variant: 'arrow' | 'bridge')
     HowItWorks.svelte                     ← Section 2 composition
     ProductCallouts.svelte                ← annotated product image
     VideoFacade.svelte                    ← lite YouTube embed (reusable site-wide)

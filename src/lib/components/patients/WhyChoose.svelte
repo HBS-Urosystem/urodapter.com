@@ -50,9 +50,7 @@
   </p>
 
   <div class="mt-12">
-    <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
-      {whyChoose.eyebrow}
-    </p>
+    <p class="eyebrow">{whyChoose.eyebrow}</p>
     <h2
       class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
     >

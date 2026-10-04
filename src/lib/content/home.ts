@@ -193,7 +193,9 @@ export const heroAudienceCards = [
 		eyebrow: 'I’m a patient',
 		title: 'A better experience for patients',
 		items: ['Catheter-free treatment', 'Greater comfort', 'Less anxiety'],
-		linkLabel: 'What to expect',
+		// Owner direction 2026-09-29 (was "What to expect"): the label names the
+		// patient page's first section, as the clinician card's names its own.
+		linkLabel: 'Patient benefits',
 		href: patientsHref,
 	},
 	{
@@ -223,7 +225,7 @@ export const heroAudienceCards = [
 // ---------------------------------------------------------------------------
 
 export const bridgeHowItWorks = {
-	variant: 'quote' as const,
+	variant: 'bridge' as const,
 	// The two docx "why heroes care" lines, moved here from the key-benefit cards
 	// (owner direction 2026-09-27, D6): the audience problems, then the idea that
 	// answers them.
@@ -450,7 +452,7 @@ export const proof = {
 // ---------------------------------------------------------------------------
 
 export const bridgePatients = {
-	variant: 'quote' as const,
+	variant: 'bridge' as const,
 	lead: 'Repeated bladder treatments can be stressful, uncomfortable and emotionally exhausting.',
 	emphasis: 'A more comfortable experience may be possible.',
 };
@@ -556,7 +558,7 @@ export const clinicians = {
 // ---------------------------------------------------------------------------
 
 export const bridgeDistributors = {
-	variant: 'quote' as const,
+	variant: 'bridge' as const,
 	lead: 'Catheter-free instillation is already reaching patients across dozens of markets.',
 	emphasis: 'There may be room for it in yours.',
 };

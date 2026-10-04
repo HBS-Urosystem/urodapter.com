@@ -14,9 +14,7 @@
      learning path) are the three accordion items: each block title already
      reads as a claim, and the pane beside it is the answer. -->
 <section aria-labelledby="implementation-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-(--accent-ink)">
-    {implementation.eyebrow}
-  </p>
+  <p class="eyebrow">{implementation.eyebrow}</p>
   <h2
     id="implementation-heading"
     class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"

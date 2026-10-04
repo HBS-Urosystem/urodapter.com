@@ -38,7 +38,7 @@
               ><path stroke-linecap="round" stroke-linejoin="round" d={card.icon} /></svg
             >
           </span>
-          <p class="text-xs font-semibold uppercase tracking-[0.1em] text-(--accent-ink)">{card.eyebrow}</p>
+          <p class="eyebrow">{card.eyebrow}</p>
         </div>
 
         <h2
@@ -65,23 +65,29 @@
           {/each}
         </ul>
 
-        <div class="mt-auto pt-4 border-t border-navy-950/10 dark:border-white/10 flex items-center justify-between gap-3">
+        <!-- The arrow chip lives INSIDE the anchor. As a sibling it was not
+             clickable: its hover `translate-x` made it a stacking layer above
+             the stretched ::after, so a click on the arrow hit nothing
+             (fixed 2026-09-29). -->
+        <div class="mt-auto pt-4 border-t border-navy-950/10 dark:border-white/10">
           <a
             href={card.href}
-            class="text-[15px] font-semibold text-navy-950 dark:text-white
+            class="flex items-center justify-between gap-3 text-[15px] font-semibold text-navy-950 dark:text-white
                    after:absolute after:inset-0 after:rounded-2xl
                    focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-2
-                   focus-visible:after:outline-(--brand-ink)">{card.linkLabel}</a
+                   focus-visible:after:outline-(--brand-ink)"
           >
-          <span
-            aria-hidden="true"
-            class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 bg-navy-950/5 dark:bg-white/10
-                   transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-              ><path stroke-linecap="round" stroke-linejoin="round" d={arrowRightIcon} /></svg
+            {card.linkLabel}
+            <span
+              aria-hidden="true"
+              class="w-9 h-9 rounded-full flex items-center justify-center shrink-0 accent-pill text-white
+                     transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
             >
-          </span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+                ><path stroke-linecap="round" stroke-linejoin="round" d={arrowRightIcon} /></svg
+              >
+            </span>
+          </a>
         </div>
       </article>
     </div>

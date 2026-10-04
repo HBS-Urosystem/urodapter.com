@@ -141,14 +141,24 @@ export const hero = {
 };
 
 // The docx asks for the section header to be written out, and for the two
-// groups to stay visually separated so they remain readable on mobile. Two
-// labelled rows of three cards do that without nesting a card inside a box.
+// groups to stay visually separated so they remain readable on mobile — and
+// offers "1 box for the 3 patient benefit, 1 box for the clinician benefit …
+// can be sliders as well to save space". So each group is one box: side by
+// side from md, and one at a time behind two side tabs on a phone (owner
+// direction 2026-09-29; it was an AutoAccordion at every width).
 export const clinicalValue = {
   eyebrow: "Clinical value",
   heading: "Clinical Value for You and Your Patients",
+  // Each group is one card. `accentClass` puts each in its own persona colour
+  // — the patients' card in patient petrol on the clinician page (owner
+  // direction 2026-09-29: persona colours may appear on each other's pages).
+  // `seconds` is the mobile tabs' dwell (presentation, not copy).
   groups: [
     {
       title: "For Your Practice",
+      icon: iconShieldCheck,
+      accentClass: "accent-clinician",
+      seconds: 12,
       items: [
         {
           title: "Higher patient satisfaction",
@@ -169,6 +179,9 @@ export const clinicalValue = {
     },
     {
       title: "For Your Patients",
+      icon: iconFaceSmile,
+      accentClass: "accent-patient",
+      seconds: 12,
       items: [
         {
           title: "A more comfortable experience",
@@ -189,20 +202,6 @@ export const clinicalValue = {
     },
   ],
 };
-
-// Section 1's accordion (design system §6a), and a near-literal reading of the
-// docx: "the 3-3 cards/group can be placed on a shared box (1 box for the 3
-// patient benefit, 1 box for the clinician benefit) … The boxes with the 3-3
-// cards can be sliders as well to save space." So the *group* is the item and
-// its three benefits are the pane — one shared box per group, one shown at a
-// time. Keeping a group's three benefits together also keeps them comparable,
-// which is how a reader actually uses them.
-export const clinicalValueItems = clinicalValue.groups.map((group, i) => ({
-  id: group.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-  title: group.title,
-  icon: [iconShieldCheck, iconFaceSmile][i],
-  seconds: 12,
-}));
 
 // ---------------------------------------------------------------------------
 // SECTION 2 — What the Clinical Evidence Shows
@@ -298,8 +297,11 @@ export const evidenceItems = [
   },
   {
     id: "review",
+    // No `body`: Buford's finding is a 22-word sentence, ~3 lines in this
+    // column against one line for the other two descriptors, and the list
+    // column is sized to its tallest body. It sits in the pane instead — the
+    // thinnest of the three panes, which has the room for it.
     title: evidence.review.label,
-    body: evidence.review.body,
     icon: evidence.review.icon,
     seconds: 10,
   },
@@ -313,7 +315,7 @@ export const evidenceItems = [
 // ---------------------------------------------------------------------------
 
 export const bridgeSocialProof = {
-  variant: "quote" as const,
+  variant: "bridge" as const,
   lead: "Clinical evidence provides the scientific foundation.",
   emphasis:
     "Real-world experience shows how UroDapter performs in everyday clinical practice.",
@@ -429,6 +431,9 @@ export const socialProofItems = [
     title: item.theme,
     icon: item.icon,
     group: socialProof.patients.heading,
+    // Patients' words, in the patient colour (owner direction 2026-09-29:
+    // persona colours may appear on each other's pages).
+    accentClass: "accent-patient",
     seconds: 9,
   })),
 ];
@@ -521,7 +526,7 @@ export const implementationItems = [
 // ---------------------------------------------------------------------------
 
 export const bridgeNextSteps = {
-  variant: "quote" as const,
+  variant: "bridge" as const,
   emphasis:
     "From clinical evidence to practical implementation, you now have the essentials to decide how UroDapter could fit into your practice.",
 };
@@ -634,7 +639,7 @@ export const whatIsIt = {
 };
 
 export const bridgeMechanism = {
-  variant: "quote" as const,
+  variant: "bridge" as const,
   lead: "Every single feature is designed for enabling a safe, painless instillation.",
   emphasis: "Let’s see how it works.",
 };

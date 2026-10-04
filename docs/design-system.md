@@ -4,6 +4,13 @@ The binding reference for building anything on this site. It records the decisio
 shipped in code, including the ones that reversed an earlier approach. **Read this before adding a
 section, page, or component.**
 
+> **2026-09-29 — brand palette.** Every colour now comes from the client's brand guide (three
+> palettes, used **60% primary / 30% complementary / 10% secondary**, §1). The three persona
+> colours were remapped onto it (patient `#0b3b54`, clinician `#166b6a`, distributor `#8376a3`),
+> navy became the guide's primary petrol, eyebrows became colour pills, and persona colours may
+> now appear on each other's pages. Values quoted elsewhere in this doc from before that date
+> (`#18438a`, `#2c8979`, `#8764b9`, `sky-300`, `emerald-300`, `#08111f`) are historical.
+>
 > **2026-09-08:** all three built pages now follow the client's 0831 plan — `/patients` and
 > `/clinicians` restructured (§2 *"Where each journey step is answered"*), and the homepage rebuilt
 > from `3. page_content.docx`. `/partners` is still the `AudienceStub`, and there is still no
@@ -20,24 +27,47 @@ section, page, or component.**
 
 ## 1. Tokens
 
+### The brand palette — 60 / 30 / 10 *(owner direction 2026-09-29)*
+
+The client's brand guide supplies three palettes, and the owner set their ratio: **60% primary,
+30% complementary ("kiegészítő"), 10% secondary**. Every colour on the site is one of these, or
+a *measured* shade of one where small text needs AA on a light surface. Don't add a colour from
+outside them.
+
+| Set | Share | Colours → tokens | What it carries |
+|---|---|---|---|
+| **Primary** | 60% | `#072c3f` `navy-950` · `#0b3b54` `navy-900` · `#52b2d6` `cerulean` · `#c7e1f0` `mist` | The structure on every page: text, the header, dark mode, the canvas and bridge base, the patient persona |
+| **Complementary** (the UroDapter product palette) | 30% | `#caa8cf` `lilac` · `#8376a3` `plum` · `#78c7c9` `--brand-bright` · `#02979d` `brand` · `#005c5b` `spruce` · `#706f6f` `graphite` · `#c6c6c6` `silver` | Persona tints (distributor), the brand highlight, the home canvas's second glow |
+| **Secondary** | 10% | `#f9e497` `sun` · `#ef797a` `coral` · `#f4ded8` `blush` · `#166b6a` `pine` · `#23a0a3` `lagoon` · `#6fc6ca` `aqua` · `#99c7e0` `powder` · `#3e94b7` `steel` (+ white; `#09979d` is the brand teal to the eye) | The pops — eyebrow pills (coral / sun), the clinician persona (pine + aqua) |
+
+In practice the 60% is automatic: navy text, the header, the mist canvas and every dark-mode
+surface are primary on every page. The persona tint is the 30% layer over it, and the pops are
+kept small — **pills and highlights, never a section background**.
+
 Defined in `@theme` (Tailwind v4) in `layout.css`:
 
 | Token | Value | Use |
 |---|---|---|
-| `--color-navy-950` | `#08111f` | Deepest navy — header band, hero base, text on light |
-| `--color-navy-900` | `#0d1a30` | Dark surfaces, bridge band (dark) |
-| `--color-navy-800` | `#132342` | Raised dark chips |
-| `--color-navy-700` | `#1b2f54` | Rarely used; dark borders/accents |
-| `--color-patient` | `#18438a` | **Patient** persona accent |
-| `--color-clinician` | `#2c8979` | **Clinician** persona accent |
-| `--color-distributor` | `#8764b9` | **Distributor** persona accent |
+| `--color-navy-950` | `#072c3f` (primary) | Deepest petrol — header base, text on light, text on bright fills |
+| `--color-navy-900` | `#0b3b54` (primary) | Dark bridge band base; the patient colour |
+| `--color-navy-800` / `-700` | `#114a68` / `#18597b` | Lighter steps of the same hue — raised chips on dark, hovers |
+| `--color-cerulean` / `--color-mist` | `#52b2d6` / `#c7e1f0` | Primary brights: patient tint + dark ink / the canvas and band base |
+| `--color-patient` | `#0b3b54` | **Patient** persona (deep) |
+| `--color-clinician` | `#166b6a` | **Clinician** persona (deep) |
+| `--color-distributor` | `#8376a3` | **Distributor** persona (deep) |
 | `--color-brand` | `#02979d` light / `#78c7c9` dark | **Brand highlight** — the logo teal. Constant on every page, scheme-aware (2026-09-28) |
 | `--font-display` | `Source Serif 4 Variable` | Editorial serif for display headlines |
 
+**Dark mode is deeper than navy-950 at the top.** The persona and home canvases run `#041c29 →
+#062536 → navy-950`, and dark cards/panels mix their tint into **navy-950, not navy-900**: the
+primary petrol is lighter than the old navy, and on a `navy-900` base slate-400 small print fell
+to 3.7:1. Measured now: slate-400 ≥ 4.64:1 on every dark card and panel of all three personas
+(panels are capped at the card's 10% tint for exactly this — at 12% clinician measured 4.44:1).
+
 Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not a scale):
 
-- `--color-patient-soft` = 7% patient in white → light tinted panels/bands
-- `--color-patient-glow` = 30% patient, transparent → dark-mode radial glows
+- `--color-patient-soft` = 14% cerulean in white → light tinted chips
+- `--color-patient-glow` = 30% cerulean, transparent → dark-mode radial glows
 - `--chart-trying` / `--chart-continuing` → the **data-series duo** for charts. Brand-hue steps
   snapped to pass the dataviz six-checks validator (lightness band, chroma floor, CVD ΔE,
   contrast) — light `#2f66c4`/`#1e947e`, dark `#0284c7`/`#059669` (auto via media query).
@@ -57,32 +87,52 @@ Derived single-purpose tints (in `:root`, not `@theme` — they're surfaces, not
 follow. The home page uses this per-section (blue → teal → purple as you scroll); persona pages
 use it once, on the page wrapper.
 
-Each scope sets four accent tokens plus the three surface variables:
+**Each persona is a pair of palette colours** (2026-09-29): a **deep** one for fills under white
+text, and a **bright** one for tints. Mixed into white, a deep colour turns grey; the bright one
+keeps the surfaces colourful.
+
+| Persona | Deep (fills, nav, ink base) | Bright (tints; dark-mode ink) | Pop (eyebrow pill) |
+|---|---|---|---|
+| Patient | `#0b3b54` navy-900 (primary) | `#52b2d6` cerulean (primary) | `#ef797a` coral |
+| Clinician | `#166b6a` pine (secondary) | `#6fc6ca` aqua (secondary) | `#f9e497` sun |
+| Distributor | `#8376a3` plum (complementary) | `#caa8cf` lilac (complementary) | `#f9e497` sun |
+
+Each scope sets every token below; `:root` carries the patient set as the default:
 
 | Token | Role |
 |---|---|
-| `--accent` | The raw persona colour. |
-| `--accent-ink` | The **readable** accent, for text/borders/icon strokes. In dark mode it swaps to the light 300-step of the same hue (patient→`sky-300`, clinician→`emerald-300`, distributor→`violet-300`) — the deep brand colours vanish on navy. Components write `text-(--accent-ink)`, never `text-patient dark:text-sky-300`. **In light mode the clinician ink is the accent darkened to 80%**, not the raw `#2c8979`: the raw teal measures 4.23:1 on white and fails AA for the 12–14px text that uses this token (fixed + measured 2026-08-26 → 6.04:1 on white, 4.66:1 on the deepest panel tint). Patient blue and distributor violet pass unchanged. Measure before changing any persona ink. |
-| `--accent-soft` | Icon-chip fill (7% accent in white; 10% ink alpha in dark). |
-| `--accent-solid` | Flat fill for compact solid CTAs — the accent at 88%, dark enough for white text to clear AA in every persona (see `.accent-pill`, §4). |
+| `--accent` | The raw persona colour (deep). |
+| `--accent-ink` | The **readable** accent, for text/borders/icon strokes. Components write `text-(--accent-ink)`, never a `dark:` pair. Light / dark, measured (on white · on the deepest `.surface-panel` tint): **patient `#1d6788`** — cerulean darkened, since `#0b3b54` reads as the heading navy — 6.27 · 5.06; **clinician `#166b6a`** as is, 6.28 · 5.30; **distributor plum 80% + black** (`#695e82`; raw plum is 4.13:1) 5.94 · 4.98. In dark mode it is the bright partner: cerulean / aqua / lilac, 6.6 / 8.0 / 7.6:1 on the dark canvas, ≥ 5.05:1 on dark cards. Measure before changing any persona ink. |
+| `--accent-soft` | Icon-chip fill (16–20% bright in white; 16% bright alpha in dark). |
+| `--accent-solid` | Flat fill for compact solid CTAs — clears AA under white text in every persona: patient 11.9, clinician 6.3, distributor (plum 85% + black) 5.4 (see `.accent-pill`, §4). |
+| `--accent-pop` | The persona's secondary **pop** — the `eyebrow` pill fill (§3). Navy text on it: coral 5.33:1, sun 11.5:1. |
+| `--surface-accent` / `--band-accent` | The **bright** colour — the tints of cards, panels, the canvas glows, bridge glows. |
+| `--surface-deep` | The **deep** colour — `.surface-solid` bands and card shadows. |
+| `--nav-accent` | The nav bar's end colour, set per scope to keep white text ≥ 5.4:1 (patient: 75% deep + cerulean, 7.7:1). |
 
 Two rules that are easy to get wrong:
 
-1. **Never declare `--surface-accent` / `--band-accent` / `--nav-accent` on the styled element
-   itself.** A declaration on the element beats the inherited value, so a self-declaring
-   `.surface-card` could never be retinted from an ancestor. They read
-   `var(--surface-accent, var(--color-patient))` at each use site instead — inherit, with a
+1. **Never declare `--surface-accent` / `--surface-deep` / `--band-accent` / `--nav-accent` on the
+   styled element itself.** A declaration on the element beats the inherited value, so a
+   self-declaring `.surface-card` could never be retinted from an ancestor. They read
+   `var(--surface-accent, var(--color-cerulean))` at each use site instead — inherit, with a
    patient fallback. *(Fixed 2026-08-26; the bug was invisible while patient was the only persona.)*
 2. **Never derive one accent token from another across a scope boundary.** A custom property
    inherits its *substituted* value, so `--accent-soft: color-mix(…var(--accent)…)` declared on
-   `:root` would keep `:root`'s colour inside `.accent-clinician`. Every scope redeclares all four.
+   `:root` would keep `:root`'s colour inside `.accent-clinician`. Every scope redeclares them all.
 - `.nav-gradient` (layout.css) = the subpage nav bar's diagonal **navy→accent** gradient (logo
-  stays on deep navy, the bar carries the primary colour). Accent via `--nav-accent` (defaults to
-  patient). Same in light & dark (the header is always dark with white text).
+  stays on deep navy, the bar carries the persona colour). Accent via `--nav-accent`. Same in
+  light & dark (the header is always dark with white text).
 
-**Persona colour rule:** each audience page uses its own accent. The patient page uses
-`--color-patient` everywhere an accent appears. When building the clinician/distributor pages,
-**parameterise** — don't hardcode blue. Shared components should take the accent from the page.
+**Persona colour rule:** each audience page uses its own accent, set once on the page wrapper.
+Shared components take the accent from the page — never hardcode one.
+
+**Persona colours may appear on each other's pages** *(owner direction 2026-09-29)*. Where a page
+shows another audience's content, that block wears the other audience's scope: the patient
+page's clinician quotes are `.accent-clinician`; on the clinician page the patient quotes, the
+"Want to hear more patient stories?" card and the "For Your Patients" benefits card are
+`.accent-patient`. Put the scope on the smallest wrapper that holds that content —
+`AutoAccordion` items take an `accentClass` for this (§7).
 
 ### The brand highlight — `--brand-*` *(2026-09-22)*
 
@@ -106,8 +156,9 @@ never touch it. Do not redeclare it inside a persona scope.
 enough for the logo, a focus ring or a fill (≥ 3:1), not for small text — and 5.33:1 as a *fill*
 under navy-950 text (4.59:1 on its 8%-darker hover). Dark `#78c7c9` (L 0.78, 197.8°) is 8.95:1 as
 text on navy-900 and 9.74:1 as a fill under navy-950 text. So light-mode *text* keeps its own,
-darker ink, `oklch(0.48 0.08 198.3)` = `#096b6e` — the same hue, 6.29:1 on white and ≥4.60:1 on
-every card / canvas / bridge tint of all three personas. **Text on the fill is set per scheme by
+darker ink, `oklch(0.48 0.08 198.3)` = `#096b6e` — the same hue, 6.29:1 on white and ≥4.85:1 on
+every card / canvas / bridge tint of all three personas (re-measured on the 2026-09-29 palette:
+4.85 on the band's mist base, 5.07–5.31 on the deepest panel tints). **Text on the fill is set per scheme by
 `.brand-pill` itself** (`--brand-on-fill`): white in light mode at the owner's request
 (2026-09-28), navy in dark. White on the light fill is **3.55:1 (4.12:1 on hover) — below AA's
 4.5:1 for normal-size text**; the button's 16px semibold label counts as normal text. It would pass
@@ -121,33 +172,34 @@ page. Persona CTAs are deliberately *not* included — `.accent-pill`, `.surface
 
 | Brand teal | Still persona |
 |---|---|
-| `SectionBridge` arrow chip, quote glyph, rule | Bridge band tint (`--band-accent`) |
-| `AutoAccordion` rail + fill, header icon chips, play/pause button, focus outlines | The accordion's group label |
-| The `→` story/testimonial links + their focus rings | Section eyebrows |
+| `SectionBridge` arrow chip, rule | Bridge band tint (`--band-accent`) |
+| `AutoAccordion` rail + fill, header icon chips (the open item's filled with `.brand-pill`), play/pause button, focus outlines | The accordion's group label |
+| The `→` story/testimonial links + their focus rings | Section eyebrows (the persona's `--accent-pop`) |
 | The hairline rules under display headlines (`WhyChoose`, `AudienceStub`) | `StatCard` / `BenefitCard` / `IndicationsStrip` chips, page canvas, cards, nav |
 | Home hero: "See how it works" (`.brand-pill`), the regulatory pill's shield, the audience cards' ticks, the quote rotator's dot fill + focus rings, the webshop link | The audience cards' chips, eyebrows and borders |
 
-**Known limit — the clinician page in light mode.** The logo teal is ~20° from `--color-clinician`
-in OKLCH, and `#096b6e` is within 19° / 0.01 L of the clinician ink `#236e61`: on `/clinicians` the
-two are hard to tell apart, so the highlight reads as cohesion rather than emphasis. Dark mode is
-fine (the bright teal separates clearly from `emerald-300`). If light-mode emphasis is wanted
-there, separate by **lightness** — use the fill forms (`.brand-pill`, `--brand-fill`,
-`--brand-soft`) rather than `--brand-ink` next to clinician ink.
+**Known limit — the clinician page.** The clinician colours are teals from the same guide as the
+logo, so on `/clinicians` the brand highlight and the persona accent nearly coincide: light
+`#096b6e` brand ink vs `#166b6a` clinician ink, dark `#78c7c9` vs `#6fc6ca`. The highlight reads
+as cohesion rather than emphasis there. If emphasis is wanted, separate by **lightness** — use
+the fill forms (`.brand-pill`, `--brand-fill`, `--brand-soft`) rather than `--brand-ink` next to
+clinician ink.
 
 ### Dark-mode accent swap (important)
 
-`--color-patient` (#18438a) is a deep blue: it **disappears against navy**. In dark mode swap every
-small accent to `sky-300`:
+The deep persona colours (`#0b3b54`, `#166b6a`, plum) **disappear against the dark canvas**. The
+scopes swap `--accent-ink` / `--accent-soft` to the bright partner in dark mode, so components
+never need a `dark:` colour pair for an accent:
 
 ```html
-<!-- shared components — accent comes from the enclosing .accent-* scope -->
+<!-- accent comes from the enclosing .accent-* scope, in both schemes -->
 class="text-(--accent-ink)"
 class="bg-(--accent-ink)/60"
 class="border-(--accent-ink)/20 dark:border-(--accent-ink)/25"
-
-<!-- patient-page-only compositions may still hardcode; they resolve identically -->
-class="text-patient dark:text-sky-300"
 ```
+
+The last hardcoded `text-patient dark:text-sky-300` pairs (patient `NextSteps`, `ClinicianQuotes`,
+the section eyebrows) were converted on 2026-09-29. Don't reintroduce them.
 
 Dark mode is driven by `prefers-color-scheme` (no theme toggle). Every component ships both.
 
@@ -212,7 +264,7 @@ SiteHeader (page)    ← in the route, before <main>: transparent on the page gr
 UroDapterHero        ← copy (pill, h1, body, CTAs) · framed photo + QuoteRotator ·
                        product chip · HeroAudienceCards · credibility strip ·
                        regulatory line
-SectionBridge (quote + problems)
+SectionBridge (bridge + problems)
                        "For patients" / "For clinicians" problem lines, a rule,
                        then "A simple idea can make a remarkable difference."
 HowItWorks   #how-it-works   ← intro, ProductCallouts, caption → 30s animation, detail
@@ -351,7 +403,7 @@ sticky header does not cover the heading.
 | Body | `text-base leading-relaxed text-slate-600 dark:text-slate-300` + `text-pretty` |
 | Home audience cards | serif `h2` `text-[clamp(1.25rem,1.7vw,1.5rem)]`, ticks `text-[15px] leading-snug space-y-2` (tighter than body, client direction 2026-09-27) |
 | Small print | `text-xs text-slate-500` |
-| Eyebrow | `text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300` |
+| Eyebrow | `class="eyebrow"` — a Tailwind `@utility` in layout.css: a 26px pill, 12px semibold uppercase `tracking-[0.16em]`, **navy-950 text on the persona's `--accent-pop`** (coral on patient, sun on clinician/distributor), in both schemes. *(2026-09-29, owner: "colour the eyebrows"; was ink-coloured text.)* An icon may sit inside it (the home bridge's "For patients"). |
 
 **Serif is for display headlines only** — body, UI, labels, and cards stay sans. Serif was adopted
 as the 2026 editorial direction; the home hero headline has *not* been back-ported yet (open item).
@@ -361,8 +413,8 @@ the patient `h1` renders the full sentence uninterrupted. Eyebrows are separate 
 (e.g. "Patient benefits"), never a fragment of the heading. Never render "SECTION n" — the docx
 numbering is internal-only.
 
-**Accent rule** (the short bar under a headline): `h-0.5 w-12 rounded-full bg-patient/60
-dark:bg-sky-300/60`, `aria-hidden`.
+**Accent rule** (the short bar under a headline): `h-0.5 w-12 rounded-full bg-(--accent-ink)/60`
+(or `bg-(--brand-ink)/60` for the brand rules listed in §1), `aria-hidden`.
 
 ---
 
@@ -382,12 +434,12 @@ patient), so the clinician page retints by setting that variable on the page wra
 
 | Surface | Class | Notes |
 |---|---|---|
-| Page canvas | `.bg-persona-page` | Colourful accent gradient (light: white→~13% accent + accent radials; dark: navy + strong accent glows). Pair with an `.accent-*` class — the patient page is `bg-persona-page accent-patient`. Replaces the neutral home `.bg-page-gradient`, which stays as-is. *(Renamed from `.bg-patient-page` 2026-08-26 — it was never patient-specific.)* |
-| Content card | `.surface-card` | Gently accent-tinted (white→~10%), accent border, soft accent shadow. Benefit/testimonial/stat/chart/video/product cards. |
-| Tinted panel | `.surface-panel` | Deeper accent tint (~13→21%). Callouts, indications strip, clinician-quote box, dive-deep band. |
-| Solid CTA band | `.surface-solid` | **Bold, full-strength accent fill** + white text — the same gradient as the home audience cards / Section 6 primary CTA. For strong "go here" invitations (Support Center bands). Dark mode brightens toward the text-free bottom-right so the band lifts off the navy canvas while white text stays on the dark top-left. |
-| Full-bleed band | `.tint-band` | Section bridges + closing band (accent via `--band-accent`; see §1). |
-| Compact solid CTA | `.accent-pill` | **Flat** `--accent-solid` fill for buttons and small CTA panels. `.surface-solid` is a *band*: its gradient brightens toward a corner the text never reaches. A pill is small enough that its label sits across the whole sweep, and there clinician teal and distributor violet drop white text under 4.5:1. Use `.surface-solid` for bands, `.accent-pill` for buttons. |
+| Page canvas | `.bg-persona-page` | **Primary mist base on every page** (light: 15→55% mist in white; dark: `#041c29 → navy-950`) with three glows in the persona's bright colour — the 60 / 30 split made literal (2026-09-29). Pair with an `.accent-*` class — the patient page is `bg-persona-page accent-patient`. The home page's neutral `.bg-page-gradient` is the same mist base with a cerulean and a lilac glow. *(Renamed from `.bg-patient-page` 2026-08-26 — it was never patient-specific.)* |
+| Content card | `.surface-card` | White warming to 12% of the bright colour, a **visible** 42% border (was 22% — more card/canvas contrast, 2026-09-29), a soft shadow in the deep colour. Benefit/testimonial/stat/chart/video/product cards. |
+| Tinted panel | `.surface-panel` | Deeper bright tint (16→26%), 50% border. Callouts, indications strip, clinician-quote box, dive-deep band. In dark mode it is no deeper than a card (see §1) and stands out by its border. |
+| Solid CTA band | `.surface-solid` | **Bold persona fill** + white text: `--surface-deep` → 22% of the bright partner toward the bottom-right (38% in dark). For strong "go here" invitations (Support Center bands) and the solid bridge. White text, measured at the bright end: patient 8.1, clinician 4.7, distributor 4.3 (a corner the text never reaches). |
+| Full-bleed band | `.tint-band` | Section bridges + closing band: mist base, persona glows via `--band-accent` (§1). |
+| Compact solid CTA | `.accent-pill` | **Flat** `--accent-solid` fill for buttons and small CTA panels. `.surface-solid` is a *band*: its gradient brightens toward a corner the text never reaches. A pill is small enough that its label sits across the whole sweep, so it stays flat. Use `.surface-solid` for bands, `.accent-pill` for buttons. |
 
 **Use the primary accent at full strength where an element is a strong call-to-action**, not only
 as a light tint — e.g. the "Read all patient testimonials" / "Go to Support Center" bands
@@ -409,8 +461,10 @@ things. Icon chips inside cards stay `bg-(--color-patient-soft)` / white as befo
   `stroke-linecap="round" stroke-linejoin="round"`, `aria-hidden="true"`.
 - Icon `d` strings live **next to the copy** in `src/lib/content/*.ts`, with a comment naming the
   icon (e.g. `// face-smile`).
-- Chip: `w-10 h-10 rounded-full bg-(--color-patient-soft) dark:bg-sky-300/10 border
-  border-patient/20 dark:border-sky-300/25 text-patient dark:text-sky-300`.
+- Chip: `w-10 h-10 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20
+  dark:border-(--accent-ink)/25 text-(--accent-ink)`. A chip that marks the *current* item (the
+  open accordion item, the open Clinical value tab) is filled instead — `.brand-pill` or
+  `bg-(--accent-solid) text-white`.
 
 ---
 
@@ -460,8 +514,17 @@ shape — "several parallel blocks, each with its own visual" — which is the s
 is actually for. Stacking them cost thousands of pixels to say three things that are read one
 at a time anyway.
 
-**Where it is applied.** Both journey pages, eight sections (2026-09-13): clinician Sections 1–4,
-patient Sections 1–3. Patient `NextSteps` is deliberately **not** one — see below.
+**Where it is applied.** Both journey pages, seven sections: clinician Sections 2–4, patient
+Sections 1–3. Patient `NextSteps` is deliberately **not** one — see below.
+
+**Clinician Section 1 left the accordion** *(owner direction 2026-09-29)*. Its two boxes ("For Your
+Practice" / "For Your Patients") are side by side and always visible from 48rem; only on a phone do
+they share one cell, behind two **side tabs** — a 44px column of icon + vertical label + rail
+beside the card, so the handle sits *next to* the card rather than above a list. It keeps every
+§6a condition (one cell so nothing moves — measured: page height identical across tabs; the rail
+is the timer; pause control; reduced motion is manual; inactive panel `inert`), but it is its own
+markup in `ClinicalValue.svelte` (APG vertical tabs, roles applied only below 48rem), not an
+`AutoAccordion`.
 
 **Not for CTAs.** Patient/clinician `NextSteps` stays a visible grid. Its three tiers are the
 conversion path and each card is itself an `<a>`; putting two of three behind an interaction
@@ -472,9 +535,32 @@ works directly against what the section is for. Length is not the thing to optim
 - **Nothing leaves the DOM.** Collapsed bodies are clipped (`grid-template-rows: 0fr`), hidden
   panes are `visibility: hidden` — both still rendered, so every claim, footnote and citation
   is in the HTML for crawlers and AEO. The section gets shorter, not lighter.
-- **The page must not move.** All panes stack in one grid cell so the box is as tall as the
-  tallest — the §6 slider rule. Verified: page height is identical across every item, on both
-  pages, desktop and mobile.
+- **The page must not move — and it takes *two* mechanisms, not one.**
+  1. **The pane column**: all panes stack in one grid cell, so the box is as tall as the tallest
+     — the §6 slider rule.
+  2. **The list column**: a spacer (`.ac-reserve`) at the end of the list holds back whatever the
+     open item's body does *not* use, so the list is always `base + tallest body` regardless of
+     which item is open.
+
+  Mechanism 2 was missing until 2026-09-30 and caused a real bug: clinician Section 2's Buford
+  body is a 22-word sentence (88 px) against 36 px for the other two descriptors, so opening it
+  made the list taller than the pane and pushed the page down 34 px at 1152 px. At 1280 px the
+  pane happened to clear the list by **2 px**, which is why it looked fine at the width it was
+  built at.
+
+  > **Measuring this in the in-app preview needs care.** A hidden Browser pane freezes CSS
+  > transitions, so `grid-template-rows` never animates from `0fr` and the bodies read as
+  > collapsed — every item then measures the same height and the bug hides. Inject
+  > `*{transition:none!important;animation:none!important}` before measuring, and after a
+  > `resize_window` **reload** the page: the `ResizeObserver` that re-measures bodies on a width
+  > change does not fire in a frozen pane either, so the reserve would be stale.
+
+- **Prefer fixing the imbalance over reserving around it.** The spacer guarantees stability, but
+  reserving the tallest body costs that height in *every* state. Where one item's body is the
+  outlier, moving it into that item's pane is better — clinician Section 2 put Buford's sentence
+  in its pane (the thinnest of the three at 168 px natural, against 343 and 316, so the pane
+  column did not grow) and the section went back to its original 560 px instead of a permanent
+  595 px.
 - **Reduced motion is fully manual.** No exceptions, no separate branch — see below.
 - **A pause control** (WCAG 2.2.2), and opening an item pauses it: the reader chose that item,
   so nothing should move under them. The control flips to "Play".
@@ -575,7 +661,7 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 
 | Component | Notes |
 |---|---|
-| `SectionBridge.svelte` | `variant: 'arrow' \| 'quote'`, props `lead` (optional), `emphasis`, `problems` (optional, quote variant only). Full-bleed tinted band. **The page's separator — always exactly one between sections.** Omit `lead` when the bridge copy is a single sentence — a sentence stays in one element. `problems` (`{id, label, text, icon, accentClass}[]`) adds a row of labelled audience statements above the emphasis — side by side when each gets 20rem, stacked below — and then the band shows **no quote glyph** and the rule sits **above** the emphasis, as the divider between problem and answer (the answer is the site's own line, not a quote). Without it the band renders exactly as before. The arrow variant centres its row (`sm:justify-center`), which only moves bridges shorter than the row (home's "Choose Your Journey"). |
+| `SectionBridge.svelte` | `variant: 'arrow' \| 'bridge'`, props `lead` (optional), `emphasis`, `problems` (optional, bridge variant only). Full-bleed tinted band. **The page's separator — always exactly one between sections.** Omit `lead` when the bridge copy is a single sentence — a sentence stays in one element. **No variant draws a quotation mark** (2026-09-30, owner: the bridge copy is the site's own line, not a quotation; the variant was called `'quote'` until then). **The rule is a divider, never an underline:** in the `bridge` variant it sits between `lead` and `emphasis`, and a bridge with only `emphasis` carries no rule at all. `problems` (`{id, label, text, icon, accentClass}[]`) adds a row of labelled audience statements above the emphasis — side by side when each gets 20rem, stacked below — and the rule then divides the problems from the answer. The problem labels are `eyebrow` pills in their own persona's pop. The arrow variant centres its row (`sm:justify-center`), which only moves bridges shorter than the row (home's "Choose Your Journey"). **`tone: 'tint' \| 'solid'`** (arrow variant, default `'tint'`): `'solid'` swaps the mist band for the persona's `.surface-solid` fill with white text and a glass arrow chip — the surface of the solid `SupportCenterCard`. Used once: the patient page's bridge into the stories, which matches the "Want to hear more patient stories?" card below it (owner direction 2026-09-29). Keep it rare — a solid bridge is louder than a solid CTA. |
 | `BenefitCard.svelte` | Icon chip + title + body, optional `source` citation line (design system §9 — a card that carries a clinical claim carries its source). **Its chip+title treatment is the shared vocabulary** the testimonial theme labels rhyme with. |
 | `TestimonialCard.svelte` | Theme chip+label (BenefitCard vocabulary), real `<blockquote>`/`<footer>`, optional story link (omit `linkLabel`/`href` when a grid shares one "read all" band, as the clinician page does). |
 | `StatCard.svelte` | Icon chip + serif `highlight` + body + optional `source` citation. Extracted from `EvidenceOutcomes`; also the home page's "The numbers" row. |
@@ -586,13 +672,13 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 | `ProductCallouts.svelte` | The 3×3 device diagram — see §8. Callouts may carry an optional `description` (the client's technical figure notes); it is hidden below `sm`, where a corner cell is ~80px wide. |
 | `VideoFacade.svelte` | Click-to-load video; **nothing is fetched until the viewer presses play**. `sources={{ webm?, mp4 }}` → a self-hosted native `<video>` (preferred: no third party is contacted at all); `videoId` → a `youtube-nocookie` embed. Neither → "Coming soon" placeholder. Also `poster`, `caption`, `duration`. **Never show a fake duration.** `captionPosition`: `'below'` (default) \| `'above'` — the caption becomes the video's lead-in, first child of the `<figure>` (home page only). `posterBar` (optional, 0–1): the height fraction of a caption bar burned into the bottom of a 16:9 poster — the duration pill is then centred in it (`bottom: posterBar × 50%` + `translate-y-1/2`) and scales with the video in `cqi` so it fits the bar even at phone width (~21px). A fixed `bottom-3` only lined up at one width (2026-09-28). The home poster's bar is 83/720, measured; re-measure if the poster is re-exported. Without it the pill keeps its fixed `bottom-3 right-3`. |
 | `ImagePlaceholder.svelte` | Dashed accent frame + photo icon + a proposed image `description`. Marks where a real asset should go so the client knows what to supply; swap for `<enhanced:img>` on delivery. |
-| `AutoAccordion.svelte` | The autonomous accordion — **see §6a for the conditions of use, which are binding.** Props: `items` (`{id, title, body?, icon?, seconds?}`), `controlLabel` (names the pause button), `autoplay`, and a `panel` snippet rendered once per item. Optional `group` on an item labels a run of consecutive items and wraps it in a `role="group"`. Takes its accent from the enclosing scope. |
+| `AutoAccordion.svelte` | The autonomous accordion — **see §6a for the conditions of use, which are binding.** Props: `items` (`{id, title, body?, icon?, seconds?}`), `controlLabel` (names the pause button), `autoplay`, and a `panel` snippet rendered once per item. Optional `group` on an item labels a run of consecutive items and wraps it in a `role="group"`. Takes its accent from the enclosing scope, **or per item from `accentClass`** (2026-09-29): an `.accent-*` class applied to that item's header, its pane and — from the run's first item — its group label, so another persona's content keeps its own colour (§1). The open item's icon chip is filled (`.brand-pill`). |
 
 Home page (`src/lib/components/home/`) — two sections below the hero since the 2026-09-27 redesign:
 
 | Component | Notes |
 |---|---|
-| `HeroAudienceCards.svelte` | The two audience cards in the hero (replaced `KeyBenefits`, 2026-09-27). Each `<article>` in its own `.accent-*` scope: persona chip + eyebrow, serif `h2` (ids `benefits-patients` / `benefits-clinicians`), brand-teal ticks, and a footer link whose `::after` stretches over the card — the **whole card is the link** and the focus ring surrounds it. Intrinsic grid (`minmax(min(100%, 16.5rem), 1fr)`); wrapper `flex-col` + `article h-full` keep both cards one height with the footers level. No `use:reveal` (above the fold). |
+| `HeroAudienceCards.svelte` | The two audience cards in the hero (replaced `KeyBenefits`, 2026-09-27). Each `<article>` in its own `.accent-*` scope: persona chip + eyebrow, serif `h2` (ids `benefits-patients` / `benefits-clinicians`), brand-teal ticks, and a footer link whose `::after` stretches over the card — the **whole card is the link** and the focus ring surrounds it. **The arrow chip is inside the `<a>`** (a solid `.accent-pill` circle): as a sibling its hover `translate-x` lifted it into its own stacking layer above the `::after`, and a click on the arrow hit nothing (fixed 2026-09-29). Link labels: "Patient benefits" (owner direction 2026-09-29, was "What to expect") / "Clinical use & evidence". Intrinsic grid (`minmax(min(100%, 16.5rem), 1fr)`); wrapper `flex-col` + `article h-full` keep both cards one height with the footers level. No `use:reveal` (above the fold). |
 | `QuoteRotator.svelte` | The hero's rotating testimonial panel — **see §6b for its conditions**. Props `items` (`{quote, author, subAuthor?, seconds?}`), `label`, `class` (placement only). |
 | `HowItWorks.svelte` | **Section 2**, `id="how-it-works"` + `scroll-mt-24` (the hero's "See how it works" target): header + intro, the `ProductCallouts` diagram in a `.surface-card`, then a `[3fr_2fr]` row pairing the 30-second animation (caption **above** it) with the second-line explanation. |
 | `ChooseJourney.svelte` | **Section 3**: three journey cards (`.accent-pill`, each in its own accent scope) + the Support Center shortcut. Its `h2` is `sr-only` — the bridge above reads "Choose Your Journey" (D14). **Carries `id="support"`** — see §2. |
@@ -606,9 +692,9 @@ Patient page (`src/lib/components/patients/`) — four sections since the 0831 r
 | `WhyChoose.svelte` | **Section 1**: the hero photo with the serif `h1` in a frosted glass panel **on** the image (docx: "text on top/top-right"), the intro sentence below it, then the four benefits as an `AutoAccordion` (§6a) and the `IndicationsStrip`. Its headers carry **no icon chip** — with one the 4-item list is 296 px against a 208 px grid; without, 251 px, and the icon moves to the pane. All four benefit *titles* stay visible; only the bodies collapse. *Trades +43 px desktop for −223 px mobile — the only section here that costs desktop height, taken because mobile is the viewport that is too long.* LCP image → `fetchpriority="high"`. The panel is `self-end sm:self-start` — at 375px the crop puts the subject's face at the top, so the headline drops to the bottom. |
 | `PatientStories.svelte` | **Section 2**: header + the four stories as an `AutoAccordion` (§6a) — theme label in the list; quote, attribution and that person's "read my story" link in the pane — then "more stories" (`SupportCenterCard` reuse). *729 → 731 px desktop (unchanged), 1 930 → 1 430 px mobile — this one is bought entirely for the phone.* |
 | `OutcomesChart.svelte` | *(now in `shared/`)* Two single-series labeled-bar lists on a shared 0–100% scale. `heading`/`intro` are **optional** — inside an accordion pane the item header already carries them. |
-| `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. `heading` is **optional** for the same reason as `OutcomesChart`'s. It now lives inside an `AutoAccordion` pane — a manual slider nested in an accordion pane is a wrinkle worth revisiting (promoting the three quotes to accordion items would remove it, at the cost of retiring this component). |
+| `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. Accents from the enclosing scope (2026-09-29) — on the patient page its accordion item is `accent-clinician`. `heading` is **optional** for the same reason as `OutcomesChart`'s. It now lives inside an `AutoAccordion` pane — a manual slider nested in an accordion pane is a wrinkle worth revisiting (promoting the three quotes to accordion items would remove it, at the cost of retiring this component). |
 | `EvidenceOutcomes.svelte` | **Section 3**: stat cards stay a visible row, then chart / expert consensus / clinician quotes become an `AutoAccordion` (§6a) — three parallel answers to "what does the research show?", each with its own visual. *1 273 → 859 px desktop.* |
-| `NextSteps.svelte` | **Not an accordion** (§6a — CTAs stay visible). Section 4 composition: CTA tiers (primary wears the home audience-card gradient via scoped `.cta-primary`; others = home support-card neutral), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
+| `NextSteps.svelte` | **Not an accordion** (§6a — CTAs stay visible). Section 4 composition: CTA tiers (primary is the `.surface-solid` gradient language via scoped `.cta-primary`, read from the scope; others are `.surface-card` — were slate-50 until 2026-09-29), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
 | `HowItWorks.svelte` | **Parked** — "how does it work?" is a homepage question now. Kept for the homepage rebuild; not rendered. |
 
 Clinician page (`src/lib/components/clinicians/`) — six sections since the 0831 restructure; the
@@ -616,9 +702,9 @@ route is composition only. All of them take the accent from the page's `.accent-
 
 | Component | Notes |
 |---|---|
-| `ClinicalValue.svelte` | **Section 1**: serif `h1` + accent rule + two intro paragraphs, `ImagePlaceholder` beside them (the hero photo is still a pending client asset), then the two benefit groups as an `AutoAccordion` (§6a) — the **group** is the item and its three benefits are the pane, which is the docx's "1 box for the 3 patient benefit, 1 box for the clinician benefit … can be sliders as well to save space" almost literally. Keeping a group's three benefits together also keeps them comparable. *1 172 → 1 052 px desktop, 2 265 → 1 717 px mobile — the modest desktop figure is because the hero row and header, not the benefits, are most of this section.* |
+| `ClinicalValue.svelte` | **Section 1**: serif `h1` + accent rule + two intro paragraphs, `ImagePlaceholder` beside them (the hero photo is still a pending client asset), then the two benefit groups as **two boxes** — the docx's "1 box for the 3 patient benefit, 1 box for the clinician benefit". Each box is a `.surface-card` `<article>` with a solid `--accent-solid` header (icon + `h3`) and its three benefits, in its own persona scope: "For Your Practice" clinician, "For Your Patients" **patient** (§1, cross-persona colours). **From 48rem the two sit side by side, always visible; below it they share one cell behind two side tabs** (§6a, owner direction 2026-09-29 — it was an `AutoAccordion` at every width). Measured: 596px cards at 1280 (equal height); at 375 a 44px tab column beside a 279px card, page height identical across tabs, no horizontal scroll. |
 | `ClinicalEvidence.svelte` | **Section 2**: the same three named studies, now an `AutoAccordion` (§6a) — each study's docx label is the header, its descriptor the summary line, and its visual the pane: a `<dl>` row of three serif figures (Lovász), `DonutStat` + a two-row bar list (Pothoven), the recognition figure (Buford). All three panes are `surface-card`. Footnotes and citations stay in the panes. *967 → 533 px desktop, 1 931 → 1 134 px mobile.* |
-| `SocialProof.svelte` | **Section 3**: the "Trusted Worldwide" `StatCard`s stay a visible row (glanceable trust, ~150px), then all six quotes are one `AutoAccordion` (§6a) with the docx's two headings as `group` labels — theme label in the list, quote + attribution in the pane. The two Support Center cards sit side by side below (the audit's §4.4 merge still needs the client to say which copy survives). *1 375 → 1 058 px desktop, 3 019 → 2 083 px mobile.* |
+| `SocialProof.svelte` | **Section 3**: the "Trusted Worldwide" `StatCard`s stay a visible row (glanceable trust, ~150px), then all six quotes are one `AutoAccordion` (§6a) with the docx's two headings as `group` labels — theme label in the list, quote + attribution in the pane; the patient run is `accentClass: 'accent-patient'`. The two Support Center cards sit side by side below (the patient one in the patient scope) (the audit's §4.4 merge still needs the client to say which copy survives). *1 375 → 1 058 px desktop, 3 019 → 2 083 px mobile.* |
 | `Implementation.svelte` | **Section 4**: the docx's three blocks as an `AutoAccordion` (§6a) — each block title is already a claim, and the pane answers it: five indication icon chips (chips in one card, **not** five nested cards — that would stack surfaces, §4), the six-item workflow checklist, and the three-step learning `<ol>` with static ↓ marks + resource pills. Only the indications block has a docx lead sentence, so only that item reveals a body. *820 → 532 px desktop, 1 723 → 998 px mobile.* |
 | `NextSteps.svelte` | **Section 5**: three CTA tiers, one link each. Primary tier is `.accent-pill`, not the patient page's scoped gradient. |
 | `SupportClosing.svelte` | **Section 6**: the Support Center box **and** the docx's closing statement in one full-bleed band — a bridge or a second band stacked here would put two tinted surfaces back to back. |
@@ -627,8 +713,9 @@ route is composition only. All of them take the accent from the page's `.accent-
 *(`ImagePlaceholder` sits in the patient page's Section 2/3 headers: a two-column
 `lg:grid-cols-[1fr_auto]`, image `lg:w-72`, stacking below the heading on mobile.)*
 
-`ClinicianQuotes` is still under `patients/` and still hardcodes patient blue — promote it to
-`shared/` and swap its accents for `--accent-ink` at the moment a second page needs it.
+`ClinicianQuotes` is still under `patients/`; its accents were swapped for `--accent-ink` on
+2026-09-29 (it now renders in clinician teal on the patient page). Promote it to `shared/` when
+a second page needs it.
 
 ---
 
@@ -689,7 +776,7 @@ Worth its own section — it took several iterations, and the constraints are ea
   image, leaders and label text scale down instead.
 - **No icons on the labels.** The leader lines carry the label→device association.
 - **Leader lines:** inline SVG, `viewBox="0 0 48 36"`, 1.25px line + 2.5r dot at the device end,
-  `text-patient/45 dark:text-sky-300/45`, `w-8 h-6 sm:w-12 sm:h-9`. Four directions
+  `text-(--accent-ink)/45`, `w-8 h-6 sm:w-12 sm:h-9`. Four directions
   (side × pos) so every line converges on the device.
 - **Vertical alignment inside a corner cell** — the subtle part:
   - Corner cells `self-stretch` to fill their grid row (otherwise there's no room to align in and
@@ -748,8 +835,11 @@ Worth its own section — it took several iterations, and the constraints are ea
 
 - Semantic landmarks; `<section aria-labelledby>` + a real heading. Eyebrows are not headings.
 - Decorative imagery `alt=""` + `aria-hidden` where appropriate; the message lives in the text.
-- Visible focus: `focus-visible:ring-2 ring-patient dark:ring-sky-300`.
-- Targets ≥24px. Contrast-check accents (patient blue passes on white; use `sky-300` on navy).
+- Visible focus: `focus-visible:ring-2 ring-(--accent-ink)` (or `outline-(--brand-ink)` on
+  brand affordances).
+- Targets ≥24px. Contrast-check accents — the measured persona inks and pops are in §1; a bright
+  palette colour (cerulean, coral, sun, aqua, lilac) is never small text on a light surface,
+  only a fill under navy text or ink on dark.
 - Quotes are `<blockquote>`/`<footer>`, not styled divs.
 - Any slider/carousel: pause on hover+focus, static under reduced motion.
 
@@ -764,10 +854,9 @@ provenance and open items. The notes below are what the build actually followed.
 
 The clinician page is the same system with different parameters — **do not fork patterns**:
 
-- **Accent:** `--color-clinician` (#2c8979) everywhere the patient page uses `--color-patient`.
-  Dark-mode small-accent swap: **`emerald-300`** (the home page already pairs clinician-teal
-  with emerald-300 checkmarks) — i.e. `text-clinician dark:text-emerald-300`. Derive
-  `--color-clinician-soft`/`-glow` the same way as the patient tints when first needed.
+- **Accent:** the clinician pair (`#166b6a` pine / `#6fc6ca` aqua, §1) wherever the patient page
+  uses the patient pair — set by `.accent-clinician`, never written per component. *(Until
+  2026-09-29: `#2c8979` with an `emerald-300` dark ink.)*
 - **Colour, in one class:** `<div class="bg-persona-page accent-clinician">`. That is the whole
   retint — `.surface-card/panel/solid`, every `.tint-band`, the `.nav-gradient` header and every
   `--accent-ink` inside the shared components follow. See §1 and `AudienceStub.svelte`.
@@ -777,9 +866,9 @@ The clinician page is the same system with different parameters — **do not for
 - **Same components, new content module** (`src/lib/content/clinicians.ts`): `SectionBridge`,
   `VideoFacade` (poster + nocookie embed), `SupportCenterCard`, `BenefitCard`,
   `TestimonialCard` (peer quotes), `OutcomesChart` (the evidence data is persona-neutral —
-  chart series tokens stay as validated), `ClinicianQuotes`. Where a component still hardcodes
-  patient classes (`text-patient dark:text-sky-300` etc.), parameterise it *at that moment*
-  (accent prop or CSS variable) rather than duplicating the file.
+  chart series tokens stay as validated), `ClinicianQuotes`. If a component ever hardcodes a persona
+  colour, parameterise it *at that moment* (accent prop or CSS variable) rather than duplicating
+  the file.
 - **Register shifts, rules don't:** clinician copy may be more technical (docx will provide),
   but claims stay verbatim-from-docx, sources stay cited, motion stays the three verbs, and the
   serif stays display-only.

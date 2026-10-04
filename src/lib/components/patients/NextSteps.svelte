@@ -5,12 +5,13 @@
 
   type Cta = (typeof nextSteps.ctas)[number];
 
-  // CTA tiers: primary wears the home page's audience-card gradient language;
-  // the other tiers are neutral cards (home support-card style).
+  // CTA tiers: primary is the solid persona gradient (scoped `.cta-primary`);
+  // the other tiers are persona-tinted cards, as on the clinician page
+  // (2026-09-29: were slate-50 — more contrast against the canvas).
   const cardClass = (cta: Cta) =>
     cta.tier === 'primary'
-      ? 'group cta-primary transition-[background] rounded-2xl p-6 flex flex-col text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-300'
-      : 'group bg-slate-50 hover:bg-slate-100 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] border border-slate-200 dark:border-white/15 transition-colors rounded-2xl p-6 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-patient dark:focus-visible:ring-sky-300';
+      ? 'group cta-primary transition-[background] rounded-2xl p-6 flex flex-col text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-(--accent-ink)'
+      : 'group surface-card rounded-2xl p-6 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink)';
 </script>
 
 <!-- Card interior, shared by the on-site and off-site anchors below. -->
@@ -19,7 +20,7 @@
   <span
     class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 {primary
       ? 'bg-white/20'
-      : 'bg-white dark:bg-navy-800 border border-patient/20 dark:border-sky-300/25 text-patient dark:text-sky-300'}"
+      : 'bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink)'}"
     aria-hidden="true"
   >
     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={cta.icon} /></svg>
@@ -28,16 +29,14 @@
   <p class="mt-1.5 text-sm leading-relaxed flex-1 {primary ? 'text-white/85' : 'text-slate-600 dark:text-slate-300'}">
     {cta.body}
   </p>
-  <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium {primary ? '' : 'text-patient dark:text-sky-300'}">
+  <span class="mt-4 inline-flex items-center gap-1.5 text-sm {primary ? 'font-semibold' : 'font-medium text-(--accent-ink)'}">
     {cta.linkLabel}{#if cta.externalHref}<span class="sr-only"> (opens in a new tab)</span>{/if}
     <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
   </span>
 {/snippet}
 
 <section aria-labelledby="next-steps-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
-    {nextSteps.eyebrow}
-  </p>
+  <p class="eyebrow">{nextSteps.eyebrow}</p>
   <h2
     id="next-steps-heading"
     class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
@@ -73,7 +72,7 @@
   <div use:reveal class="mt-6 rounded-2xl surface-panel p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-x-10 gap-y-6 items-center">
     <div class="flex items-start gap-4">
       <span
-        class="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 text-patient dark:text-sky-300 flex items-center justify-center shrink-0"
+        class="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 text-(--accent-ink) flex items-center justify-center shrink-0"
         aria-hidden="true"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
@@ -83,7 +82,7 @@
         <p class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{nextSteps.diveDeep.body}</p>
         <a
           href={nextSteps.diveDeep.href}
-          class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-patient dark:text-sky-300 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-patient dark:focus-visible:ring-sky-300 rounded-sm"
+          class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink) rounded-sm"
         >
           {nextSteps.diveDeep.linkLabel}
           <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
@@ -94,7 +93,7 @@
       {#each nextSteps.diveDeep.items as item (item.label)}
         <li class="flex flex-col items-center gap-2 text-center">
           <span
-            class="w-10 h-10 rounded-full bg-white dark:bg-navy-800 border border-patient/20 dark:border-sky-300/25 text-patient dark:text-sky-300 flex items-center justify-center"
+            class="w-10 h-10 rounded-full bg-white dark:bg-navy-800 border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center"
             aria-hidden="true"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={item.icon} /></svg>
@@ -117,7 +116,7 @@
         <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 text-pretty">
           {nextSteps.closing.body}
         </p>
-        <div class="mt-7 h-0.5 w-12 mx-auto lg:mx-0 rounded-full bg-patient/50 dark:bg-sky-300/60" aria-hidden="true"></div>
+        <div class="mt-7 h-0.5 w-12 mx-auto lg:mx-0 rounded-full bg-(--accent-ink)/50 dark:bg-(--accent-ink)/60" aria-hidden="true"></div>
         <p class="mt-7 font-display font-semibold text-navy-950 dark:text-white text-[clamp(1.35rem,2.6vw,1.9rem)] leading-snug text-balance">
           &ldquo;{nextSteps.closing.callback}&rdquo;
         </p>
@@ -135,11 +134,16 @@
 </div>
 
 <style>
-  /* Same gradient language as the home page's patient audience card */
+  /* The .surface-solid gradient language (deep → a little of the bright
+     partner), read from the page's accent scope rather than hardcoded. */
   .cta-primary {
-    background: linear-gradient(135deg, var(--color-patient) 0%, color-mix(in srgb, var(--color-patient) 85%, white) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--accent-solid) 0%,
+      color-mix(in srgb, var(--accent-solid) 78%, var(--surface-accent)) 100%
+    );
   }
   .cta-primary:hover {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--color-patient) 85%, black) 0%, var(--color-patient) 100%);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-solid) 85%, black) 0%, var(--accent-solid) 100%);
   }
 </style>

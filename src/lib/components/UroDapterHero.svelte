@@ -138,9 +138,7 @@
 
       <div class="hero-cards">
         <!-- Only while the cards follow the chip; from md they sit on the photo. -->
-        <p class="md:hidden mt-8 mb-3 text-xs font-semibold uppercase tracking-[0.1em] text-slate-600 dark:text-slate-400">
-          {hero.choosePathLabel}
-        </p>
+        <p class="md:hidden mt-8 mb-3"><span class="eyebrow">{hero.choosePathLabel}</span></p>
         <!-- In flow, never absolutely positioned: only the negative margin pulls
              them over the photo, so taller cards push the strip down instead of
              sliding under it. -->

@@ -53,6 +53,11 @@ Asztali (1280×900), a hídsávokkal együtt:
 | 6 | `SupportClosing` | 563 | 7,9 |
 | | **négy hídsáv összesen** | **1 039** | **14,6** |
 
+> **Megjegyzés (2026-09-30).** A táblázat a 2026-09-09-i állapotot méri. Azóta a `SectionBridge`
+> `'quote'` variánsa `'bridge'` nevet kapott, és megszűnt a szövegek fölötti idézőjeles kör, az
+> egymondatos hídsávokból pedig a vízszintes vonal is. A fenti két „bridge (quote)" sor ezért ma
+> alacsonyabb; a számokat nem mértük újra.
+
 A `SocialProof` belső bontása: fejléc ~87 · klinikus idézetek 276 + disclaimer 16 + Support Center
 kártya 136 · „Trusted Worldwide" számok 149 · páciens idézetek 237 + második Support Center kártya
 134 (a maradék a `mt-12` térközök).

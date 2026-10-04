@@ -47,7 +47,12 @@
     <!-- Section 1: why patients choose UroDapter -->
     <WhyChoose />
 
-    <SectionBridge variant={bridgeStories.variant} lead={bridgeStories.lead} emphasis={bridgeStories.emphasis} />
+    <SectionBridge
+      variant={bridgeStories.variant}
+      tone={bridgeStories.tone}
+      lead={bridgeStories.lead}
+      emphasis={bridgeStories.emphasis}
+    />
 
     <!-- Section 2: patient experiences -->
     <PatientStories />

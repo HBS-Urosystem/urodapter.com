@@ -11,9 +11,7 @@
 <section aria-labelledby="evidence-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
   <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
     <div>
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-patient dark:text-sky-300">
-        {evidence.eyebrow}
-      </p>
+      <p class="eyebrow">{evidence.eyebrow}</p>
       <h2
         id="evidence-heading"
         class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"

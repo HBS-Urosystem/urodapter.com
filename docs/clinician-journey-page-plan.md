@@ -69,19 +69,19 @@ homepage rebuild. `ClinicianHero`, `ClinicalBenefits`, `Indications`, `EvidenceA
 
 ```
 SiteHeader (solid, .nav-gradient teal)
-1  ClinicalValue      Clinical Value for You and Your Patients   hero + AutoAccordion: 2 groups × 3 benefits
+1  ClinicalValue      Clinical Value for You and Your Patients   hero + 2 boxes × 3 benefits (side by side ≥ md; side tabs on a phone — 2026-09-29)
    bridge (arrow)
 2  ClinicalEvidence   What the Clinical Evidence Shows           AutoAccordion: 3 figures · ring + bars · review
-   bridge (quote)
+   bridge (statement)
 3  SocialProof        Trusted in everyday clinical practice      numbers · AutoAccordion: 3 clinician + 3 patient quotes
    bridge (arrow)
 4  Implementation     Easy to introduce into clinical practice   AutoAccordion: indications · workflow · learning path
-   bridge (quote)
+   bridge (statement)
 5  NextSteps          What would you like to do now?             3 CTA tiers
    SupportClosing     Support Center box + the closing statement
 ```
 
-Four bridges for five open sections, alternating arrow → quote → arrow → quote, exactly as the
+Four bridges for five open sections, alternating arrow → statement → arrow → statement, exactly as the
 patient page. Section 6 is folded into `SupportClosing` so the page does not stack a bridge on top
 of the closing band. Copy lives in
 [`src/lib/content/clinicians.ts`](../src/lib/content/clinicians.ts); the route is composition only.
@@ -128,11 +128,18 @@ The two Support Center cards now sit side by side rather than stacked (~135 px).
 accent — design system §1); the SVG is `aria-hidden` and the percentage is real text.
 
 **Since 2026-09-13 the three blocks are an `AutoAccordion`** (design system §6a), not three
-stacked cards: each study's docx label is the header, its descriptor line the summary (Buford:
-its recognition sentence), and the visual above is the pane. All three panes are `surface-card`
+stacked cards: each study's docx label is the header, its descriptor line the summary, and the
+visual above is the pane. All three panes are `surface-card`
 — a pane that switched to `surface-panel` read as a glitch when it faded in where a card had
 been. Every footnote and citation is still in the DOM. **967 → 533 px desktop, 1 931 → 1 134 px
 mobile.**
+
+**2026-09-30 — Buford's finding sentence moved into its pane.** It used to be the accordion
+body, where at ~3 lines against one line for the other two descriptors it made the list column
+taller than the pane and pushed the page down 34 px at 1152 px (design system §6a). The review
+item now has no body; its pane — the thinnest of the three, 168 px natural against 343 and 316 —
+carries the sentence, so the pane column did not grow and the section returned to 560 px. The
+copy is unchanged and still verbatim; only its placement within the section moved.
 
 ### Section 4 — the three implementation blocks
 

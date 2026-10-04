@@ -28,6 +28,11 @@ an enclosing `.accent-patient` / `.accent-clinician` / `.accent-distributor` sco
 patient blue in them, and never declare `--surface-accent` / `--band-accent` / `--nav-accent` on a
 styled element — that breaks retinting (design system §1).
 
+**Palette (2026-09-29):** every colour comes from the client's brand guide — 60% primary
+(`#072c3f` `#0b3b54` `#52b2d6` `#c7e1f0`), 30% complementary (the UroDapter product palette), 10%
+secondary (coral, sun … as pops: the `eyebrow` pills). Personas are deep + bright pairs; persona
+colours may appear on each other's pages via a scoped `.accent-*` class. Design system §1.
+
 **Brand highlight:** `--brand-ink` / `--brand-fill` / `--brand-soft` / `.brand-pill` are the logo
 teal (`--color-brand`: `#02979d` light, `#78c7c9` dark). They are *page-independent* — declared once on `:root`, never
 inside an `.accent-*` scope — and carry the interaction affordances and highlight marks

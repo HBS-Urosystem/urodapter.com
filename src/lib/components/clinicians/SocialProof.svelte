@@ -25,9 +25,7 @@
      accordion's two labelled groups. The numbers row stays outside the
      accordion: it is the glanceable trust signal and only costs ~150px. -->
 <section aria-labelledby="social-proof-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-(--accent-ink)">
-    {socialProof.eyebrow}
-  </p>
+  <p class="eyebrow">{socialProof.eyebrow}</p>
   <h2
     id="social-proof-heading"
     class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
@@ -81,11 +79,14 @@
       linkLabel={socialProof.clinicians.more.linkLabel}
       href={socialProof.clinicians.more.href}
     />
-    <SupportCenterCard
-      heading={socialProof.patients.more.heading}
-      body={socialProof.patients.more.body}
-      linkLabel={socialProof.patients.more.linkLabel}
-      href={socialProof.patients.more.href}
-    />
+    <!-- Leads to the patient journey, so it wears the patient colour. -->
+    <div class="accent-patient grid">
+      <SupportCenterCard
+        heading={socialProof.patients.more.heading}
+        body={socialProof.patients.more.body}
+        linkLabel={socialProof.patients.more.linkLabel}
+        href={socialProof.patients.more.href}
+      />
+    </div>
   </div>
 </section>

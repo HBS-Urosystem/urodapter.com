@@ -11,7 +11,7 @@
 > | # | Block | Component | Source |
 > |---|---|---|---|
 > | — | Hero: regulatory pill, headline, body, "See how it works" / "Talk to our team", product chip, framed photo with the rotating testimonials, two audience cards (whole card = link), credibility strip, regulatory line | `UroDapterHero`, `home/HeroAudienceCards`, `home/QuoteRotator` | Owner-approved mockup copy (2026-09-27); testimonials and regulatory line unchanged |
-> | — | bridge (quote + problems): "For patients" / "For clinicians" problem lines, then *"A simple idea can make a remarkable difference."* | `SectionBridge` (`problems`) | docx "Why Heroes Care" lines, verbatim (moved out of the cards) + the docx How-It-Works headline |
+> | — | bridge (`bridge` variant + problems): "For patients" / "For clinicians" problem lines, then *"A simple idea can make a remarkable difference."* | `SectionBridge` (`problems`) | docx "Why Heroes Care" lines, verbatim (moved out of the cards) + the docx How-It-Works headline |
 > | 2 | How It Works — one-sentence intro, product diagram, caption above the 30-second animation, explanation | `home/HowItWorks.svelte` | docx, with owner wording D9–D12 |
 > | — | bridge (arrow): *"Choose Your Journey"* | `SectionBridge` | owner wording (D14) |
 > | 3 | Choose Your Journey (sr-only `h2`, 3 cards) + Support Center shortcut | `home/ChooseJourney.svelte` | docx, clinician card D13 |
@@ -34,7 +34,8 @@
 >
 > 1. **Contact destination.** "Contact us" and "Talk to our team" point at `#support` as
 >    placeholders (`TODO(placeholder): contact route`). A contact route or form is needed.
-> 2. **Card deep links (optional).** "What to expect" and "Clinical use & evidence" go to the page
+> 2. **Card deep links (optional).** "Patient benefits" (owner rename 2026-09-29, was "What to
+>    expect") and "Clinical use & evidence" go to the page
 >    roots; deep links (`/clinicians#…`) could replace them once those sections carry stable ids.
 > 3. **Client sign-off.** The hero copy now differs from the client docx (D5/D6). Record the
 >    client's acknowledgement here.
@@ -78,7 +79,7 @@
 > |---|---|---|---|
 > | — | Hero: headline + subheadline on the image, product chip, credibility strip, regulatory line | `UroDapterHero` | Hero + Credibility |
 > | 1 | Two audience cards — "A Better Experience for Patients" / "A Practical Solution for Clinicians", each with that audience's problem line and three ticks — **plus the two testimonials as a third column** | `home/KeyBenefits.svelte` | Why Heroes Care + Key benefits + the two testimonials |
-> | — | bridge (quote): *"A simple idea can make a remarkable difference."* | `SectionBridge` | the docx's own How-It-Works headline |
+> | — | bridge: *"A simple idea can make a remarkable difference."* | `SectionBridge` | the docx's own How-It-Works headline |
 > | 2 | How It Works — intro, product diagram, second-line explanation, 30-second animation | `home/HowItWorks.svelte` | How It Works |
 > | — | bridge (arrow) | `SectionBridge` | connective, newly written |
 > | 3 | Choose Your Journey (3 cards) + Support Center shortcut | `home/ChooseJourney.svelte` | CTA Cards + Support Center Shortcut |
