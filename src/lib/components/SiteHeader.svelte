@@ -92,10 +92,11 @@
            Height is fluid below md (44px at 375 → 56px at 768) and fixed from
            there.
            Colour (owner direction 2026-09-28), focus ring included: on the
-           `page` variant the brand colour (`text-brand` — #02979d light,
-           #78c7c9 dark; the light ring is 3.55:1 on white, clear of WCAG
-           2.4.11's 3:1). The `solid` bar is dark in both schemes, so it always
-           takes the bright teal, --brand-bright (#78c7c9, 8.95:1 on navy). -->
+           `page` variant the brand colour (`text-brand` — #09979d light,
+           #6fc6ca dark, the brand guideline's teals since 2026-10-05; the
+           light ring is 3.54:1 on white, clear of WCAG 2.4.11's 3:1). The
+           `solid` bar is dark in both schemes, so it always takes the bright
+           teal, --brand-bright (#6fc6ca, 7.36:1 on navy-950). -->
       <div class="@container flex-1 min-w-0">
         <a
           href={resolve('/')}

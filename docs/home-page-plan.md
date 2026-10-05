@@ -296,4 +296,5 @@ claim-free connective tissue.
   built the way `/patients` was — same components, new content module, `.accent-*` on the wrapper.
 - Standalone `→` story links are 20px tall (WCAG 2.2 target-size guidance suggests 24). This is the
   shipped `TestimonialCard` pattern, not new here, but worth revisiting site-wide.
-- Back-porting the serif to the home hero `h1` is still open (design system §3).
+- ~~Back-porting the serif to the home hero `h1`~~ — closed 2026-10-05: the site moved to Source
+  Sans 3 throughout, so there is no serif to back-port (design system §3).

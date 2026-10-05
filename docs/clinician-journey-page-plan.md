@@ -120,9 +120,9 @@ The two Support Center cards now sit side by side rather than stacked (~135 px).
 
 | Block | Docx ask | Built as |
 |---|---|---|
-| Lovász, *Int J Urol* 2019 | "a row of three large evidence figures" | A `.surface-card` with a `<dl>` of three serif figures (1,520 · 98% / 100% · 0 observed), divided by hairline accent rules, then the two docx footnotes and the citation |
+| Lovász, *Int J Urol* 2019 | "a row of three large evidence figures" | A `.surface-card` with a `<dl>` of three display-type figures (1,520 · 98% / 100% · 0 observed), divided by hairline accent rules, then the two docx footnotes and the citation |
 | Pothoven et al., *Continence* 2025 | "a large 74% continuation ring on the left, a short horizontal bar chart on the right" | `shared/DonutStat.svelte` (new) + a two-row bar list, side by side from `sm` up, stacked below it |
-| Buford et al., *Neurourol Urodyn* 2025 | recognition callout | A `.surface-panel` beside the Pothoven card: label, the serif "8 experts from 6 countries", the recognition sentence and the citation |
+| Buford et al., *Neurourol Urodyn* 2025 | recognition callout | A `.surface-panel` beside the Pothoven card: label, the display-type "8 experts from 6 countries", the recognition sentence and the citation |
 
 `DonutStat` draws the arc with the validated `--chart-continuing` token (never the raw persona
 accent — design system §1); the SVG is `aria-hidden` and the percentage is real text.

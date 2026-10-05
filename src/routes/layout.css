@@ -1,20 +1,23 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/source-serif-4';
+@import '@fontsource-variable/source-sans-3';
+@import '@fontsource-variable/source-sans-3/wght-italic.css';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
 /* ---------------------------------------------------------------------------
-   Brand palette — the client's brand guide (owner direction 2026-09-29). Three
-   sets, used in a 60 / 30 / 10 ratio:
+   Brand palette — the UroSystem Brand Guideline 1.0 (2026-10-05; the ratio is
+   owner direction 2026-09-29). Three sets, used in a 60 / 30 / 10 ratio:
 
-     60% PRIMARY        #072c3f #0b3b54 #52b2d6 #c7e1f0 — the structure on every
-                        page: text, the header, dark mode, the canvas and bands.
-     30% COMPLEMENTARY  the UroDapter product palette — #caa8cf #8376a3 #78c7c9
-                        #02979d #005c5b #706f6f #c6c6c6: persona tints and the
-                        brand highlight.
-     10% SECONDARY      #f9e497 #ef797a #f4ded8 #166b6a #23a0a3 #6fc6ca #09979d
-                        #99c7e0 #3e94b7 (+ white): the pops — eyebrow pills,
-                        highlights.
+     60% PRIMARY        UroSystem: #072c3f #0b3b54 #52b2d6 #c7e1f0 — the
+                        structure on every page: text, the header, dark mode,
+                        the canvas and bands.
+     30% COMPLEMENTARY  UroDapter: #166b6a #23a0a3 #09979d #6fc6ca #3e94b7
+                        #99c7e0 (the guideline's UroDapter colour scheme) plus
+                        #caa8cf #8376a3 from the UroDapter brand book (the
+                        distributor persona): persona tints and the brand
+                        highlight.
+     10% SECONDARY      #f9e497 #ef797a #f4ded8 (+ white): the warm pops —
+                        eyebrow pills, highlights.
 
    Every colour on the site is one of these, or a measured shade of one where
    small text needs AA on a light surface. Design system §1.
@@ -29,23 +32,23 @@
   --color-cerulean: #52b2d6;
   --color-mist: #c7e1f0;
 
-  /* Complementary — the UroDapter product palette. Its two teals are the
-     brand highlight (--color-brand / --brand-bright, below). */
-  --color-lilac: #caa8cf;
-  --color-plum: #8376a3;
-  --color-spruce: #005c5b;
-  --color-graphite: #706f6f;
-  --color-silver: #c6c6c6;
-
-  /* Secondary — the 10%. #09979d is the brand teal to the eye; use --color-brand. */
-  --color-sun: #f9e497;
-  --color-coral: #ef797a;
-  --color-blush: #f4ded8;
+  /* Complementary — the UroDapter colours. The guideline pairs them as three
+     gradients: pine → lagoon (45°), aqua → #09979d (-45°), powder → steel
+     (45°). #09979d / aqua are the brand highlight (--color-brand /
+     --brand-bright, below), so they have no colour token of their own here.
+     Lilac and plum come from the UroDapter brand book: the distributor pair. */
   --color-pine: #166b6a;
   --color-lagoon: #23a0a3;
   --color-aqua: #6fc6ca;
   --color-powder: #99c7e0;
   --color-steel: #3e94b7;
+  --color-lilac: #caa8cf;
+  --color-plum: #8376a3;
+
+  /* Secondary — the warm 10%. */
+  --color-sun: #f9e497;
+  --color-coral: #ef797a;
+  --color-blush: #f4ded8;
 
   /* Personas — each one a palette colour (owner direction 2026-09-29; until
      then #18438a / #2c8979 / #8764b9, none of which is in the guide). This is
@@ -56,15 +59,21 @@
   --color-clinician: #166b6a;
   --color-distributor: #8376a3;
 
-  /* Brand highlight — the UroDapter logo teal. Unlike the three persona
-     colours it is constant on every journey page (see the brand scope below),
-     but it is scheme-aware: #02979d in light mode, #78c7c9 in dark (owner
+  /* Brand highlight — the UroDapter teal. Unlike the three persona colours it
+     is constant on every journey page (see the brand scope below), but it is
+     scheme-aware: #09979d in light mode, #6fc6ca in dark (the guideline's
+     UroDapter teal pair, 2026-10-05; until then #02979d / #78c7c9, owner
      direction 2026-09-28; the dark value is redeclared on :root below). The
      logo SVGs in $lib/assets/hero still carry the earlier single #75c6c9. */
-  --color-brand: #02979d;
+  --color-brand: #09979d;
 
-  /* Editorial serif for display headlines (patient-facing pages; 2026 direction) */
-  --font-display: 'Source Serif 4 Variable', ui-serif, Georgia, serif;
+  /* One typeface, Source Sans 3 — the UroSystem Brand Guideline 1.0
+     (2026-10-05; replaced the Source Serif 4 display face and the system sans
+     body). --font-sans retypes every Tailwind default; --font-display is the
+     same family, kept as the role token of the display headlines so their
+     face can be tuned in one place. */
+  --font-sans: 'Source Sans 3 Variable', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Source Sans 3 Variable', 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Derived patient-page tints — not in @theme because they are single-purpose
@@ -93,29 +102,30 @@
    highlight is the constant that ties the journeys together. Declared once on
    :root — never redeclare it inside .accent-patient/-clinician/-etc.
 
-   Per scheme (owner direction 2026-09-28): light #02979d, dark #78c7c9.
-   Measured:
-     · light #02979d on white ............ 3.55:1  → logo / focus ring / fill,
+   Per scheme (2026-10-05, the guideline's UroDapter teals): light #09979d,
+   dark #6fc6ca. Measured (WCAG 2, 2026-10-05):
+     · light #09979d on white ............ 3.54:1  → logo / focus ring / fill,
                                                       NOT small text (< 4.5)
-     · light #02979d under navy-950 text . 5.33:1  → fill OK (hover 4.59:1)
-     · dark #78c7c9 on navy-900 .......... 8.95:1  → text and fill both fine
-     · dark #78c7c9 under navy-950 text .. 9.74:1
+     · light #09979d under navy-950 text . 4.11:1  → not used: the light-mode
+                                                      fill carries white text
+     · dark #6fc6ca on navy-900 .......... 6.00:1  → text and fill both fine
+     · dark #6fc6ca under navy-950 text .. 7.36:1
    So the family splits by job, and each token is measured, not guessed:
 
    --brand-ink    the readable text/border/icon colour. Light mode stays at
-                  oklch(0.48 0.08 198.3) = #096b6e — the brand hue (199.8°)
+                  oklch(0.48 0.08 198.3) = #096b6e — the brand hue
                   darkened to 6.29:1 on white and >=4.60:1 on every
                   card/canvas/bridge tint of all three personas. Dark mode is
-                  the brand colour itself (8.9-9.7:1 on the navy surfaces).
+                  the brand colour itself (6.0-8.8:1 on the navy surfaces).
    --brand-fill   the brand colour as a button/chip background. The text on it
                   is --brand-on-fill: white in light mode (owner direction
-                  2026-09-28 — 3.55:1, AA for large text only), navy in dark
-                  (white on #78c7c9 would be 1.9:1).
+                  2026-09-28 — 3.54:1, AA for large text only), navy in dark
+                  (white on #6fc6ca would be 1.98:1).
    --brand-soft   tint for highlight chips and underlines.
 
    Hue caution: since 2026-09-29 the clinician pair is also from the teal
-   family (#166b6a ink / #6fc6ca dark) — next to #096b6e / #78c7c9 brand ink
-   it is nearly the same colour. On the CLINICIAN page, highlight with the fill
+   family (#166b6a ink / #6fc6ca dark) — next to the #096b6e brand ink it is
+   nearly the same colour, and in dark mode both ARE #6fc6ca (2026-10-05). On the CLINICIAN page, highlight with the fill
    forms (.brand-pill, --brand-fill, --brand-soft), which separate by
    lightness, rather than with --brand-ink next to clinician ink.
    Re-measured on the new tints: --brand-ink ≥ 4.85:1 on every card, panel,
@@ -124,20 +134,21 @@
 :root {
   /* The bright brand teal, scheme-independent: dark mode's brand colour, and
      the logo on surfaces that are dark in BOTH schemes (the journey pages'
-     .nav-gradient header — owner direction 2026-09-28). 8.95:1 on navy-900. */
-  --brand-bright: #78c7c9;
+     .nav-gradient header — owner direction 2026-09-28). The guideline's aqua,
+     6.00:1 on navy-900. */
+  --brand-bright: var(--color-aqua);
   --brand-ink: #096b6e;
   --brand-fill: var(--color-brand);
   --brand-soft: color-mix(in srgb, var(--color-brand) 10%, white);
-  /* Text on --brand-fill. White in light mode by owner direction (3.55:1 on
-     #02979d, 4.12:1 on the hover — below AA's 4.5:1 for normal-size text;
+  /* Text on --brand-fill. White in light mode by owner direction (3.54:1 on
+     #09979d, 4.11:1 on the hover — below AA's 4.5:1 for normal-size text;
      accepted by the owner 2026-09-28). */
   --brand-on-fill: #fff;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --color-brand: var(--brand-bright);
-    /* The only safe text colour on the pale dark-mode fill (9.74:1). */
+    /* The only safe text colour on the pale dark-mode fill (7.36:1). */
     --brand-on-fill: var(--color-navy-950);
     --brand-ink: var(--color-brand);
     --brand-soft: color-mix(in srgb, var(--color-brand) 14%, transparent);

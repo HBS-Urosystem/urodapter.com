@@ -219,7 +219,8 @@ The chip holds nothing focusable, so the visual reordering does not change tab o
   76 px at 1440 and 44 px at 375, matching the mockup.
   - It is one string, and "Catheter‑free" uses a **non-breaking hyphen (U+2011)**, so the line
     never breaks after "Catheter-".
-  - The mockup's H1 is sans. The serif back-port stays out of scope.
+  - The mockup's H1 is sans. The serif back-port stays out of scope. *(2026-10-05: moot — the
+    whole site is Source Sans 3 now, design system §3.)*
 - **Body.** `mt-5 text-lg sm:text-xl leading-relaxed text-slate-600 dark:text-slate-300 max-w-md`.
 
 **Actions and product chip**
@@ -864,7 +865,7 @@ still holds everywhere except these owner-overridden strings.
 
 ## Out of scope
 
-- The serif back-port for the home H1.
+- The serif back-port for the home H1. *(Moot since 2026-10-05: Source Sans 3 throughout.)*
 - `ChooseJourney` beyond D13/D14. It keeps its three cards and the Support Center block.
 - `/patients`, `/clinicians`, `/partners`, apart from the shared header's Contact pill.
 - JSON-LD, `<title>` and meta copy.

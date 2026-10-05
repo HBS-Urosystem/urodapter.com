@@ -98,6 +98,10 @@ display type, and the client's fallback preference was serif too. Implemented as
 applied to patient-page headlines and bridge emphasis. Recommended follow-up: back-port to the
 home hero headline for full coherence (not done yet — the home page look is a separate call).
 
+**Superseded (2026-10-05): serif retired.** The client's UroSystem Brand Guideline 1.0 sets
+Source Sans 3 as the only typeface; the owner adopted it site-wide. `--font-display` now points at
+Source Sans 3 (design system §3). The serif mentions below are build history.
+
 ### Prerequisite refactors (small, do first)
 
 1. **Extract `SiteHeader.svelte`** from `UroDapterHero.svelte` (nav + logo + mobile menu are
@@ -459,7 +463,8 @@ Section 1. The docx's positive closing hero image is a **pending asset**.
 
 **Status (2026-07-14): Sections 1–3 + both bridges are built and verified** (light/dark,
 desktop/mobile, `svelte-check`, eslint, svelte-autofixer). Open-item resolutions:
-- Serif display font: **adopted** (Source Serif 4 Variable; see §1).
+- Serif display font: **adopted** (Source Serif 4 Variable; see §1) — *retired 2026-10-05 for
+  Source Sans 3, the brand guideline's typeface (design system §3).*
 - Section 1 patient photo: **delivered and placed** (`src/lib/assets/patients/patient-hero.jpg`,
   AI watermark cropped out).
 - Video: **embedded** — `x10av1eP8L8` via youtube-nocookie, click-to-load, badge `3:03`

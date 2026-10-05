@@ -19,8 +19,8 @@ To avoid drift, the rules live in one place each — this file only points at th
 | **[docs/clinician-journey-page-plan.md](docs/clinician-journey-page-plan.md)** | Clinician page plan: section-by-section structure, what each client docx comment turned into, copy provenance, open items. |
 | **[src/routes/layout.css](src/routes/layout.css)** | Source of truth for design tokens. |
 
-Several decisions **reversed** an earlier approach (section cards removed, serif adopted, CSS
-scroll-timeline replaced by a JS action). Reading the code alone will reintroduce discarded
+Several decisions **reversed** an earlier approach (section cards removed, serif adopted and
+then retired for the brand guideline's Source Sans 3, CSS scroll-timeline replaced by a JS action). Reading the code alone will reintroduce discarded
 patterns — read the design system doc first.
 
 **Layout note:** shared components live in `src/lib/components/shared/` and take their accent from
@@ -28,13 +28,20 @@ an enclosing `.accent-patient` / `.accent-clinician` / `.accent-distributor` sco
 patient blue in them, and never declare `--surface-accent` / `--band-accent` / `--nav-accent` on a
 styled element — that breaks retinting (design system §1).
 
-**Palette (2026-09-29):** every colour comes from the client's brand guide — 60% primary
-(`#072c3f` `#0b3b54` `#52b2d6` `#c7e1f0`), 30% complementary (the UroDapter product palette), 10%
-secondary (coral, sun … as pops: the `eyebrow` pills). Personas are deep + bright pairs; persona
+**Palette (2026-10-05):** every colour comes from the UroSystem Brand Guideline 1.0 (plus lilac /
+plum from the UroDapter brand book) — 60% primary UroSystem (`#072c3f` `#0b3b54` `#52b2d6`
+`#c7e1f0`), 30% complementary UroDapter (pine, lagoon, `#09979d`, aqua, powder, steel; lilac /
+plum), 10% secondary (sun, coral, blush as pops: the `eyebrow` pills).
+
+**Type (2026-10-05):** Source Sans 3 only (`@fontsource-variable/source-sans-3`, Tailwind's
+`--font-sans`); `--font-display` is the same family, kept as the display-headline role token.
+
+**Icons (2026-10-05):** heroicons outline, plus the client's *vector* brand pictograms where
+heroicons can't draw it; never the Canva-export SVGs (bitmap masks). Design system §5. Personas are deep + bright pairs; persona
 colours may appear on each other's pages via a scoped `.accent-*` class. Design system §1.
 
 **Brand highlight:** `--brand-ink` / `--brand-fill` / `--brand-soft` / `.brand-pill` are the logo
-teal (`--color-brand`: `#02979d` light, `#78c7c9` dark). They are *page-independent* — declared once on `:root`, never
+teal (`--color-brand`: `#09979d` light, `#6fc6ca` dark). They are *page-independent* — declared once on `:root`, never
 inside an `.accent-*` scope — and carry the interaction affordances and highlight marks
 (accordion rail and chips, bridge icons, story links, headline rules). Persona CTAs keep their
 audience colour. Full rationale, measurements and the clinician-page caveat: design system §1.

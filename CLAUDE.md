@@ -20,22 +20,26 @@ Non-negotiables (rationale + specifics in the design system doc):
 - **Sections are not cards.** Section content sits directly on `.bg-page-gradient`; the full-bleed
   `SectionBridge` bands are what separate sections. Exactly one bridge between two sections.
   Container is always `max-w-7xl mx-auto px-5 sm:px-8`.
-- **Colours come only from the client's brand palette**, used **60% primary / 30% complementary /
-  10% secondary** (design system §1, 2026-09-29). Each persona is a deep + bright pair
+- **Colours come only from the client's brand palette** — the UroSystem Brand Guideline 1.0 plus
+  lilac / plum from the UroDapter brand book — used **60% primary (UroSystem) / 30% complementary
+  (UroDapter) / 10% secondary (warm pops)** (design system §1, 2026-10-05). Each persona is a deep + bright pair
   (patient `#0b3b54`/cerulean, clinician `#166b6a`/aqua, distributor `#8376a3`/lilac); eyebrows
   are `class="eyebrow"` pills in the persona's secondary pop. Persona colours may appear on each
   other's pages — scope the other audience's block with its `.accent-*` class.
 - **Dark mode ships with every component.** The deep persona colours *vanish* against the dark
   canvas — write accents as `text-(--accent-ink)` etc.; the scope swaps them to the bright
   partner in dark. Driven by `prefers-color-scheme`; there is no toggle.
-- **Serif (`--font-display`) is for display headlines only** — body, UI and labels stay sans.
-  A headline is one sentence in one element: never split it into an eyebrow + remainder. Eyebrows
-  are separate short labels. Never render "SECTION n" (docx numbering is internal-only).
+- **One typeface: Source Sans 3** (the brand guideline, 2026-10-05) for body, UI, labels and
+  headlines alike. `font-display` stays on display headlines as the role token — it is the same
+  family. A headline is one sentence in one element: never split it into an eyebrow + remainder.
+  Eyebrows are separate short labels. Never render "SECTION n" (docx numbering is internal-only).
 - **Copy lives in `src/lib/content/*.ts`** as typed objects, never inline in components. The client
   docx is the source of truth for wording, and **claims must never be strengthened** — preserve
   "may", "designed to", "many patients". This is a regulated medical device.
-- **Icons: heroicons outline only** — inline the `d` string, draw with `currentColor`, stroke
-  1.5–2. No icon fonts, no second set.
+- **Icons: heroicons outline, plus the client's vector brand pictograms** where heroicons can't
+  draw the thing (conditions, catheter, bladder) — design system §5. Inline the `d` string, draw
+  with `currentColor` (heroicons: stroke 1.5–2; brand pictograms: `fill`). **Never the Canva-export
+  SVGs** from the client's icon folder (bitmap masks — use the heroicon). No icon fonts, no third set.
 - **Motion has exactly three verbs**: the `use:reveal` action, the `→` link-arrow nudge, and the
   bridge arrow. Use `use:reveal` ([src/lib/actions/reveal.ts](src/lib/actions/reveal.ts)) — *not*
   CSS `animation-timeline: view()`, which caused blank compositor paints in Chromium.

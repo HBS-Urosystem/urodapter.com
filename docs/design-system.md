@@ -4,6 +4,17 @@ The binding reference for building anything on this site. It records the decisio
 shipped in code, including the ones that reversed an earlier approach. **Read this before adding a
 section, page, or component.**
 
+> **2026-10-05 — UroSystem Brand Guideline 1.0** (`Brand Identity Codes_UroSystem.pdf` in the
+> client's `urodapter - UX/Képek, design ötletek/` folder). Owner decisions:
+> **(1)** the whole site is set in **Source Sans 3** — the serif display face is retired (§3);
+> **(2)** the palette is regrouped by the guideline: 60% UroSystem primary, 30% the UroDapter
+> colours (pine, lagoon, `#09979d`, aqua, powder, steel) plus lilac / plum from the UroDapter
+> brand book for the distributor, 10% the warm secondaries (sun, coral, blush). The brand teal
+> moved to the guideline's values (`#09979d` light / `#6fc6ca` dark); spruce, graphite and
+> silver are gone (§1); **(3)** the client's Canva-exported icons (bitmap masks, not
+> recolourable) are replaced by heroicons; **(4)** the icon rule now admits the client's
+> *vector* brand pictograms next to heroicons (§5).
+>
 > **2026-09-29 — brand palette.** Every colour now comes from the client's brand guide (three
 > palettes, used **60% primary / 30% complementary / 10% secondary**, §1). The three persona
 > colours were remapped onto it (patient `#0b3b54`, clinician `#166b6a`, distributor `#8376a3`),
@@ -27,22 +38,34 @@ section, page, or component.**
 
 ## 1. Tokens
 
-### The brand palette — 60 / 30 / 10 *(owner direction 2026-09-29)*
+### The brand palette — 60 / 30 / 10 *(ratio: owner direction 2026-09-29; sets: UroSystem Brand Guideline 1.0, 2026-10-05)*
 
-The client's brand guide supplies three palettes, and the owner set their ratio: **60% primary,
-30% complementary ("kiegészítő"), 10% secondary**. Every colour on the site is one of these, or
-a *measured* shade of one where small text needs AA on a light surface. Don't add a colour from
-outside them.
+The colours come from two client documents: the **UroSystem Brand Guideline 1.0** (UroSystem
+primary colours, the UroDapter colour scheme, the secondary colours) and the **UroDapter brand
+book** (lilac and plum). The owner set the ratio: **60% primary, 30% complementary
+("kiegészítő"), 10% secondary**. Every colour on the site is one of these, or a *measured* shade
+of one where small text needs AA on a light surface. Don't add a colour from outside them.
 
 | Set | Share | Colours → tokens | What it carries |
 |---|---|---|---|
-| **Primary** | 60% | `#072c3f` `navy-950` · `#0b3b54` `navy-900` · `#52b2d6` `cerulean` · `#c7e1f0` `mist` | The structure on every page: text, the header, dark mode, the canvas and bridge base, the patient persona |
-| **Complementary** (the UroDapter product palette) | 30% | `#caa8cf` `lilac` · `#8376a3` `plum` · `#78c7c9` `--brand-bright` · `#02979d` `brand` · `#005c5b` `spruce` · `#706f6f` `graphite` · `#c6c6c6` `silver` | Persona tints (distributor), the brand highlight, the home canvas's second glow |
-| **Secondary** | 10% | `#f9e497` `sun` · `#ef797a` `coral` · `#f4ded8` `blush` · `#166b6a` `pine` · `#23a0a3` `lagoon` · `#6fc6ca` `aqua` · `#99c7e0` `powder` · `#3e94b7` `steel` (+ white; `#09979d` is the brand teal to the eye) | The pops — eyebrow pills (coral / sun), the clinician persona (pine + aqua) |
+| **Primary** (UroSystem) | 60% | `#072c3f` `navy-950` · `#0b3b54` `navy-900` · `#52b2d6` `cerulean` · `#c7e1f0` `mist` | The structure on every page: text, the header, dark mode, the canvas and bridge base, the patient persona |
+| **Complementary** (UroDapter) | 30% | `#166b6a` `pine` · `#23a0a3` `lagoon` · `#09979d` `brand` · `#6fc6ca` `aqua` (= `--brand-bright`) · `#99c7e0` `powder` · `#3e94b7` `steel` — from the guideline; `#caa8cf` `lilac` · `#8376a3` `plum` — from the UroDapter brand book | Persona tints (clinician pine + aqua, distributor plum + lilac), the brand highlight, the home canvas's second glow |
+| **Secondary** | 10% | `#f9e497` `sun` · `#ef797a` `coral` · `#f4ded8` `blush` (+ white) | The warm pops — eyebrow pills (coral / sun) and highlights |
 
 In practice the 60% is automatic: navy text, the header, the mist canvas and every dark-mode
 surface are primary on every page. The persona tint is the 30% layer over it, and the pops are
 kept small — **pills and highlights, never a section background**.
+
+**The guideline's gradients** (available, not yet tokens): `#0b3b54 → #072c3f` 45° and
+`#c7e1f0 → #52b2d6` −45° (UroSystem); `#166b6a → #23a0a3` 45°, `#6fc6ca → #09979d` −45° and
+`#99c7e0 → #3e94b7` 45° (UroDapter). Use these pairs, at these angles, when a surface needs a
+brand gradient rather than inventing a stop.
+
+*(Until 2026-10-05 the complementary set also listed `#005c5b` spruce, `#706f6f` graphite and
+`#c6c6c6` silver, and the brand teal was `#02979d` / `#78c7c9`. None of those is in the
+guideline; the three greys were never used outside their token declarations and were removed.
+Pine, lagoon, aqua, powder and steel were listed as secondary; the guideline groups them with
+the UroDapter colour scheme, so they count toward the 30%.)*
 
 Defined in `@theme` (Tailwind v4) in `layout.css`:
 
@@ -55,8 +78,9 @@ Defined in `@theme` (Tailwind v4) in `layout.css`:
 | `--color-patient` | `#0b3b54` | **Patient** persona (deep) |
 | `--color-clinician` | `#166b6a` | **Clinician** persona (deep) |
 | `--color-distributor` | `#8376a3` | **Distributor** persona (deep) |
-| `--color-brand` | `#02979d` light / `#78c7c9` dark | **Brand highlight** — the logo teal. Constant on every page, scheme-aware (2026-09-28) |
-| `--font-display` | `Source Serif 4 Variable` | Editorial serif for display headlines |
+| `--color-brand` | `#09979d` light / `#6fc6ca` dark | **Brand highlight** — the UroDapter teal. Constant on every page, scheme-aware (2026-09-28; guideline values since 2026-10-05) |
+| `--font-sans` | `Source Sans 3 Variable` | The one typeface (UroSystem Brand Guideline 1.0, 2026-10-05) — body, UI, labels |
+| `--font-display` | `Source Sans 3 Variable` | The same family, kept as the display-headline role token (§3) |
 
 **Dark mode is deeper than navy-950 at the top.** The persona and home canvases run `#041c29 →
 #062536 → navy-950`, and dark cards/panels mix their tint into **navy-950, not navy-900**: the
@@ -94,7 +118,7 @@ keeps the surfaces colourful.
 | Persona | Deep (fills, nav, ink base) | Bright (tints; dark-mode ink) | Pop (eyebrow pill) |
 |---|---|---|---|
 | Patient | `#0b3b54` navy-900 (primary) | `#52b2d6` cerulean (primary) | `#ef797a` coral |
-| Clinician | `#166b6a` pine (secondary) | `#6fc6ca` aqua (secondary) | `#f9e497` sun |
+| Clinician | `#166b6a` pine (complementary) | `#6fc6ca` aqua (complementary) | `#f9e497` sun |
 | Distributor | `#8376a3` plum (complementary) | `#caa8cf` lilac (complementary) | `#f9e497` sun |
 
 Each scope sets every token below; `:root` carries the patient set as the default:
@@ -136,35 +160,38 @@ page's clinician quotes are `.accent-clinician`; on the clinician page the patie
 
 ### The brand highlight — `--brand-*` *(2026-09-22)*
 
-A second, **page-independent** accent: the logo teal, **`#02979d` in light mode and `#78c7c9` in
-dark** (owner direction 2026-09-28 — until then it was a single `#75c6c9`, the colour the logo SVG
-files still carry). Where `--accent-*` says *which audience you are reading*, the
+A second, **page-independent** accent: the UroDapter teal, **`#09979d` in light mode and `#6fc6ca`
+in dark** — the guideline's UroDapter teal pair (2026-10-05; `#02979d` / `#78c7c9` from 2026-09-28,
+and before that a single `#75c6c9`, the colour the logo SVG files still carry). Where `--accent-*` says *which audience you are reading*, the
 brand teal says *this is UroDapter* — so it is declared once on `:root` and the `.accent-*` scopes
 never touch it. Do not redeclare it inside a persona scope.
 
 | Token | Light | Dark | Role |
 |---|---|---|---|
-| `--color-brand` | `#02979d` | `#78c7c9` | The brand colour. Tailwind: `text-brand`, `bg-brand`. The header logo uses it. |
-| `--brand-bright` | `#78c7c9` | `#78c7c9` | The bright teal, scheme-independent: dark mode's `--color-brand`, and the logo on surfaces that are dark in both schemes (the journey pages' `.nav-gradient` header). |
-| `--brand-ink` | `#096b6e` | `#78c7c9` | Readable text / icon / border colour. |
-| `--brand-fill` | `#02979d` | `#78c7c9` | Button & chip background (under navy text). |
+| `--color-brand` | `#09979d` | `#6fc6ca` | The brand colour. Tailwind: `text-brand`, `bg-brand`. The header logo uses it. |
+| `--brand-bright` | `#6fc6ca` | `#6fc6ca` | The bright teal (`var(--color-aqua)`), scheme-independent: dark mode's `--color-brand`, and the logo on surfaces that are dark in both schemes (the journey pages' `.nav-gradient` header). |
+| `--brand-ink` | `#096b6e` | `#6fc6ca` | Readable text / icon / border colour. |
+| `--brand-fill` | `#09979d` | `#6fc6ca` | Button & chip background (white text in light, navy in dark). |
 | `--brand-soft` | 10% teal in white | 14% teal alpha | Chip tint. |
-| `--brand-on-fill` | `#fff` | `--color-navy-950` | Text on `--brand-fill`. White in light mode by owner direction (2026-09-28) — **3.55:1, AA only for large text**; navy in dark, where white would be 1.9:1. |
+| `--brand-on-fill` | `#fff` | `--color-navy-950` | Text on `--brand-fill`. White in light mode by owner direction (2026-09-28) — **3.54:1, AA only for large text**; navy in dark, where white would be 1.98:1. |
 | `.brand-pill` | `--brand-fill` + white text | `--brand-fill` + navy text | Brand button; the counterpart to `.accent-pill`. |
 
-**Why the split by job.** Measured: light `#02979d` (OKLCH L 0.62, hue 199.8°) is 3.55:1 on white —
-enough for the logo, a focus ring or a fill (≥ 3:1), not for small text — and 5.33:1 as a *fill*
-under navy-950 text (4.59:1 on its 8%-darker hover). Dark `#78c7c9` (L 0.78, 197.8°) is 8.95:1 as
-text on navy-900 and 9.74:1 as a fill under navy-950 text. So light-mode *text* keeps its own,
+**Why the split by job.** Measured (WCAG 2, re-measured 2026-10-05 on the guideline values):
+light `#09979d` is 3.54:1 on white — enough for the logo, a focus ring or a fill (≥ 3:1), not for
+small text — and only 4.11:1 under navy-950 text, so the light fill carries white text (below).
+Dark `#6fc6ca` is 6.00:1 as text on navy-900, 7.36:1 as a fill under navy-950 text and 8.81:1 on
+the darkest canvas stop. *(The 5.33 / 8.95 / 9.74 figures this paragraph quoted before 2026-10-05
+were measured against the pre-2026-09-29 navy and did not hold on the current one.)* So
+light-mode *text* keeps its own,
 darker ink, `oklch(0.48 0.08 198.3)` = `#096b6e` — the same hue, 6.29:1 on white and ≥4.85:1 on
 every card / canvas / bridge tint of all three personas (re-measured on the 2026-09-29 palette:
 4.85 on the band's mist base, 5.07–5.31 on the deepest panel tints). **Text on the fill is set per scheme by
 `.brand-pill` itself** (`--brand-on-fill`): white in light mode at the owner's request
-(2026-09-28), navy in dark. White on the light fill is **3.55:1 (4.12:1 on hover) — below AA's
+(2026-09-28), navy in dark. White on the light fill is **3.54:1 (4.11:1 on hover) — below AA's
 4.5:1 for normal-size text**; the button's 16px semibold label counts as normal text. It would pass
 if the label were large text (≥ 18.66px bold) or the fill darker; **the owner accepted the
-3.55:1 (2026-09-28)** — don't "fix" it without asking. White on the
-dark-mode fill would be 1.9:1, so never set it there.
+3.55:1 of the earlier `#02979d` (2026-09-28)**, and the guideline's `#09979d` measures the same —
+don't "fix" it without asking. White on the dark-mode fill would be 1.98:1, so never set it there.
 
 **Where it is used** (2026-09-22): interaction affordances and highlight marks, on every journey
 page. Persona CTAs are deliberately *not* included — `.accent-pill`, `.surface-solid` bands and the
@@ -180,7 +207,8 @@ page. Persona CTAs are deliberately *not* included — `.accent-pill`, `.surface
 
 **Known limit — the clinician page.** The clinician colours are teals from the same guide as the
 logo, so on `/clinicians` the brand highlight and the persona accent nearly coincide: light
-`#096b6e` brand ink vs `#166b6a` clinician ink, dark `#78c7c9` vs `#6fc6ca`. The highlight reads
+`#096b6e` brand ink vs `#166b6a` clinician ink, and in dark mode both are `#6fc6ca` (since
+2026-10-05 — the guideline's aqua is the dark brand teal *and* the clinician ink). The highlight reads
 as cohesion rather than emphasis there. If emphasis is wanted, separate by **lightness** — use
 the fill forms (`.brand-pill`, `--brand-fill`, `--brand-soft`) rather than `--brand-ink` next to
 clinician ink.
@@ -399,14 +427,21 @@ sticky header does not cover the heading.
 | Patient page `h1` | `text-[clamp(1.75rem,3.8vw,2.6rem)] leading-[1.15]` |
 | Section `h2` | `text-[clamp(1.6rem,3.2vw,2.25rem)] leading-tight` |
 | Bridge emphasis | `font-display font-semibold text-[clamp(1.35rem,2.6vw,1.9rem)]` |
-| Home hero `h1` | `font-bold tracking-[-0.035em] leading-none text-balance text-[clamp(2.75rem,19.2cqi-1.27rem,4.75rem)]` (still sans). Sized by its **column** (`@container` on the copy block): 44px at 375, 73px in the 486px desktop column, 76px cap. One string; "Catheter‑free" uses U+2011 so it never breaks after the hyphen (5.8em wide in the system sans — the cqi slope keeps it on one line with room for wider fallback fonts). |
+| Home hero `h1` | `font-bold tracking-[-0.035em] leading-none text-balance text-[clamp(2.75rem,19.2cqi-1.27rem,4.75rem)]`. Sized by its **column** (`@container` on the copy block): 44px at 375, 73px in the 486px desktop column, 76px cap. One string; "Catheter‑free" uses U+2011 so it never breaks after the hyphen (5.45em wide in Source Sans 3 bold with the tracking, measured 2026-10-05 — 5.8em in the system sans it replaced; the cqi slope keeps it on one line with room for wider fallback fonts). |
 | Body | `text-base leading-relaxed text-slate-600 dark:text-slate-300` + `text-pretty` |
-| Home audience cards | serif `h2` `text-[clamp(1.25rem,1.7vw,1.5rem)]`, ticks `text-[15px] leading-snug space-y-2` (tighter than body, client direction 2026-09-27) |
+| Home audience cards | display `h2` (`font-display font-semibold`) `text-[clamp(1.25rem,1.7vw,1.5rem)]`, ticks `text-[15px] leading-snug space-y-2` (tighter than body, client direction 2026-09-27) |
 | Small print | `text-xs text-slate-500` |
 | Eyebrow | `class="eyebrow"` — a Tailwind `@utility` in layout.css: a 26px pill, 12px semibold uppercase `tracking-[0.16em]`, **navy-950 text on the persona's `--accent-pop`** (coral on patient, sun on clinician/distributor), in both schemes. *(2026-09-29, owner: "colour the eyebrows"; was ink-coloured text.)* An icon may sit inside it (the home bridge's "For patients"). |
 
-**Serif is for display headlines only** — body, UI, labels, and cards stay sans. Serif was adopted
-as the 2026 editorial direction; the home hero headline has *not* been back-ported yet (open item).
+**One typeface: Source Sans 3** *(UroSystem Brand Guideline 1.0, owner direction 2026-10-05)*.
+Self-hosted as `@fontsource-variable/source-sans-3` (upright + italic, weight axis 200–900) and
+wired in as Tailwind's `--font-sans`, so every element gets it without a class. `--font-display`
+points at the same family: keep writing `font-display` on display headlines — it is the *role*
+token, so a later change of display weight or face is one line in `layout.css`, not 30 call sites.
+The guideline shows Light, Regular, Bold and their italics; the site uses 400 for body, 600 for
+display headlines and labels, 700 for the home hero `h1`. Don't add a second family.
+*(Source Serif 4 was the display face from 2026-07-14 to 2026-10-05, and body text was the system
+sans. The open item "back-port the serif to the home hero `h1`" is closed by this change.)*
 
 **Headlines are one sentence in one element.** Don't split a sentence into an eyebrow + rest —
 the patient `h1` renders the full sentence uninterrupted. Eyebrows are separate short labels
@@ -455,12 +490,35 @@ things. Icon chips inside cards stay `bg-(--color-patient-soft)` / white as befo
 
 ## 5. Icons
 
-- **Heroicons outline only.** No icon fonts, no second icon set.
-- Inline the single path `d` string; draw with `currentColor`.
-- `viewBox="0 0 24 24"`, `fill="none"`, `stroke-width="1.5"` (2 for small/dense marks),
-  `stroke-linecap="round" stroke-linejoin="round"`, `aria-hidden="true"`.
-- Icon `d` strings live **next to the copy** in `src/lib/content/*.ts`, with a comment naming the
-  icon (e.g. `// face-smile`).
+**Two sources, nothing else** *(owner direction 2026-10-05; until then "heroicons outline only")*:
+
+1. **Heroicons outline** — the default for UI marks, benefits and features.
+   - Inline the single path `d` string; draw with `currentColor`.
+   - `viewBox="0 0 24 24"`, `fill="none"`, `stroke-width="1.5"` (2 for small/dense marks),
+     `stroke-linecap="round" stroke-linejoin="round"`, `aria-hidden="true"`.
+2. **The client's vector brand pictograms** — the line drawings from the brand guideline's icon
+   page, for things heroicons cannot draw (conditions, the catheter, the bladder and urethra).
+   Source folder: `urodapter - UX/Képek, design ötletek/Ikonok/`. Only the files that are real
+   vectors qualify: `no catheter.svg`, `kateter.svg`, `urethral treatment 2.svg`,
+   `chemo cystitis.svg`, `irradiation cystitis.svg`, `male-female.svg`. (`no pain 2.svg` is a
+   vector but holds only the strike-through lines, not the lightning bolt.)
+   - They are **filled outlines**, not strokes: merge the file's paths into one `d`, keep the
+     file's own `viewBox`, draw with `fill="currentColor"` (drop the hard-coded `#4bb3d6`-style
+     fills), `aria-hidden="true"`. Size by height; the viewBoxes are not square.
+   - Don't mix the two sources inside one row or grid of equal items — one set per row.
+
+**Never ship the Canva exports** in that folder — `bladder care.svg`, `bladder pain.svg`,
+`bladder.svg`, `no pain.svg`, `pill.svg`, `save time.svg`, `urodapter.svg`. Each is a 400–950 KB
+file whose drawing is an embedded bitmap mask, so `fill` cannot recolour it and dark mode cannot
+retint it. Use the heroicon instead: *no pain* → `face-smile`, *save time* → `clock`, *pill* →
+`beaker` (the home page's existing choice for post-cancer cystitis). The three bladder drawings and
+the UroDapter device drawing have no heroicon equivalent — ask the client for a vector export
+before using them.
+
+No icon fonts, no third set.
+
+- Icon `d` strings — both sources — live **next to the copy** in `src/lib/content/*.ts`, with a
+  comment naming the icon (e.g. `// face-smile`, `// brand: no catheter.svg`).
 - Chip: `w-10 h-10 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20
   dark:border-(--accent-ink)/25 text-(--accent-ink)`. A chip that marks the *current* item (the
   open accordion item, the open Clinical value tab) is filled instead — `.brand-pill` or
@@ -651,7 +709,7 @@ Shared (`src/lib/components/`):
 
 | Component | Notes |
 |---|---|
-| `SiteHeader.svelte` | `variant: 'page'` (transparent on the page gradient, scheme-aware text — the home page, rendered by the route before `<main>`) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar, white text). Owns nav + mobile menu. A **"Contact us"** pill closes the nav on every page (and the mobile menu); it points at `#support` until a contact route exists (`TODO(placeholder)`). The nav gap is fluid (`clamp(1rem, 2.5vw - 0.5rem, 2rem)`) so links + pill fit at 768px. **Brand = the logo, not a text wordmark** (2026-09-28): `UroDapterLogo` in a logo slot that takes the row's leftover width and is a size container — the horizontal logo shows while the slot is ≥ its width (8.875rem = 141.6px at the 56px md+ height), the stacked one where the horizontal would run into the menu. **The links collapse into the menu button by the same rule** (owner direction 2026-09-28): only when the link row no longer fits beside the *stacked* logo, not at a viewport width. CSS cannot query whether a row's own max-content width fits, so `fitLinks` (an attachment on the `<nav>`) measures it — the row's max-content width, read with one synchronous out-of-flow layout so it works in either state, + the nav gap + the stacked logo's width — before the first paint and again from a `ResizeObserver` on the nav and the row and on `document.fonts.ready`. The server render and the pre-hydration frame fall back to the md breakpoint. The result is three steps, each triggered by room, not width: horizontal logo + links → stacked logo + links → horizontal logo + menu button. Measured with the system font: links + horizontal logo from 772px, links + stacked logo 687–771px (24.05px gap at 687), menu button at 686px and below; wider fonts, longer labels or text zoom move both switches with them. Logo height is fluid below md (44px at 375 → 56px at 768) and fixed from md. Colour: the brand colour, `text-brand` (`#02979d` light, `#78c7c9` dark), on the `page` variant (the light ring is 3.55:1 on white, clear of WCAG 2.4.11's 3:1); on the `solid` bar — dark in both schemes — always `--brand-bright` (`#78c7c9`), focus ring included (owner direction 2026-09-28). The header row is 56px tall from md (was 44px). |
+| `SiteHeader.svelte` | `variant: 'page'` (transparent on the page gradient, scheme-aware text — the home page, rendered by the route before `<main>`) \| `'solid'` (subpages — a `.nav-gradient` navy→accent bar, white text). Owns nav + mobile menu. A **"Contact us"** pill closes the nav on every page (and the mobile menu); it points at `#support` until a contact route exists (`TODO(placeholder)`). The nav gap is fluid (`clamp(1rem, 2.5vw - 0.5rem, 2rem)`) so links + pill fit at 768px. **Brand = the logo, not a text wordmark** (2026-09-28): `UroDapterLogo` in a logo slot that takes the row's leftover width and is a size container — the horizontal logo shows while the slot is ≥ its width (8.875rem = 141.6px at the 56px md+ height), the stacked one where the horizontal would run into the menu. **The links collapse into the menu button by the same rule** (owner direction 2026-09-28): only when the link row no longer fits beside the *stacked* logo, not at a viewport width. CSS cannot query whether a row's own max-content width fits, so `fitLinks` (an attachment on the `<nav>`) measures it — the row's max-content width, read with one synchronous out-of-flow layout so it works in either state, + the nav gap + the stacked logo's width — before the first paint and again from a `ResizeObserver` on the nav and the row and on `document.fonts.ready`. The server render and the pre-hydration frame fall back to the md breakpoint. The result is three steps, each triggered by room, not width: horizontal logo + links → stacked logo + links → horizontal logo + menu button. Measured with Source Sans 3 (2026-10-05): links + horizontal logo from 729px (726px is already the stacked logo), links + stacked logo 618–726px, menu button at 615px and below — the narrower brand face moved both switches down from the system-font 772 / 687–771 / ≤ 686px; longer labels or text zoom move them back up. Logo height is fluid below md (44px at 375 → 56px at 768) and fixed from md. Colour: the brand colour, `text-brand` (`#02979d` light, `#78c7c9` dark), on the `page` variant (the light ring is 3.55:1 on white, clear of WCAG 2.4.11's 3:1); on the `solid` bar — dark in both schemes — always `--brand-bright` (`#78c7c9`), focus ring included (owner direction 2026-09-28). The header row is 56px tall from md (was 44px). |
 | `UroDapterLogo.svelte` | The client's logo inlined (`variant: 'horizontal' \| 'stacked'`), `fill="currentColor"`, `aria-hidden` (the wrapping link carries the label). Paths are unchanged from `$lib/assets/hero/UroDapter_logo_horizontal.svg` / `_square.svg`; each viewBox is cropped to the artwork's ink (measured with `getBBox()`), because the source files carry 20–30% padding. Size it by `h-*` + `w-auto`. |
 | `UroDapterHero.svelte` | Home hero (2026-09-27): regulatory pill, sans `h1`, body, brand-pill + outline CTAs, the framed photo with `QuoteRotator`, the product chip, `HeroAudienceCards`, the credibility strip (every item has a sub-line; the webshop link is off-site) and the regulatory line. Renders **no** header, **no** `<main>` and **no** page wrapper — the route owns all three. Placement rules and measurements: §2 *The home page*. |
 
@@ -664,7 +722,7 @@ enclosing `.accent-*` scope; never hardcode patient blue in them.** *(Moved out 
 | `SectionBridge.svelte` | `variant: 'arrow' \| 'bridge'`, props `lead` (optional), `emphasis`, `problems` (optional, bridge variant only). Full-bleed tinted band. **The page's separator — always exactly one between sections.** Omit `lead` when the bridge copy is a single sentence — a sentence stays in one element. **No variant draws a quotation mark** (2026-09-30, owner: the bridge copy is the site's own line, not a quotation; the variant was called `'quote'` until then). **The rule is a divider, never an underline:** in the `bridge` variant it sits between `lead` and `emphasis`, and a bridge with only `emphasis` carries no rule at all. `problems` (`{id, label, text, icon, accentClass}[]`) adds a row of labelled audience statements above the emphasis — side by side when each gets 20rem, stacked below — and the rule then divides the problems from the answer. The problem labels are `eyebrow` pills in their own persona's pop. The arrow variant centres its row (`sm:justify-center`), which only moves bridges shorter than the row (home's "Choose Your Journey"). **`tone: 'tint' \| 'solid'`** (arrow variant, default `'tint'`): `'solid'` swaps the mist band for the persona's `.surface-solid` fill with white text and a glass arrow chip — the surface of the solid `SupportCenterCard`. Used once: the patient page's bridge into the stories, which matches the "Want to hear more patient stories?" card below it (owner direction 2026-09-29). Keep it rare — a solid bridge is louder than a solid CTA. |
 | `BenefitCard.svelte` | Icon chip + title + body, optional `source` citation line (design system §9 — a card that carries a clinical claim carries its source). **Its chip+title treatment is the shared vocabulary** the testimonial theme labels rhyme with. |
 | `TestimonialCard.svelte` | Theme chip+label (BenefitCard vocabulary), real `<blockquote>`/`<footer>`, optional story link (omit `linkLabel`/`href` when a grid shares one "read all" band, as the clinician page does). |
-| `StatCard.svelte` | Icon chip + serif `highlight` + body + optional `source` citation. Extracted from `EvidenceOutcomes`; also the home page's "The numbers" row. |
+| `StatCard.svelte` | Icon chip + display `highlight` + body + optional `source` citation. Extracted from `EvidenceOutcomes`; also the home page's "The numbers" row. |
 | `SupportCenterCard.svelte` | Reusable "visit the Support Center" CTA. `variant`: `'solid'` (default — bold `.surface-solid` band, white text) \| `'tint'` (light `.surface-panel`). `href` typed `ResolvedPathname`. |
 | `IndicationsStrip.svelte` | Tinted band: sentence + condition icon chips. Designed for ~4 chips; more than that squeezes the `sm:flex` row — the clinician page's five indications use their own card grid instead. |
 | `OutcomesChart.svelte` | Two single-series labeled-bar lists on a shared 0–100% scale. Thin `h-2` bars, data-end-only rounding, recessive track, label+value as real text on every row (the bars are decoration over an accessible list), source line. Series colours: the validated `--chart-*` tokens only. *(Promoted from `patients/` 2026-08-26, when the clinician page needed it.)* |
@@ -678,7 +736,7 @@ Home page (`src/lib/components/home/`) — two sections below the hero since the
 
 | Component | Notes |
 |---|---|
-| `HeroAudienceCards.svelte` | The two audience cards in the hero (replaced `KeyBenefits`, 2026-09-27). Each `<article>` in its own `.accent-*` scope: persona chip + eyebrow, serif `h2` (ids `benefits-patients` / `benefits-clinicians`), brand-teal ticks, and a footer link whose `::after` stretches over the card — the **whole card is the link** and the focus ring surrounds it. **The arrow chip is inside the `<a>`** (a solid `.accent-pill` circle): as a sibling its hover `translate-x` lifted it into its own stacking layer above the `::after`, and a click on the arrow hit nothing (fixed 2026-09-29). Link labels: "Patient benefits" (owner direction 2026-09-29, was "What to expect") / "Clinical use & evidence". Intrinsic grid (`minmax(min(100%, 16.5rem), 1fr)`); wrapper `flex-col` + `article h-full` keep both cards one height with the footers level. No `use:reveal` (above the fold). |
+| `HeroAudienceCards.svelte` | The two audience cards in the hero (replaced `KeyBenefits`, 2026-09-27). Each `<article>` in its own `.accent-*` scope: persona chip + eyebrow, display `h2` (ids `benefits-patients` / `benefits-clinicians`), brand-teal ticks, and a footer link whose `::after` stretches over the card — the **whole card is the link** and the focus ring surrounds it. **The arrow chip is inside the `<a>`** (a solid `.accent-pill` circle): as a sibling its hover `translate-x` lifted it into its own stacking layer above the `::after`, and a click on the arrow hit nothing (fixed 2026-09-29). Link labels: "Patient benefits" (owner direction 2026-09-29, was "What to expect") / "Clinical use & evidence". Intrinsic grid (`minmax(min(100%, 16.5rem), 1fr)`); wrapper `flex-col` + `article h-full` keep both cards one height with the footers level. No `use:reveal` (above the fold). |
 | `QuoteRotator.svelte` | The hero's rotating testimonial panel — **see §6b for its conditions**. Props `items` (`{quote, author, subAuthor?, seconds?}`), `label`, `class` (placement only). |
 | `HowItWorks.svelte` | **Section 2**, `id="how-it-works"` + `scroll-mt-24` (the hero's "See how it works" target): header + intro, the `ProductCallouts` diagram in a `.surface-card`, then a `[3fr_2fr]` row pairing the 30-second animation (caption **above** it) with the second-line explanation. |
 | `ChooseJourney.svelte` | **Section 3**: three journey cards (`.accent-pill`, each in its own accent scope) + the Support Center shortcut. Its `h2` is `sr-only` — the bridge above reads "Choose Your Journey" (D14). **Carries `id="support"`** — see §2. |
@@ -689,12 +747,12 @@ Patient page (`src/lib/components/patients/`) — four sections since the 0831 r
 
 | Component | Notes |
 |---|---|
-| `WhyChoose.svelte` | **Section 1**: the hero photo with the serif `h1` in a frosted glass panel **on** the image (docx: "text on top/top-right"), the intro sentence below it, then the four benefits as an `AutoAccordion` (§6a) and the `IndicationsStrip`. Its headers carry **no icon chip** — with one the 4-item list is 296 px against a 208 px grid; without, 251 px, and the icon moves to the pane. All four benefit *titles* stay visible; only the bodies collapse. *Trades +43 px desktop for −223 px mobile — the only section here that costs desktop height, taken because mobile is the viewport that is too long.* LCP image → `fetchpriority="high"`. The panel is `self-end sm:self-start` — at 375px the crop puts the subject's face at the top, so the headline drops to the bottom. |
+| `WhyChoose.svelte` | **Section 1**: the hero photo with the display `h1` in a frosted glass panel **on** the image (docx: "text on top/top-right"), the intro sentence below it, then the four benefits as an `AutoAccordion` (§6a) and the `IndicationsStrip`. Its headers carry **no icon chip** — with one the 4-item list is 296 px against a 208 px grid; without, 251 px, and the icon moves to the pane. All four benefit *titles* stay visible; only the bodies collapse. *Trades +43 px desktop for −223 px mobile — the only section here that costs desktop height, taken because mobile is the viewport that is too long.* LCP image → `fetchpriority="high"`. The panel is `self-end sm:self-start` — at 375px the crop puts the subject's face at the top, so the headline drops to the bottom. |
 | `PatientStories.svelte` | **Section 2**: header + the four stories as an `AutoAccordion` (§6a) — theme label in the list; quote, attribution and that person's "read my story" link in the pane — then "more stories" (`SupportCenterCard` reuse). *729 → 731 px desktop (unchanged), 1 930 → 1 430 px mobile — this one is bought entirely for the phone.* |
 | `OutcomesChart.svelte` | *(now in `shared/`)* Two single-series labeled-bar lists on a shared 0–100% scale. `heading`/`intro` are **optional** — inside an accordion pane the item header already carries them. |
 | `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. Accents from the enclosing scope (2026-09-29) — on the patient page its accordion item is `accent-clinician`. `heading` is **optional** for the same reason as `OutcomesChart`'s. It now lives inside an `AutoAccordion` pane — a manual slider nested in an accordion pane is a wrinkle worth revisiting (promoting the three quotes to accordion items would remove it, at the cost of retiring this component). |
 | `EvidenceOutcomes.svelte` | **Section 3**: stat cards stay a visible row, then chart / expert consensus / clinician quotes become an `AutoAccordion` (§6a) — three parallel answers to "what does the research show?", each with its own visual. *1 273 → 859 px desktop.* |
-| `NextSteps.svelte` | **Not an accordion** (§6a — CTAs stay visible). Section 4 composition: CTA tiers (primary is the `.surface-solid` gradient language via scoped `.cta-primary`, read from the scope; others are `.surface-card` — were slate-50 until 2026-09-29), dive-deep band, and the full-bleed closing `tint-band` with the serif callback quote. |
+| `NextSteps.svelte` | **Not an accordion** (§6a — CTAs stay visible). Section 4 composition: CTA tiers (primary is the `.surface-solid` gradient language via scoped `.cta-primary`, read from the scope; others are `.surface-card` — were slate-50 until 2026-09-29), dive-deep band, and the full-bleed closing `tint-band` with the display-type callback quote. |
 | `HowItWorks.svelte` | **Parked** — "how does it work?" is a homepage question now. Kept for the homepage rebuild; not rendered. |
 
 Clinician page (`src/lib/components/clinicians/`) — six sections since the 0831 restructure; the
@@ -702,8 +760,8 @@ route is composition only. All of them take the accent from the page's `.accent-
 
 | Component | Notes |
 |---|---|
-| `ClinicalValue.svelte` | **Section 1**: serif `h1` + accent rule + two intro paragraphs, `ImagePlaceholder` beside them (the hero photo is still a pending client asset), then the two benefit groups as **two boxes** — the docx's "1 box for the 3 patient benefit, 1 box for the clinician benefit". Each box is a `.surface-card` `<article>` with a solid `--accent-solid` header (icon + `h3`) and its three benefits, in its own persona scope: "For Your Practice" clinician, "For Your Patients" **patient** (§1, cross-persona colours). **From 48rem the two sit side by side, always visible; below it they share one cell behind two side tabs** (§6a, owner direction 2026-09-29 — it was an `AutoAccordion` at every width). Measured: 596px cards at 1280 (equal height); at 375 a 44px tab column beside a 279px card, page height identical across tabs, no horizontal scroll. |
-| `ClinicalEvidence.svelte` | **Section 2**: the same three named studies, now an `AutoAccordion` (§6a) — each study's docx label is the header, its descriptor the summary line, and its visual the pane: a `<dl>` row of three serif figures (Lovász), `DonutStat` + a two-row bar list (Pothoven), the recognition figure (Buford). All three panes are `surface-card`. Footnotes and citations stay in the panes. *967 → 533 px desktop, 1 931 → 1 134 px mobile.* |
+| `ClinicalValue.svelte` | **Section 1**: display `h1` + accent rule + two intro paragraphs, `ImagePlaceholder` beside them (the hero photo is still a pending client asset), then the two benefit groups as **two boxes** — the docx's "1 box for the 3 patient benefit, 1 box for the clinician benefit". Each box is a `.surface-card` `<article>` with a solid `--accent-solid` header (icon + `h3`) and its three benefits, in its own persona scope: "For Your Practice" clinician, "For Your Patients" **patient** (§1, cross-persona colours). **From 48rem the two sit side by side, always visible; below it they share one cell behind two side tabs** (§6a, owner direction 2026-09-29 — it was an `AutoAccordion` at every width). Measured: 596px cards at 1280 (equal height); at 375 a 44px tab column beside a 279px card, page height identical across tabs, no horizontal scroll. |
+| `ClinicalEvidence.svelte` | **Section 2**: the same three named studies, now an `AutoAccordion` (§6a) — each study's docx label is the header, its descriptor the summary line, and its visual the pane: a `<dl>` row of three display-type figures (Lovász), `DonutStat` + a two-row bar list (Pothoven), the recognition figure (Buford). All three panes are `surface-card`. Footnotes and citations stay in the panes. *967 → 533 px desktop, 1 931 → 1 134 px mobile.* |
 | `SocialProof.svelte` | **Section 3**: the "Trusted Worldwide" `StatCard`s stay a visible row (glanceable trust, ~150px), then all six quotes are one `AutoAccordion` (§6a) with the docx's two headings as `group` labels — theme label in the list, quote + attribution in the pane; the patient run is `accentClass: 'accent-patient'`. The two Support Center cards sit side by side below (the patient one in the patient scope) (the audit's §4.4 merge still needs the client to say which copy survives). *1 375 → 1 058 px desktop, 3 019 → 2 083 px mobile.* |
 | `Implementation.svelte` | **Section 4**: the docx's three blocks as an `AutoAccordion` (§6a) — each block title is already a claim, and the pane answers it: five indication icon chips (chips in one card, **not** five nested cards — that would stack surfaces, §4), the six-item workflow checklist, and the three-step learning `<ol>` with static ↓ marks + resource pills. Only the indications block has a docx lead sentence, so only that item reveals a body. *820 → 532 px desktop, 1 723 → 998 px mobile.* |
 | `NextSteps.svelte` | **Section 5**: three CTA tiers, one link each. Primary tier is `.accent-pill`, not the patient page's scoped gradient. |
@@ -871,7 +929,7 @@ The clinician page is the same system with different parameters — **do not for
   the file.
 - **Register shifts, rules don't:** clinician copy may be more technical (docx will provide),
   but claims stay verbatim-from-docx, sources stay cited, motion stays the three verbs, and the
-  serif stays display-only.
+  type stays the one family (Source Sans 3).
 - **Audience-page checklist:** nav link retarget (done — `SiteHeader` points at `/clinicians` and
   `/partners`), JSON-LD `audience` → `MedicalAudience/Clinician` (done), and the same definition of
   done (§14). **`AudienceStub` now serves `/partners` only** — the distributor journey is the
