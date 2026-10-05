@@ -345,7 +345,7 @@ export const socialProof = {
         theme: "Clinical efficiency",
         icon: iconClock,
         quote:
-          "Perfect for quick, targeted bladder treatments — especially when repeated instillations are needed. Less discomfort, more efficiency, better experience.",
+          "Perfect for targeted bladder treatments — Less discomfort, more efficiency, better experience.",
         author: "Dr. Sijo J. Parekattil",
         meta: "Avant Concierge Urology, Winter Garden, Florida, USA",
       },

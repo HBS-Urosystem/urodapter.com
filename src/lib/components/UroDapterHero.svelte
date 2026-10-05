@@ -29,18 +29,6 @@
       <!-- A size container: the headline scales with the column it sits in,
            not the viewport, so "Catheter‑free" always fits on one line. -->
       <div class="hero-copy @container">
-        <p
-          class="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] leading-none border whitespace-nowrap
-                 border-navy-950/10 bg-white/70 text-slate-700 dark:border-white/15 dark:bg-white/5 dark:text-slate-300"
-        >
-          <svg class="w-4 h-4 shrink-0 text-(--brand-ink)" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
-            ><path stroke-linecap="round" stroke-linejoin="round" d={hero.regulatoryPill.icon} /></svg
-          >
-          <!-- The full label needs ~23rem; narrower copy columns get the short one. -->
-          <span class="@min-[23.5rem]:hidden">{hero.regulatoryPill.labelShort}</span>
-          <span class="hidden @min-[23.5rem]:inline">{hero.regulatoryPill.label}</span>
-        </p>
-
         <!-- Sized by the copy column (cqi), not the viewport: 44px at a 335px
              phone column, 73px in the 486px desktop column, capped at 76px.
              "Catheter‑free" measures 5.8em in the system sans, so the line fits
@@ -48,7 +36,7 @@
              copy keeps the hyphen unbreakable. -->
         <h1
           id="hero-heading"
-          class="mt-[clamp(1.25rem,1rem+0.75vw,1.5rem)] font-bold tracking-[-0.035em] leading-none text-balance
+          class="font-bold tracking-[-0.035em] leading-none text-balance
                  text-[clamp(2.75rem,19.2cqi-1.27rem,4.75rem)] text-navy-950 dark:text-white"
         >
           {hero.headline}

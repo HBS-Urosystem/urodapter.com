@@ -400,7 +400,7 @@ export const quotes = {
 	items: [
 		{ quote: 'I now have confidence, less apprehension, more predictability, and an overall better quality of life.',
 		  author: 'Hannah, 27 · IC/BPS patient', seconds: 7 },
-		{ quote: 'Perfect for quick, targeted bladder treatments — especially when repeated instillations are needed. Less discomfort, more efficiency, better experience.',
+		{ quote: 'Perfect for targeted bladder treatments — Less discomfort, more efficiency, better experience.',
 		  author: 'Dr. Parekattil, Avant Concierge Urology', subAuthor: 'Winter Garden, Florida, USA', seconds: 9 },
 	],
 };

@@ -95,12 +95,6 @@ export const hero = {
 	// U+2011 non-breaking hyphen: the headline must never break after "Catheter-".
 	headline: 'Catheter‑free bladder instillation',
 	body: 'A simple way to perform bladder instillations without catheterization.',
-	regulatoryPill: {
-		label: 'CE marked · FDA listed · ISO 13485 certified QMS',
-		// Narrow screens: the pill has to stay on one line.
-		labelShort: 'CE marked · FDA listed · ISO 13485',
-		icon: iconShieldCheck,
-	},
 	primaryCta: { label: 'See how it works', href: howItWorksHref },
 	// TODO(placeholder): contact route — pending links resolve to #support until it exists
 	secondaryCta: { label: 'Talk to our team', href: supportHref },
@@ -174,7 +168,7 @@ export const quotes = {
 		},
 		{
 			quote:
-				'Perfect for quick, targeted bladder treatments — especially when repeated instillations are needed. Less discomfort, more efficiency, better experience.',
+				'Perfect for targeted bladder treatments — Less discomfort, more efficiency, better experience.',
 			author: 'Dr. Parekattil, Avant Concierge Urology',
 			subAuthor: 'Winter Garden, Florida, USA',
 			seconds: 9,
