@@ -9,8 +9,8 @@ section, page, or component.**
 > Webshop) is now the layout reference for the pages; this doc stays the rulebook for tokens,
 > dark mode, a11y and motion. Shipped so far: the canvas **header** (labels, current-page mark,
 > "Contact us"), the site **footer**, the **ink tokens + display type**, **`/shop`**,
-> **`/support`**, the **home page**, **`/patients`** and **`/clinicians`** — see §15. Not yet
-> rebuilt from the canvas: Partner. (§2's home-page description below predates this rebuild.)
+> **`/support`**, the **home page**, **`/patients`**, **`/clinicians`** and **`/partners`** — see
+> §15. Every board of the canvas is now in code. (§2's home-page description below predates this rebuild.)
 >
 > **2026-10-05 — UroSystem Brand Guideline 1.0** (`Brand Identity Codes_UroSystem.pdf` in the
 > client's `urodapter - UX/Képek, design ötletek/` folder). Owner decisions:
@@ -1158,4 +1158,15 @@ replaced the image placeholder; `ClinicalValue` now starts at its own heading.
   distributor 14px. `StatCard`, `SupportCenterCard` and `TestimonialCard` read it and now use
   white / mist-35 fills with a mist ring instead of `.surface-card` / `.surface-panel` (the
   solid variant keeps `.surface-solid`).
+
+**Distributor page (`/partners`, canvas "Partner oldal" board).** Still a placeholder journey —
+it says what is coming. `PartnerPage` (`src/lib/components/partners/`; copy in `home.ts`
+`partnerPage`, plus `eyebrow`, `title`, `productAlt`) replaced `AudienceStub` (parked):
+`SiteHeader variant="dark"` on a navy-950 → plum-ink band (100°), then one lilac-10 hero band with
+the UroDapter plus as a lilac-20 decoration, a lilac eyebrow with 8px corners, "UroDapter®" in the
+distributor ink, the headline as the `display-light` line, a brand rule and the intro; then two
+cards with 20px corners — the roadmap (white, lilac ring, 14px icon chips) and the B2B
+invitation (`--accent-solid` plum, white 14px-cornered button, the product shot, hidden below
+`sm` where it would cover the button). The invitation's link is still "Back to the overview"
+(home); a contact link would serve a B2B reader better — a copy decision for the client.
 

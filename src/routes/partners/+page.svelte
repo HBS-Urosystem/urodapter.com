@@ -1,6 +1,5 @@
 <script lang="ts">
-  import AudienceStub from "$lib/components/home/AudienceStub.svelte";
-  import { partnerPage } from "$lib/content/home";
+  import PartnerPage from "$lib/components/partners/PartnerPage.svelte";
 </script>
 
 <svelte:head>
@@ -11,4 +10,5 @@
   />
 </svelte:head>
 
-<AudienceStub {...partnerPage} />
+<!-- Canvas "Partner oldal" board (2026-11-18); AudienceStub is parked. -->
+<PartnerPage />

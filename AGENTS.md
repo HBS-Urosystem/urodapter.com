@@ -49,12 +49,13 @@ audience colour. Full rationale, measurements and the clinician-page caveat: des
 **Canvas (2026-11-18):** pages are being rebuilt from the "UroDapter webdesign" Claude Design
 canvas — design system §15. Site chrome copy lives in `src/lib/content/site.ts` (header nav,
 footer); the footer is rendered once in `src/routes/+layout.svelte`. Routes: `/`, `/patients`,
-`/clinicians`, `/partners` (stub), `/shop` (`components/shop/`, `content/shop.ts`),
+`/clinicians`, `/partners`, `/shop` (`components/shop/`, `content/shop.ts`),
 `/support` (`components/support/`, `content/support.ts`; contact form = Netlify Forms via
 `static/__forms.html`). Home (`/`) is rebuilt too: `components/home/HomeHero`, `HomeWhyItMatters`,
 `HowItWorks`, `HomeJourney`; the old `UroDapterHero` and `ChooseJourney` are parked. `/patients` too: `PatientHero` + the
 shared `WaveBridge` between its four sections. `/clinicians` too: `ClinicianHero` (renders the
-header, `variant="dark"`) + the shared `DarkBridge`; `graph-paper` utility in `layout.css`.
+header, `variant="dark"`) + the shared `DarkBridge`; `graph-paper` utility in `layout.css`. `/partners`: `components/partners/PartnerPage` (the old
+`AudienceStub` is parked).
 
 When a structural or design decision changes, update `docs/design-system.md` (and the page plan)
 in the same change so the docs don't drift from the code.

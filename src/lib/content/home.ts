@@ -719,6 +719,11 @@ export const voices = {
 
 export const partnerPage = {
 	accentClass: 'accent-distributor',
+	// Canvas "Partner oldal" board (2026-11-18): eyebrow and the product name as
+	// the title over the distributor headline.
+	eyebrow: 'For distributors',
+	title: 'UroDapter®',
+	productAlt: 'The UroDapter syringe adapter',
 	heading: distributors.heading,
 	body: distributors.intro,
 	roadmap: {
