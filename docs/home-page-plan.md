@@ -120,9 +120,10 @@
 > | `static/urodapter-animation.webm` | 1.9 MB | VP9 CRF 34, Opus 80 k — served first |
 > | `static/urodapter-animation-poster.webp` | 16 KB | frame at 2 s ("Introducing UroDapter") |
 >
-> Re-encoded with ffmpeg; **there is no ffmpeg on this machine** — the one used was the copy
-> bundled inside Stremio (`/Applications/Stremio.app/Contents/MacOS/ffmpeg`, 7.1.1 with libx264 and
-> libvpx-vp9). macOS's own `avconvert` was tried first and could only reach 26 MB at 720p, since its
+> Re-encoded with ffmpeg — at the time the copy bundled inside Stremio (7.1.1 with libx264 and
+> libvpx-vp9). **Since 2026-11-18 ffmpeg is installed with Homebrew** (`/opt/homebrew/bin/ffmpeg`,
+> 9.0.2: libx264, libvpx-vp9, libopus; no libwebp encoder, so posters are JPEG or go through
+> another tool). macOS's own `avconvert` was tried first and could only reach 26 MB at 720p, since its
 > presets do not expose a bitrate. **If the client ships a new cut, re-encode with the same
 > settings** rather than dropping the raw 38 MB file into `static/`.
 >

@@ -4,6 +4,13 @@ The binding reference for building anything on this site. It records the decisio
 shipped in code, including the ones that reversed an earlier approach. **Read this before adding a
 section, page, or component.**
 
+> **2026-11-18 — building from the canvas.** The "UroDapter webdesign" Claude Design canvas
+> (claude.ai artifact, boards: Home, Patient, Clinician, Partner, Support Center 1/2 + 2/2,
+> Webshop) is now the layout reference for the pages; this doc stays the rulebook for tokens,
+> dark mode, a11y and motion. Shipped so far: the canvas **header** (labels, current-page mark,
+> "Contact us"), the site **footer**, the **ink tokens + display type**, **`/shop`** and
+> **`/support`** — see §15. Not yet rebuilt from the canvas: Home, Patient, Clinician, Partner.
+>
 > **2026-10-05 — UroSystem Brand Guideline 1.0** (`Brand Identity Codes_UroSystem.pdf` in the
 > client's `urodapter - UX/Képek, design ötletek/` folder). Owner decisions:
 > **(1)** the whole site is set in **Source Sans 3** — the serif display face is retired (§3);
@@ -983,3 +990,88 @@ These are **preview-pane artifacts, not bugs — don't "fix" the code for them:*
    shot) the capture may **duplicate tiles** — the page content appears twice in the image.
    Verify structure with JS measurements (`scrollWidth`, grid `gridTemplateColumns`, element
    rects) and trust the un-duplicated upper portion of the capture.
+
+---
+
+## 15. Pages built from the canvas *(2026-11-18)*
+
+The canvas boards are light-mode HTML with inline styles; the code translates them onto the
+tokens above and adds the dark variant. What they introduced:
+
+**Header (`SiteHeader`).** Labels "Patients · Clinicians · Distributors · Support Center" +
+"Contact us" (copy in `src/lib/content/site.ts`, `siteNav`), 16px semibold. The current page's
+link gets `aria-current="page"`: on the light `page` variant a brand-teal dot before the label,
+on the dark `solid` variant an inset underline in the persona's `--accent-pop`. "Contact us" is a
+filled navy pill on `page` (white pill in dark mode) and an outline in the persona's bright
+colour (`--surface-accent`) on `solid`. "Support Center" → `/support`, "Contact us" →
+`/support#contact` (`supportHref` / `contactHref` in `site.ts`).
+
+**Footer (`SiteFooter`, rendered once in `src/routes/+layout.svelte`).** Navy-950 in both schemes
+(a white/10 hairline on top in dark mode, where the canvas ends in the same colour). Left: the
+**UroSystem** company logo (`UroSystemLogo.svelte` — mist → cerulean gradient mark, mist
+wordmark) with a "Company" label beside it (client task list 2026-11-18, row 6) and "UroDapter®
+is a product of UroSystem Zrt.". Right: Support Center, Webshop, Contact us, and the IFU PDF
+(`static/docs/UroDapter_Users_Manual.pdf`, the file the old urosystem.com served). Bottom row:
+the regulatory line and the legal documents, which stay on urosystem.com
+(`/en/privacy-policy`, `/en/terms-of-service`, `/en/shipping-policy`) — **launch-blocking until
+the client confirms they are current** (task list rows 10, 13–16).
+
+**Ink and display type (`layout.css`).** `--ink` / `--ink-soft` / `--ink-mute` are the canvas's
+three petrol inks (navy-900 at 100 / 88 / 72% in white: 11.9 / 8.4 / 5.2:1 on white, 11.4 / 8.0 / 4.9:1 on the mist-15 band — measured 2026-11-18); dark mode
+maps them to white / slate-300 / slate-400. Write `text-(--ink-soft)` etc. Two utilities:
+`display-title` (the semibold "UroDapter®" page title, `clamp(2.75rem,6vw,5.25rem)`) and
+`display-light` (the **light 300** display line: hero subtitle and every section heading,
+`clamp(2rem,3.6vw,3.125rem)`). The light weight is the canvas's — Source Sans 3 Light from the
+brand guideline — and applies to pages rebuilt from the canvas; older pages keep §3's semibold
+headings until they are rebuilt.
+
+**Canvas page rhythm.** Canvas pages alternate full-width **bands** (mist-35 → mist-15 hero,
+white, mist-15) instead of §2's sections-on-one-canvas with `SectionBridge`s; cards are white
+(or mist-15) with a 1px inset ring and a soft navy shadow. Dark: bands `#041c29 → navy-950` /
+navy-950, cards navy-900 with a white/10 ring, no shadow.
+
+**`/shop` (`src/lib/components/shop/`, copy in `src/lib/content/shop.ts`).** `ShopHero` — title,
+display line, facts with brand-teal ticks, the first-pack offer card (blush), and the purchase
+card: price + the European VAT line (€99 + 27%), pack stepper (1–5, `<output aria-live>`), subtotal
+and the order's shipping (€10 for 1 pack, €25 for 2–5) **before** the checkout button, accepted cards, a blush nudge back to the offer. "Continue to secure checkout"
+opens the Shopify cart permalink of the old shop's product (`ify.urosystem.com/cart/
+39737392300192:<packs>`) in the same tab. `ShopInfo` — shipping cost, delivery time, and right of
+withdrawal **with** "Manage my orders" (`shop.urosystem.com`) in one card, then two equal link
+cards: the Support Center and "For distributors" (`/partners`, `.accent-distributor`), which
+replaced the old B2B text (task list rows 4–5). Every fact is sourced in the header comment of
+`shop.ts`, with the owner's decisions of 2026-11-18 (Shopify checkout stays, 27% VAT in Europe,
+shipping €10 / €25, at most 5 packs).
+
+**`/support` — the Support Center (`src/lib/components/support/`, copy in
+`src/lib/content/support.ts`).** Both canvas boards on one page, as alternating bands:
+`SupportHero` (seven topic cards linking to the sections) → `UsingSection` (`#use`: Web App,
+real-life videos, IFU and Tips & Tricks PDFs with a "What's inside" summary) → `EvidenceSection`
+(`#evidence`: three studies, two guideline cards in aqua) → `TestimonialsSection` (`#experience`:
+patients / professionals tabs, arrow-key navigation, collapsed to 1000px with "Show all") →
+`VideosSection` (`#videos`: YouTube *links*, not embeds) → `FaqSection` (`#faq`: `<details>`
+with the short answer, the detailed answer one `<details>` deeper; FAQPage JSON-LD) →
+`ContactSection` (`#contact`) → `PartnersSection` (`#partners`). The long texts were extracted
+from the board HTML by script, unedited; inline links are `Rich` segments, never `{@html}`.
+
+- **18+ gate** (`explicit-gate.svelte.ts` + `ExplicitGateDialog.svelte`): one `ExplicitGate`
+  instance per page guards the four real-life videos and the 45-minute instruction video. A
+  native modal `<dialog>` (focus trapped, Escape = decline); **focus starts on the heading, not
+  on either answer**, so neither choice is pre-selected. Accepting unlocks for this visit only —
+  nothing is stored, so no cookie is involved.
+- **Contact form = Netlify Forms**, like the old urosystem.com form. The site is server-rendered,
+  so `static/__forms.html` declares the form (name `contact`, same fields, honeypot) for Netlify's
+  deploy-time scan, and the form posts there (`fetch` with JS, a plain POST without). **Keep the
+  field names of both files in sync.** It cannot be exercised locally; test it on a Netlify
+  deploy preview. The country field is a `<datalist>` of every inhabited ISO 3166 region, named
+  by `Intl.DisplayNames`.
+- **Files:** PDFs in `static/docs/`, the four real-life videos in `static/videos/real-life/` —
+  re-encoded from the client's masters (1280×720, no audio) on 2026-11-18: 960px wide,
+  `<name>.webm` VP9 CRF 44 (served first; 0.4–1.9 MB, 5 MB for all four), `<name>.mp4` H.264 high
+  CRF 30 `+faststart` (0.8–3.0 MB), `<name>-poster.jpg` (frame at 1 s); `preload="none"`, so
+  nothing loads before play. Images and partner logos in
+  `src/lib/assets/support/` and `src/lib/assets/partners/` (logos sit on white in both schemes —
+  they are the partners' own artwork).
+- **Open, flagged in `support.ts`:** the Infuserve America and Dawa Medical website addresses
+  (their cards have no link until then); "completely painless" in the Global Consensus summary
+  and "absolutely no leakage" in the FAQ — wording for the client to confirm, never to strengthen.
+

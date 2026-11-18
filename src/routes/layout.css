@@ -468,3 +468,50 @@
     opacity 0.6s ease,
     transform 0.6s ease;
 }
+
+/* ---------------------------------------------------------------------------
+   Canvas type and ink (the "UroDapter webdesign" canvas, 2026-11-18). The
+   canvas boards set text in three inks of the primary petrol and their
+   headlines in two weights of Source Sans 3: a semibold title ("UroDapter®")
+   and a light display line under it / on every section heading. Pages built
+   from the canvas (/shop, /support) use these; design system §3.
+
+   Inks, measured (WCAG 2): on white / on the mist-15 band
+     --ink       #0b3b54                 11.9 / 11.4
+     --ink-soft  88% #0b3b54 in white     8.4 /  8.0
+     --ink-mute  72% #0b3b54 in white     5.2 /  4.9
+   Dark mode: white, slate-300, slate-400 (the body / small-print pair of §3).
+--------------------------------------------------------------------------- */
+:root {
+  --ink: var(--color-navy-900);
+  --ink-soft: color-mix(in srgb, var(--color-navy-900) 88%, white);
+  --ink-mute: color-mix(in srgb, var(--color-navy-900) 72%, white);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #ffffff;
+    --ink-soft: var(--color-slate-300);
+    --ink-mute: var(--color-slate-400);
+  }
+}
+
+/* "UroDapter®" — the page title above the light display line. */
+@utility display-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6vw, 5.25rem);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+/* The light display line: the hero subtitle and every section heading. */
+@utility display-light {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.6vw, 3.125rem);
+  line-height: 1.1;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  color: var(--ink);
+}

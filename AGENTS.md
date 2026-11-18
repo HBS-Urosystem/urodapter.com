@@ -46,6 +46,13 @@ inside an `.accent-*` scope — and carry the interaction affordances and highli
 (accordion rail and chips, bridge icons, story links, headline rules). Persona CTAs keep their
 audience colour. Full rationale, measurements and the clinician-page caveat: design system §1.
 
+**Canvas (2026-11-18):** pages are being rebuilt from the "UroDapter webdesign" Claude Design
+canvas — design system §15. Site chrome copy lives in `src/lib/content/site.ts` (header nav,
+footer); the footer is rendered once in `src/routes/+layout.svelte`. Routes: `/`, `/patients`,
+`/clinicians`, `/partners` (stub), `/shop` (`components/shop/`, `content/shop.ts`),
+`/support` (`components/support/`, `content/support.ts`; contact form = Netlify Forms via
+`static/__forms.html`).
+
 When a structural or design decision changes, update `docs/design-system.md` (and the page plan)
 in the same change so the docs don't drift from the code.
 

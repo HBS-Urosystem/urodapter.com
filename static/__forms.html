@@ -1,0 +1,22 @@
+<!doctype html>
+<!-- Netlify Forms registry. The site is server-rendered, so Netlify cannot find
+     the Support Center contact form in its HTML at deploy time; this static file
+     declares it (same name and fields) and is the URL the form posts to.
+     Keep the field names in sync with src/lib/components/support/ContactSection.svelte. -->
+<html lang="en">
+  <head><meta charset="utf-8" /><title>Forms</title><meta name="robots" content="noindex" /></head>
+  <body>
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input name="country" />
+      <input type="url" name="website" />
+      <select name="subject"><option>UroDapter – General Question</option></select>
+      <textarea name="message"></textarea>
+      <input type="checkbox" name="privacy" />
+    </form>
+  </body>
+</html>

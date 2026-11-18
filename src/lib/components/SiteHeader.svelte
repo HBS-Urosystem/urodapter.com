@@ -1,8 +1,9 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
-  import type { ResolvedPathname } from '$app/types';
+  import { page } from '$app/state';
   import type { Attachment } from 'svelte/attachments';
   import UroDapterLogo from '$lib/components/UroDapterLogo.svelte';
+  import { siteNav } from '$lib/content/site';
 
   // `page` sits transparent on the page gradient (home, where the hero is no
   // longer a photo band), so its text follows the colour scheme; `solid` is the
@@ -16,19 +17,15 @@
   // breakpoint (the classes below), so the header always has a working menu.
   let collapsed = $state<boolean | null>(null);
 
-  // Cross-page fragment targets: resolve() the route, keep the fragment
-  const fragment = (hash: string) => (resolve('/') + hash) as ResolvedPathname;
+  // Labels and targets: the canvas header (2026-11-18) — "Patients",
+  // "Clinicians", "Distributors", "Support Center", and "Contact us", which
+  // opens the contact form on the Support Center page.
+  const navLinks = siteNav.links;
+  const contactLink = siteNav.contact;
 
-  const navLinks = [
-    { href: resolve('/patients'), label: 'For Patients' },
-    { href: resolve('/clinicians'), label: 'For Clinicians' },
-    { href: resolve('/partners'), label: 'For Distributors' },
-    { href: fragment('#support'), label: 'Support Center' },
-  ];
-
-  // Owner-approved mockup copy (2026-09-27).
-  // TODO(placeholder): contact route — pending links resolve to #support until it exists
-  const contactLink = { href: fragment('#support'), label: 'Contact us' };
+  // The current page's link is marked (aria-current + a teal dot on the light
+  // header, an underline in the persona pop on the dark one), as on the canvas.
+  const isCurrent = (href: string) => page.url.pathname === href;
 
   const onPage = $derived(variant === 'page');
 
@@ -117,29 +114,43 @@
       </div>
 
       <!-- The gap is fluid (16px at the narrowest → 32px on wide screens). -->
+      <!-- Canvas header (2026-11-18): 16px semibold links. The light (`page`)
+           header marks the current page with a brand-teal dot and fills
+           "Contact us" in navy; the dark (`solid`) header underlines the
+           current page in the persona's pop and outlines "Contact us" in the
+           persona's bright colour. -->
       <ul
         data-nav-links
-        class="shrink-0 items-center gap-x-[clamp(1rem,2.5vw-0.5rem,2rem)] text-sm whitespace-nowrap
+        class="shrink-0 items-center gap-x-[clamp(1rem,2.5vw-0.5rem,1.75rem)] text-base font-semibold whitespace-nowrap
                {collapsed === null ? 'hidden md:flex' : collapsed ? 'hidden' : 'flex'}
-               {onPage ? 'text-slate-600 dark:text-slate-300' : 'text-slate-200'}"
+               {onPage ? 'text-navy-900/85 dark:text-slate-300' : 'text-slate-200'}"
       >
         {#each navLinks as link (link.label)}
+          {@const current = isCurrent(link.href)}
           <li>
             <a
               href={link.href}
-              class="transition-colors {onPage ? 'hover:text-navy-950 dark:hover:text-white' : 'hover:text-white'}"
-              >{link.label}</a
+              aria-current={current ? 'page' : undefined}
+              class="inline-flex items-center gap-2 min-h-11 transition-colors rounded-sm
+                     focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand-ink)
+                     {onPage
+                ? `hover:text-navy-950 dark:hover:text-white ${current ? 'text-navy-950 dark:text-white' : ''}`
+                : `hover:text-white ${current ? 'text-white shadow-[inset_0_-2px_0_var(--accent-pop)]' : ''}`}"
             >
+              {#if current && onPage}<span class="size-2 rounded-full bg-brand" aria-hidden="true"></span>{/if}
+              {link.label}
+            </a>
           </li>
         {/each}
         <li>
           <a
             href={contactLink.href}
-            class="inline-flex h-11 px-5 items-center rounded-full font-medium border transition-colors
+            class="inline-flex h-11 px-5 items-center rounded-full transition-colors
                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand-ink)
                    {onPage
-              ? 'border-navy-950/20 text-navy-950 hover:bg-navy-950/5 dark:border-white/25 dark:text-white dark:hover:bg-white/5'
-              : 'border-white/30 text-white hover:bg-white/10'}">{contactLink.label}</a
+              ? 'bg-navy-900 text-white hover:bg-navy-950 dark:bg-white dark:text-navy-950 dark:hover:bg-mist'
+              : 'text-white shadow-[inset_0_0_0_1.5px_var(--surface-accent,var(--color-cerulean))] hover:bg-white/10'}"
+            >{contactLink.label}</a
           >
         </li>
       </ul>
@@ -167,13 +178,18 @@
         class="mt-3 pb-2 border-b {collapsed === null ? 'md:hidden' : ''}
                {onPage ? 'border-navy-950/10 dark:border-white/10' : 'border-white/10'}"
       >
-        <ul class="flex flex-col gap-1 text-sm {onPage ? 'text-slate-600 dark:text-slate-300' : 'text-slate-200'}">
+        <ul class="flex flex-col gap-1 text-base font-semibold {onPage ? 'text-navy-900/85 dark:text-slate-300' : 'text-slate-200'}">
           {#each [...navLinks, contactLink] as link (link.label)}
+            {@const current = isCurrent(link.href)}
             <li>
               <a
                 href={link.href}
-                class="block py-2.5 {onPage ? 'hover:text-navy-950 dark:hover:text-white' : 'hover:text-white'}"
-                >{link.label}</a
+                aria-current={current ? 'page' : undefined}
+                class="flex items-center gap-2 py-2.5 {onPage ? 'hover:text-navy-950 dark:hover:text-white' : 'hover:text-white'}
+                       {current ? (onPage ? 'text-navy-950 dark:text-white' : 'text-white') : ''}"
+              >
+                {#if current}<span class="size-2 rounded-full {onPage ? 'bg-brand' : 'bg-(--accent-pop)'}" aria-hidden="true"></span>{/if}
+                {link.label}</a
               >
             </li>
           {/each}
