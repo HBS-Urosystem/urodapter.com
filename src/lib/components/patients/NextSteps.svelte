@@ -1,7 +1,7 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/reveal';
   import { nextSteps } from '$lib/content/patients';
-  import closingImage from '$lib/assets/patients/closing-hero.jpg?enhanced';
+  import closingImage from '$lib/assets/patients/closing-meadow.jpg?enhanced';
 
   type Cta = (typeof nextSteps.ctas)[number];
 
@@ -105,20 +105,23 @@
   </div>
 </section>
 
-<!-- Closing band: bookends the page — closing note + callback, with the
-     positive photo (client asset) on the right: the subject looks left, so
-     her gaze points into the text. -->
+<!-- Closing band: bookends the page — closing note + callback (a takeaway, not a quote — no quotation marks), with the
+     positive photo on the right in an arch crop (2026-10-11: the open-armed
+     meadow photo replaced the sofa portrait, `closing-hero.jpg`, which is kept
+     for the patient stories). Text is left-aligned at every width. -->
 <div class="tint-band mt-12 sm:mt-16">
   <div class="max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
     <div class="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-8 lg:gap-14 items-center">
-      <div class="text-center lg:text-left">
-        <p class="font-semibold text-navy-950 dark:text-white">{nextSteps.closing.heading}</p>
-        <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 max-w-xl mx-auto lg:mx-0 text-pretty">
+      <div class="text-left">
+        <h2 class="font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.75rem,3.8vw,2.75rem)]">
+          {nextSteps.closing.heading}
+        </h2>
+        <p class="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-300 max-w-xl text-pretty">
           {nextSteps.closing.body}
         </p>
-        <div class="mt-7 h-0.5 w-12 mx-auto lg:mx-0 rounded-full bg-(--accent-ink)/50 dark:bg-(--accent-ink)/60" aria-hidden="true"></div>
+        <div class="mt-7 h-0.5 w-12 rounded-full bg-(--accent-ink)/50 dark:bg-(--accent-ink)/60" aria-hidden="true"></div>
         <p class="mt-7 font-display font-semibold text-navy-950 dark:text-white text-[clamp(1.35rem,2.6vw,1.9rem)] leading-snug text-balance">
-          &ldquo;{nextSteps.closing.callback}&rdquo;
+          {nextSteps.closing.callback}
         </p>
       </div>
       <enhanced:img
@@ -127,7 +130,7 @@
         aria-hidden="true"
         sizes="(min-width: 1024px) 35vw, 100vw"
         loading="lazy"
-        class="rounded-3xl w-full max-w-md mx-auto lg:mx-0 lg:justify-self-end h-auto object-cover"
+        class="w-full max-w-md mx-auto lg:mx-0 lg:justify-self-end aspect-[4/5] object-cover object-[50%_45%] rounded-[999px_999px_2rem_2rem/60%_60%_2rem_2rem]"
       />
     </div>
   </div>

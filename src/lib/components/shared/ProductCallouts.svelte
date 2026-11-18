@@ -49,7 +49,7 @@
      center cell, converging on it. Dot marks the device end. -->
 {#snippet leader(side: 'left' | 'right', pos: 'top' | 'bottom')}
   <svg
-    class="block shrink-0 w-8 h-6 sm:w-12 sm:h-9 text-(--accent-ink)/45 {pos === 'top' ? 'self-end' : 'self-start'}"
+    class="block shrink-0 w-8 h-6 sm:w-12 sm:h-9 text-(--accent-ink)/70 {pos === 'top' ? 'self-end' : 'self-start'}"
     viewBox="0 0 48 36"
     fill="none"
     aria-hidden="true"

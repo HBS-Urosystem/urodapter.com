@@ -562,8 +562,10 @@ export const distributors = {
 	accentClass: 'accent-distributor',
 	eyebrow: 'For distributors',
 	heading: 'Bring catheter-free bladder instillation to your market',
+	// "FDA-listed", not the CMS's "FDA-registered" (owner direction 2026-10-05):
+	// the device is listed with the FDA — see the credibility strip above.
 	intro:
-		'UroDapter® is CE-marked, FDA-registered and used in 1,000,000+ procedures — a differentiated addition to your urology portfolio.',
+		'UroDapter® is CE-marked, FDA-listed and used in 1,000,000+ procedures — a differentiated addition to your urology portfolio.',
 	benefits: [
 		{
 			title: 'Product Value',

@@ -188,8 +188,10 @@
      bright  cerulean / aqua / lilac — --surface-accent, --band-accent: the
              tints. Mixed into white, a deep colour turns grey; the bright one
              keeps the page colourful.
-   --accent-pop is the persona's 10% secondary pop (the eyebrow pill fill, set
-   under navy text): coral for patients, sun for clinicians and distributors.
+   --accent-pop is the persona's pop (the eyebrow pill fill, set under navy
+   text): powder for patients, sun for clinicians, lilac for distributors
+   (owner direction 2026-10-05: the colour of the Distributors nav underline,
+   not the yellow).
 
    Inks, measured (WCAG, on white / on the deepest .surface-panel tint):
      patient      #1d6788 (cerulean, darkened) 6.3 / 5.1   dark: #52b2d6
@@ -203,7 +205,7 @@
   --accent-ink: #1d6788;
   --accent-soft: color-mix(in srgb, var(--color-cerulean) 16%, white);
   --accent-solid: var(--color-patient);
-  --accent-pop: var(--color-coral);
+  --accent-pop: var(--color-powder);
   --surface-accent: var(--color-cerulean);
   --surface-deep: var(--color-patient);
   --band-accent: var(--color-cerulean);
@@ -227,7 +229,7 @@
   --accent-ink: color-mix(in srgb, var(--color-distributor) 80%, black);
   --accent-soft: color-mix(in srgb, var(--color-lilac) 20%, white);
   --accent-solid: color-mix(in srgb, var(--color-distributor) 85%, black);
-  --accent-pop: var(--color-sun);
+  --accent-pop: var(--color-lilac);
   --surface-accent: var(--color-lilac);
   --surface-deep: color-mix(in srgb, var(--color-distributor) 85%, black);
   --band-accent: var(--color-lilac);
@@ -254,7 +256,7 @@
 
 /* Eyebrow — the short label above a section heading, as a pill in the
    persona's secondary pop (owner direction 2026-09-29: "colour the eyebrows").
-   Navy text on every pop, in both schemes: coral 5.3:1, sun 11.5:1. A
+   Navy text on every pop, in both schemes: powder 8.0:1, sun 11.5:1, lilac 6.9:1. A
    @utility, so it sits in Tailwind's utilities layer and margin / display
    utilities on the same element still apply. The right padding gives back the
    letter-spacing that trails the last letter, so the label sits centred. */
@@ -270,7 +272,7 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-navy-950);
-  background: var(--accent-pop, var(--color-coral));
+  background: var(--accent-pop, var(--color-powder));
 }
 
 /* Full-bleed tinted band (section bridges + the closing band). The base is the

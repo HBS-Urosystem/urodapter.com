@@ -31,7 +31,7 @@ styled element — that breaks retinting (design system §1).
 **Palette (2026-10-05):** every colour comes from the UroSystem Brand Guideline 1.0 (plus lilac /
 plum from the UroDapter brand book) — 60% primary UroSystem (`#072c3f` `#0b3b54` `#52b2d6`
 `#c7e1f0`), 30% complementary UroDapter (pine, lagoon, `#09979d`, aqua, powder, steel; lilac /
-plum), 10% secondary (sun, coral, blush as pops: the `eyebrow` pills).
+plum), 10% secondary (sun, blush as pops; the `eyebrow` pills are powder on patient, sun on clinician, lilac on distributor).
 
 **Type (2026-10-05):** Source Sans 3 only (`@fontsource-variable/source-sans-3`, Tailwind's
 `--font-sans`); `--font-display` is the same family, kept as the display-headline role token.

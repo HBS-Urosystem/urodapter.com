@@ -13,7 +13,9 @@ section, page, or component.**
 > moved to the guideline's values (`#09979d` light / `#6fc6ca` dark); spruce, graphite and
 > silver are gone (§1); **(3)** the client's Canva-exported icons (bitmap masks, not
 > recolourable) are replaced by heroicons; **(4)** the icon rule now admits the client's
-> *vector* brand pictograms next to heroicons (§5).
+> *vector* brand pictograms next to heroicons (§5). Later the same day: **(5)** the distributor's
+> eyebrow pop is lilac, not sun — the colour of the Distributors nav underline (§1). On 2026-10-12 the patient pop moved from coral (it read as a warning)
+> to powder `#99c7e0` (§1); aqua was rejected as it is the clinician's bright colour.
 >
 > **2026-09-29 — brand palette.** Every colour now comes from the client's brand guide (three
 > palettes, used **60% primary / 30% complementary / 10% secondary**, §1). The three persona
@@ -50,7 +52,7 @@ of one where small text needs AA on a light surface. Don't add a colour from out
 |---|---|---|---|
 | **Primary** (UroSystem) | 60% | `#072c3f` `navy-950` · `#0b3b54` `navy-900` · `#52b2d6` `cerulean` · `#c7e1f0` `mist` | The structure on every page: text, the header, dark mode, the canvas and bridge base, the patient persona |
 | **Complementary** (UroDapter) | 30% | `#166b6a` `pine` · `#23a0a3` `lagoon` · `#09979d` `brand` · `#6fc6ca` `aqua` (= `--brand-bright`) · `#99c7e0` `powder` · `#3e94b7` `steel` — from the guideline; `#caa8cf` `lilac` · `#8376a3` `plum` — from the UroDapter brand book | Persona tints (clinician pine + aqua, distributor plum + lilac), the brand highlight, the home canvas's second glow |
-| **Secondary** | 10% | `#f9e497` `sun` · `#ef797a` `coral` · `#f4ded8` `blush` (+ white) | The warm pops — eyebrow pills (coral / sun) and highlights |
+| **Secondary** | 10% | `#f9e497` `sun` · `#ef797a` `coral` · `#f4ded8` `blush` (+ white) | The warm pops — eyebrow pills (sun on the clinician; coral is now unused as a pill) and highlights. The distributor's pill is lilac (complementary) instead, 2026-10-05 |
 
 In practice the 60% is automatic: navy text, the header, the mist canvas and every dark-mode
 surface are primary on every page. The persona tint is the 30% layer over it, and the pops are
@@ -117,9 +119,9 @@ keeps the surfaces colourful.
 
 | Persona | Deep (fills, nav, ink base) | Bright (tints; dark-mode ink) | Pop (eyebrow pill) |
 |---|---|---|---|
-| Patient | `#0b3b54` navy-900 (primary) | `#52b2d6` cerulean (primary) | `#ef797a` coral |
+| Patient | `#0b3b54` navy-900 (primary) | `#52b2d6` cerulean (primary) | `#99c7e0` powder *(2026-10-12; was coral, briefly aqua)* |
 | Clinician | `#166b6a` pine (complementary) | `#6fc6ca` aqua (complementary) | `#f9e497` sun |
-| Distributor | `#8376a3` plum (complementary) | `#caa8cf` lilac (complementary) | `#f9e497` sun |
+| Distributor | `#8376a3` plum (complementary) | `#caa8cf` lilac (complementary) | `#caa8cf` lilac *(2026-10-05)* |
 
 Each scope sets every token below; `:root` carries the patient set as the default:
 
@@ -129,7 +131,7 @@ Each scope sets every token below; `:root` carries the patient set as the defaul
 | `--accent-ink` | The **readable** accent, for text/borders/icon strokes. Components write `text-(--accent-ink)`, never a `dark:` pair. Light / dark, measured (on white · on the deepest `.surface-panel` tint): **patient `#1d6788`** — cerulean darkened, since `#0b3b54` reads as the heading navy — 6.27 · 5.06; **clinician `#166b6a`** as is, 6.28 · 5.30; **distributor plum 80% + black** (`#695e82`; raw plum is 4.13:1) 5.94 · 4.98. In dark mode it is the bright partner: cerulean / aqua / lilac, 6.6 / 8.0 / 7.6:1 on the dark canvas, ≥ 5.05:1 on dark cards. Measure before changing any persona ink. |
 | `--accent-soft` | Icon-chip fill (16–20% bright in white; 16% bright alpha in dark). |
 | `--accent-solid` | Flat fill for compact solid CTAs — clears AA under white text in every persona: patient 11.9, clinician 6.3, distributor (plum 85% + black) 5.4 (see `.accent-pill`, §4). |
-| `--accent-pop` | The persona's secondary **pop** — the `eyebrow` pill fill (§3). Navy text on it: coral 5.33:1, sun 11.5:1. |
+| `--accent-pop` | The persona's secondary **pop** — the `eyebrow` pill fill (§3). Navy text on it: powder 8.0:1, sun 11.5:1, lilac 6.95:1. The distributor's pop is its own bright colour, lilac — owner direction 2026-10-05 ("the colour of the Distributors nav underline"), replacing sun; it is the one pop from the 30% set. |
 | `--surface-accent` / `--band-accent` | The **bright** colour — the tints of cards, panels, the canvas glows, bridge glows. |
 | `--surface-deep` | The **deep** colour — `.surface-solid` bands and card shadows. |
 | `--nav-accent` | The nav bar's end colour, set per scope to keep white text ≥ 5.4:1 (patient: 75% deep + cerulean, 7.7:1). |
@@ -431,7 +433,7 @@ sticky header does not cover the heading.
 | Body | `text-base leading-relaxed text-slate-600 dark:text-slate-300` + `text-pretty` |
 | Home audience cards | display `h2` (`font-display font-semibold`) `text-[clamp(1.25rem,1.7vw,1.5rem)]`, ticks `text-[15px] leading-snug space-y-2` (tighter than body, client direction 2026-09-27) |
 | Small print | `text-xs text-slate-500` |
-| Eyebrow | `class="eyebrow"` — a Tailwind `@utility` in layout.css: a 26px pill, 12px semibold uppercase `tracking-[0.16em]`, **navy-950 text on the persona's `--accent-pop`** (coral on patient, sun on clinician/distributor), in both schemes. *(2026-09-29, owner: "colour the eyebrows"; was ink-coloured text.)* An icon may sit inside it (the home bridge's "For patients"). |
+| Eyebrow | `class="eyebrow"` — a Tailwind `@utility` in layout.css: a 26px pill, 12px semibold uppercase `tracking-[0.16em]`, **navy-950 text on the persona's `--accent-pop`** (powder on patient — 2026-10-12, was coral: it read as a warning; aqua was dropped because it is the clinician's bright colour —, sun on clinician, lilac on distributor — 2026-10-05), in both schemes. *(2026-09-29, owner: "colour the eyebrows"; was ink-coloured text.)* An icon may sit inside it (the home bridge's "For patients"). |
 
 **One typeface: Source Sans 3** *(UroSystem Brand Guideline 1.0, owner direction 2026-10-05)*.
 Self-hosted as `@fontsource-variable/source-sans-3` (upright + italic, weight axis 200–900) and
@@ -752,7 +754,7 @@ Patient page (`src/lib/components/patients/`) — four sections since the 0831 r
 | `OutcomesChart.svelte` | *(now in `shared/`)* Two single-series labeled-bar lists on a shared 0–100% scale. `heading`/`intro` are **optional** — inside an accordion pane the item header already carries them. |
 | `ClinicianQuotes.svelte` | Manual quote slider (see Motion §6 slider rules) + disclaimer line. Accents from the enclosing scope (2026-09-29) — on the patient page its accordion item is `accent-clinician`. `heading` is **optional** for the same reason as `OutcomesChart`'s. It now lives inside an `AutoAccordion` pane — a manual slider nested in an accordion pane is a wrinkle worth revisiting (promoting the three quotes to accordion items would remove it, at the cost of retiring this component). |
 | `EvidenceOutcomes.svelte` | **Section 3**: stat cards stay a visible row, then chart / expert consensus / clinician quotes become an `AutoAccordion` (§6a) — three parallel answers to "what does the research show?", each with its own visual. *1 273 → 859 px desktop.* |
-| `NextSteps.svelte` | **Not an accordion** (§6a — CTAs stay visible). Section 4 composition: CTA tiers (primary is the `.surface-solid` gradient language via scoped `.cta-primary`, read from the scope; others are `.surface-card` — were slate-50 until 2026-09-29), dive-deep band, and the full-bleed closing `tint-band` with the display-type callback quote. |
+| `NextSteps.svelte` | **Not an accordion** (§6a — CTAs stay visible). Section 4 composition: CTA tiers (primary is the `.surface-solid` gradient language via scoped `.cta-primary`, read from the scope; others are `.surface-card` — were slate-50 until 2026-09-29), dive-deep band, and the full-bleed closing `tint-band` with the display-type callback — a takeaway, not a quote, so no quotation marks or italics (owner direction 2026-10-05). Since 2026-10-11 the band is left-aligned at every width: an `h2` heading (`font-display`, `clamp(1.75rem,3.8vw,2.75rem)`), `text-lg` body, the callback, and the open-armed meadow photo (`closing-meadow.jpg`) in an **arch crop** (`aspect-[4/5]`, `rounded-[999px_999px_2rem_2rem/60%_60%_2rem_2rem]` — percentages on the top corners, because a `999px` radius makes the browser scale the bottom corners down too). The sofa portrait `closing-hero.jpg` is kept for the patient stories. |
 | `HowItWorks.svelte` | **Parked** — "how does it work?" is a homepage question now. Kept for the homepage rebuild; not rendered. |
 
 Clinician page (`src/lib/components/clinicians/`) — six sections since the 0831 restructure; the
