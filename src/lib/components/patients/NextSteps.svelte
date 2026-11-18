@@ -1,7 +1,7 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/reveal';
   import { nextSteps } from '$lib/content/patients';
-  import closingImage from '$lib/assets/patients/closing-meadow.jpg?enhanced';
+  import closingImage from '$lib/assets/patients/closing-medical-team.jpg?enhanced';
 
   type Cta = (typeof nextSteps.ctas)[number];
 
@@ -35,15 +35,15 @@
   </span>
 {/snippet}
 
-<section aria-labelledby="next-steps-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
+<section id="next-steps" aria-labelledby="next-steps-heading" class="max-w-7xl mx-auto px-5 sm:px-8 pt-[clamp(1.5rem,3vw,2.5rem)] pb-[clamp(3.5rem,6vw,6rem)] scroll-mt-6">
   <p class="eyebrow">{nextSteps.eyebrow}</p>
   <h2
     id="next-steps-heading"
-    class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
+    class="mt-4 display-light"
   >
     {nextSteps.heading}
   </h2>
-  <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
+  <p class="mt-4 text-lg leading-relaxed text-(--ink-soft) max-w-3xl text-pretty">
     {nextSteps.intro}
   </p>
 
@@ -105,36 +105,30 @@
   </div>
 </section>
 
-<!-- Closing band: bookends the page — closing note + callback (a takeaway, not a quote — no quotation marks), with the
-     positive photo on the right in an arch crop (2026-10-11: the open-armed
-     meadow photo replaced the sofa portrait, `closing-hero.jpg`, which is kept
-     for the patient stories). Text is left-aligned at every width. -->
-<div class="tint-band mt-12 sm:mt-16">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-    <div class="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-8 lg:gap-14 items-center">
-      <div class="text-left">
-        <h2 class="font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.75rem,3.8vw,2.75rem)]">
-          {nextSteps.closing.heading}
-        </h2>
-        <p class="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-300 max-w-xl text-pretty">
-          {nextSteps.closing.body}
-        </p>
-        <div class="mt-7 h-0.5 w-12 rounded-full bg-(--accent-ink)/50 dark:bg-(--accent-ink)/60" aria-hidden="true"></div>
-        <p class="mt-7 font-display font-semibold text-navy-950 dark:text-white text-[clamp(1.35rem,2.6vw,1.9rem)] leading-snug text-balance">
-          {nextSteps.closing.callback}
-        </p>
-      </div>
-      <enhanced:img
-        src={closingImage}
-        alt=""
-        aria-hidden="true"
-        sizes="(min-width: 1024px) 35vw, 100vw"
-        loading="lazy"
-        class="w-full max-w-md mx-auto lg:mx-0 lg:justify-self-end aspect-[4/5] object-cover object-[50%_45%] rounded-[999px_999px_2rem_2rem/60%_60%_2rem_2rem]"
-      />
+<!-- Closing band (canvas "Páciens oldal" board, 2026-11-18): mist, with a
+     powder and a blush blob; the closing note, a rule, the callback (a
+     takeaway, not a quote — no quotation marks), and the medical-team photo
+     in the arch crop. It replaced the meadow photo of 2026-10-11
+     (`closing-meadow.jpg`, kept). Text is left-aligned at every width. -->
+<section aria-labelledby="p-close" class="relative overflow-hidden bg-mist dark:bg-[#062536]">
+  <div aria-hidden="true" class="absolute -left-15 -top-20 w-80 h-[280px] rounded-[52%_48%_60%_40%/46%_56%_44%_54%] bg-powder/55 dark:bg-powder/10"></div>
+  <div aria-hidden="true" class="absolute right-[6%] -bottom-[90px] w-[260px] h-60 rounded-[44%_56%_48%_52%/58%_44%_56%_42%] bg-blush dark:bg-blush/10"></div>
+  <div class="relative max-w-[73.75rem] mx-auto px-5 sm:px-8 py-[clamp(3.5rem,6vw,6rem)] flex flex-wrap items-center gap-[clamp(2rem,5vw,4rem)]">
+    <div class="flex-[1_1_26rem] min-w-0 flex flex-col items-start gap-4.5">
+      <h2 id="p-close" class="display-light text-navy-950! dark:text-white!">{nextSteps.closing.heading}</h2>
+      <p class="text-lg leading-relaxed text-navy-900 dark:text-slate-300">{nextSteps.closing.body}</p>
+      <span aria-hidden="true" class="mt-2.5 w-12 h-0.5 rounded-full bg-(--brand-ink)/70"></span>
+      <p class="max-w-2xl text-[clamp(1.25rem,2vw,1.625rem)] leading-snug font-semibold text-navy-950 dark:text-white text-balance">{nextSteps.closing.callback}</p>
     </div>
+    <enhanced:img
+      src={closingImage}
+      alt={nextSteps.closing.imageAlt}
+      sizes="(min-width: 1024px) 460px, 100vw"
+      loading="lazy"
+      class="relative flex-[1_1_20rem] min-w-0 max-w-[28.75rem] mx-auto w-full aspect-[5/4] object-cover object-[50%_30%] rounded-[999px_999px_2rem_2rem/60%_60%_2rem_2rem]"
+    />
   </div>
-</div>
+</section>
 
 <style>
   /* The .surface-solid gradient language (deep → a little of the bright

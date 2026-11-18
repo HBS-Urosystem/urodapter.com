@@ -52,7 +52,8 @@ footer); the footer is rendered once in `src/routes/+layout.svelte`. Routes: `/`
 `/clinicians`, `/partners` (stub), `/shop` (`components/shop/`, `content/shop.ts`),
 `/support` (`components/support/`, `content/support.ts`; contact form = Netlify Forms via
 `static/__forms.html`). Home (`/`) is rebuilt too: `components/home/HomeHero`, `HomeWhyItMatters`,
-`HowItWorks`, `HomeJourney`; the old `UroDapterHero` and `ChooseJourney` are parked.
+`HowItWorks`, `HomeJourney`; the old `UroDapterHero` and `ChooseJourney` are parked. `/patients` too: `PatientHero` + the
+shared `WaveBridge` between its four sections.
 
 When a structural or design decision changes, update `docs/design-system.md` (and the page plan)
 in the same change so the docs don't drift from the code.

@@ -29,8 +29,20 @@ const appUrl = 'https://app.urodapter.com';
 // ---------------------------------------------------------------------------
 
 export const hero = {
+	// Canvas "Páciens oldal" board (2026-11-18): eyebrow, the product name as the
+	// title, the docx headline as the light display line, the docx intro, and a
+	// patient quote over the photo.
+	eyebrow: 'For patients',
+	title: 'UroDapter®',
 	// docx: "[Text on top/ top-right of patient hero image]"
 	headline: 'A more comfortable bladder instillation experience',
+	photoAlt: 'A woman relaxing on a sofa at home, looking out of the window with a calm smile',
+	productAlt: 'The UroDapter syringe adapter',
+	// Patient testimonial (Edit K.; the full text is on the Support Center).
+	quote: {
+		text: 'Intravesical instillations have become a very gentle procedure thanks to the UroDapter®.',
+		author: 'Edit K., 46 · Female IC/BPS patient, Hungary',
+	},
 	body: 'For patients who need bladder instillations repeatedly, the treatment experience matters. By allowing bladder instillation without catheterization, UroDapter helps patients avoid one of the most uncomfortable parts of treatment — making ongoing therapy more comfortable, less stressful and easier to manage.',
 };
 
@@ -117,6 +129,7 @@ export const bridgeStories = {
 export const stories = {
 	eyebrow: 'Patient experiences',
 	heading: 'Stories from patients like you',
+	imageAlt: 'A smiling woman relaxing on a sofa at home, holding a mug',
 	intro:
 		'Every patient’s journey is different. Here are some of the experiences shared by people who have used UroDapter.',
 	image: {
@@ -198,6 +211,8 @@ export const bridgeEvidence = {
 export const evidence = {
 	eyebrow: 'Evidence & outcomes',
 	heading: 'What the research shows',
+	imageAlt:
+		'A female urologist in a white coat at her desk, with clinical papers and a microscope behind her',
 	intro:
 		'UroDapter has been studied in clinical settings in real patients receiving intravesical instillations. Here are the findings that matter most to patients.',
 	image: {
@@ -402,6 +417,8 @@ export const nextSteps = {
 		body: 'Whether you’re exploring your options or already using UroDapter, we’re here to support you every step of the way.',
 		// Callback to the Section 1 headline (docx: reflection to the beginning)
 		callback: 'A more comfortable treatment experience begins with the next step you choose.',
+		imageAlt:
+			'Two smiling clinicians in a bright clinic: a woman in a white coat holding a tablet and a man in green scrubs holding a syringe fitted with the UroDapter',
 	},
 };
 

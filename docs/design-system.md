@@ -9,8 +9,8 @@ section, page, or component.**
 > Webshop) is now the layout reference for the pages; this doc stays the rulebook for tokens,
 > dark mode, a11y and motion. Shipped so far: the canvas **header** (labels, current-page mark,
 > "Contact us"), the site **footer**, the **ink tokens + display type**, **`/shop`**,
-> **`/support`** and the **home page** — see §15. Not yet rebuilt from the canvas: Patient,
-> Clinician, Partner. (§2's home-page description below predates this rebuild.)
+> **`/support`**, the **home page** and **`/patients`** — see §15. Not yet rebuilt from the
+> canvas: Clinician, Partner. (§2's home-page description below predates this rebuild.)
 >
 > **2026-10-05 — UroSystem Brand Guideline 1.0** (`Brand Identity Codes_UroSystem.pdf` in the
 > client's `urodapter - UX/Képek, design ötletek/` folder). Owner decisions:
@@ -1101,4 +1101,23 @@ from the board HTML by script, unedited; inline links are `Rich` segments, never
   rendered, kept compiling. §6b and the §7 rows for them describe the previous home page.
 - Links that used to point at the home page's `#support` card (home, patient and clinician
   content) now go to `/support` (`supportHref` from `site.ts`).
+
+**Patient page (`/patients`, canvas "Páciens oldal" board).** `accent-patient` on a white page
+with the light header. `PatientHero` (eyebrow, "UroDapter®", the docx headline as the
+`display-light` line, the docx intro; the sofa photo `patient-hero.jpg` with the product shot and
+an Edit K. quote card overlapping it) → `WhyChoose` (mist-35 band; the old photo + glass-panel
+headline moved into the hero) → `WaveBridge` → `PatientStories` (arch-cropped
+`closing-hero.jpg` with a blush ring beside the heading) → `WaveBridge` → `EvidenceOutcomes`
+(arch-cropped `research-urologist.jpg`) → `WaveBridge` → `NextSteps` and the closing band (mist
+with a powder and a blush blob; `closing-medical-team.jpg` in the arch crop replaced the meadow
+photo, which is kept). The two image placeholders of the stories and evidence sections are gone.
+
+- **`WaveBridge` (`components/shared/`)** replaces `SectionBridge` on the patient page: a blush
+  band with wavy SVG edges, the lead line, the emphasis in the light display weight, and the
+  bridge arrow (same `nudge` keyframes, off under reduced motion) pointing at the next section's
+  id (`#stories`, `#evidence`, `#next-steps`). `above` / `below` take the neighbouring bands'
+  fill classes so the waves cut in seamlessly; dark mode uses blush 12% in navy-950.
+- **Unchanged inside:** the AutoAccordions, benefit / story / stat cards, the outcomes chart and
+  the next-step CTA cards keep their pre-canvas styling for now; the canvas's tinted CTA cards
+  (blue / blush / mist) are not yet applied.
 

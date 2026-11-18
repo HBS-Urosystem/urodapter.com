@@ -1,6 +1,7 @@
 <script lang="ts">
   import SiteHeader from '$lib/components/SiteHeader.svelte';
-  import SectionBridge from '$lib/components/shared/SectionBridge.svelte';
+  import WaveBridge from '$lib/components/shared/WaveBridge.svelte';
+  import PatientHero from '$lib/components/patients/PatientHero.svelte';
   import WhyChoose from '$lib/components/patients/WhyChoose.svelte';
   import PatientStories from '$lib/components/patients/PatientStories.svelte';
   import EvidenceOutcomes from '$lib/components/patients/EvidenceOutcomes.svelte';
@@ -37,32 +38,35 @@
   {@html jsonLd}
 </svelte:head>
 
-<!-- 0831 architecture: journey Steps 1–3 (relevance, hope, "how does it work?")
-     are answered on the homepage, so this page opens at Step 4. Four sections,
-     one bridge between each. -->
-<div class="bg-persona-page accent-patient text-navy-950 dark:text-white transition-colors min-h-screen">
-  <SiteHeader variant="solid" />
+<!-- Canvas "Páciens oldal" board (2026-11-18), on white and mist bands with
+     blush wave bridges (design system §15): PatientHero → the benefits (mist)
+     → wave → stories → wave → evidence → wave → next steps and the closing
+     band. The 0831 order is unchanged: the page opens at journey Step 4. -->
+<div class="accent-patient bg-white dark:bg-navy-950 text-(--ink)">
+  <SiteHeader variant="page" />
 
-  <main class="pb-16">
+  <main>
+    <PatientHero />
+
     <!-- Section 1: why patients choose UroDapter -->
     <WhyChoose />
 
-    <SectionBridge
-      variant={bridgeStories.variant}
-      tone={bridgeStories.tone}
+    <WaveBridge
       lead={bridgeStories.lead}
       emphasis={bridgeStories.emphasis}
+      next="stories"
+      above="fill-[color-mix(in_srgb,var(--color-mist)_35%,white)] dark:fill-[#062536]"
     />
 
     <!-- Section 2: patient experiences -->
     <PatientStories />
 
-    <SectionBridge variant={bridgeEvidence.variant} lead={bridgeEvidence.lead} emphasis={bridgeEvidence.emphasis} />
+    <WaveBridge lead={bridgeEvidence.lead} emphasis={bridgeEvidence.emphasis} next="evidence" />
 
     <!-- Section 3: evidence and outcomes -->
     <EvidenceOutcomes />
 
-    <SectionBridge variant={bridgeNextSteps.variant} lead={bridgeNextSteps.lead} emphasis={bridgeNextSteps.emphasis} />
+    <WaveBridge lead={bridgeNextSteps.lead} emphasis={bridgeNextSteps.emphasis} next="next-steps" />
 
     <!-- Section 4: what happens next (includes the closing band) -->
     <NextSteps />

@@ -4,27 +4,33 @@
   import AutoAccordion from '$lib/components/shared/AutoAccordion.svelte';
   import OutcomesChart from '$lib/components/shared/OutcomesChart.svelte';
   import ClinicianQuotes from './ClinicianQuotes.svelte';
-  import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
+  import researchImage from '$lib/assets/patients/research-urologist.jpg?enhanced';
   import StatCard from '$lib/components/shared/StatCard.svelte';
 </script>
 
-<section aria-labelledby="evidence-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
-    <div>
+<!-- Canvas restyle 2026-11-18: light display heading, and the urologist photo
+     in the arch crop beside it. -->
+<section id="evidence" aria-labelledby="evidence-heading" class="max-w-7xl mx-auto px-5 sm:px-8 pt-[clamp(1.5rem,3vw,2.5rem)] pb-[clamp(3.5rem,6vw,6rem)] scroll-mt-6">
+  <div class="flex flex-wrap items-center gap-x-14 gap-y-8">
+    <div class="flex-[1_1_26rem] min-w-0">
       <p class="eyebrow">{evidence.eyebrow}</p>
       <h2
         id="evidence-heading"
-        class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
+        class="mt-4 display-light"
       >
         {evidence.heading}
       </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
+      <p class="mt-4 text-lg leading-relaxed text-(--ink-soft) max-w-3xl text-pretty">
         {evidence.intro}
       </p>
     </div>
-    <div class="w-full lg:w-72 shrink-0">
-      <ImagePlaceholder description={evidence.image.description} />
-    </div>
+    <enhanced:img
+      src={researchImage}
+      alt={evidence.imageAlt}
+      sizes="(min-width: 1024px) 520px, 100vw"
+      loading="lazy"
+      class="flex-[1_1_22.5rem] min-w-0 max-w-[32.5rem] mx-auto w-full aspect-[16/10] object-cover object-[62%_0%] rounded-[999px_999px_2rem_2rem/60%_60%_2rem_2rem]"
+    />
   </div>
 
   <!-- Stat snippets: first word highlighted (docx spec) -->

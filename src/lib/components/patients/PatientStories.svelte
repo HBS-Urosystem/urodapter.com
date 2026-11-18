@@ -3,7 +3,7 @@
   import { stories, storyItems } from '$lib/content/patients';
   import AutoAccordion from '$lib/components/shared/AutoAccordion.svelte';
   import SupportCenterCard from '$lib/components/shared/SupportCenterCard.svelte';
-  import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
+  import storiesImage from '$lib/assets/patients/closing-hero.jpg?enhanced';
 
   // `storyItems` is built from `stories.testimonials` in order; the pane looks
   // its story up by item id rather than by position.
@@ -14,23 +14,29 @@
 
 <!-- `#stories` is a cross-page anchor target: the clinician journey's "Read all
      patient testimonials" lands here. `scroll-mt-24` clears the sticky header. -->
-<section id="stories" aria-labelledby="patient-stories-heading" class="max-w-7xl mx-auto px-5 sm:px-8 scroll-mt-24">
-  <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-12 items-center">
-    <div>
+<!-- Canvas restyle 2026-11-18: light display heading, and the sofa photo in the
+     arch crop with a blush ring beside the heading. -->
+<section id="stories" aria-labelledby="patient-stories-heading" class="max-w-7xl mx-auto px-5 sm:px-8 pt-[clamp(1.5rem,3vw,2.5rem)] pb-[clamp(3.5rem,6vw,6rem)] scroll-mt-6">
+  <div class="flex flex-wrap items-center gap-x-14 gap-y-8">
+    <div class="flex-[1_1_26rem] min-w-0">
       <p class="eyebrow">{stories.eyebrow}</p>
       <h2
         id="patient-stories-heading"
-        class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
+        class="mt-4 display-light"
       >
         {stories.heading}
       </h2>
-      <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
+      <p class="mt-4 text-lg leading-relaxed text-(--ink-soft) max-w-3xl text-pretty">
         {stories.intro}
       </p>
     </div>
-    <div class="w-full lg:w-72 shrink-0">
-      <ImagePlaceholder description={stories.image.description} />
-    </div>
+    <enhanced:img
+      src={storiesImage}
+      alt={stories.imageAlt}
+      sizes="(min-width: 1024px) 520px, 100vw"
+      loading="lazy"
+      class="flex-[1_1_22.5rem] min-w-0 max-w-[32.5rem] mx-auto w-full aspect-[16/10] object-cover object-[72%_30%] rounded-[999px_999px_2rem_2rem/60%_60%_2rem_2rem] ring-8 ring-blush/40 dark:ring-blush/15"
+    />
   </div>
 
   <!-- The four stories are an AutoAccordion (design system §6a) rather than a
