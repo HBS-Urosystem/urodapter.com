@@ -1,4 +1,6 @@
 <script lang="ts">
+  // PARKED 2026-11-18: the home page renders HomeHero (canvas design) instead.
+  // Kept compiling for reference; see design system §15.
   import heroImage from '$lib/assets/hero/urodapter-hero.png?enhanced';
   import productImage from '$lib/assets/hero/urodapter-product.png';
   import HeroAudienceCards from '$lib/components/home/HeroAudienceCards.svelte';
@@ -162,9 +164,7 @@
               {/if}
               {#if stat.link}
                 <a
-                  href={stat.link.externalHref}
-                  target="_blank"
-                  rel="external noopener noreferrer"
+                  href={stat.link.href}
                   class="inline-flex items-center gap-1 py-1 -my-1 text-sm font-medium text-(--brand-ink) hover:underline underline-offset-4
                          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand-ink)"
                 >
@@ -172,7 +172,6 @@
                   <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
                     ><path stroke-linecap="round" stroke-linejoin="round" d={arrowUpRightIcon} /></svg
                   >
-                  <span class="sr-only">(opens in a new tab)</span>
                 </a>
               {/if}
             </div>

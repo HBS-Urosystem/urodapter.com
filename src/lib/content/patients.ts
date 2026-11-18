@@ -10,12 +10,10 @@
 // choose UroDapter?" — the old "How it works" section is no longer part of the
 // patient journey (its copy is parked below for the homepage rebuild).
 
-import { resolve } from '$app/paths';
-import type { ResolvedPathname } from '$app/types';
-
-// Placeholder target until dedicated pages/URLs exist (story pages, webshop,
-// discussion guide, app) — every pending link points at the Support Center.
-const supportHref = (resolve('/') + '#support') as ResolvedPathname;
+// Placeholder target until dedicated pages/URLs exist (story pages, discussion
+// guide, app): every pending link points at the Support Center page (/support;
+// until 2026-11-18 a card on the home page, #support).
+import { supportHref } from '$lib/content/site';
 
 // External destinations supplied by the client (2026-09-09). They are absolute
 // URLs, not routes, so they live in `externalHref` rather than `href`: the two

@@ -8,8 +8,9 @@ section, page, or component.**
 > (claude.ai artifact, boards: Home, Patient, Clinician, Partner, Support Center 1/2 + 2/2,
 > Webshop) is now the layout reference for the pages; this doc stays the rulebook for tokens,
 > dark mode, a11y and motion. Shipped so far: the canvas **header** (labels, current-page mark,
-> "Contact us"), the site **footer**, the **ink tokens + display type**, **`/shop`** and
-> **`/support`** — see §15. Not yet rebuilt from the canvas: Home, Patient, Clinician, Partner.
+> "Contact us"), the site **footer**, the **ink tokens + display type**, **`/shop`**,
+> **`/support`** and the **home page** — see §15. Not yet rebuilt from the canvas: Patient,
+> Clinician, Partner. (§2's home-page description below predates this rebuild.)
 >
 > **2026-10-05 — UroSystem Brand Guideline 1.0** (`Brand Identity Codes_UroSystem.pdf` in the
 > client's `urodapter - UX/Képek, design ötletek/` folder). Owner decisions:
@@ -1074,4 +1075,30 @@ from the board HTML by script, unedited; inline links are `Rich` segments, never
 - **Open, flagged in `support.ts`:** the Infuserve America and Dawa Medical website addresses
   (their cards have no link until then); "completely painless" in the Global Consensus summary
   and "absolutely no leakage" in the FAQ — wording for the client to confirm, never to strengthen.
+
+**Home page (`src/routes/+page.svelte`, canvas "Főoldal" board).** On white bands, not
+`.bg-page-gradient`: `HomeHero` → `HomeWhyItMatters` → `HowItWorks` (restyled in place) →
+`HomeJourney`. Copy stays in `home.ts` (new: `hero.title`, `hero.intro`, `hero.photoAlt`,
+`hero.productAlt`, a `quote` on each `heroAudienceCards` item, an `icon` on each journey card).
+
+- `HomeHero`: "UroDapter®" (`display-title`, brand ink) over the headline as the `display-light`
+  line; intro; "See how it works" (filled) + "Talk to our team" (outline, → `/support#contact`);
+  the consultation photo (`src/lib/assets/home/hero-consultation.jpg`) with the product shot
+  (`src/lib/assets/product/urodapter-on-syringe.png`, flipped and tilted) over it from 1080px, or
+  centred under the CTAs below that. The two audience cards overlap the photo by 104px from `md`.
+  Each card is one link and carries **one static quote** — Hannah on the patient card,
+  Dr. Parekattil on the clinician card — which replaced the rotating quotes on the photo.
+  Then the credibility strip under a mist hairline; "Visit our webshop" now goes to `/shop`.
+- **Two "temperatures", one per persona** (the canvas's colour-system board): patient = warm and
+  round (blush card, blob decoration, rounded powder pill, round chips and arrows); clinician =
+  cool and square (white card, mist corner triangle, square sun pill via `rounded-[2px]!`,
+  square chips, pine arrow); distributor = lilac with 14px corners. Persona colours still come
+  from the `.accent-*` scopes.
+- `HomeWhyItMatters` replaces the home page's first `SectionBridge`; `HomeJourney` replaces the
+  second bridge and `ChooseJourney`. Its arrow is the bridge-arrow motion verb (same keyframes as
+  `SectionBridge`, off under reduced motion). The journey section's id is now `#journey`.
+- **Parked:** `UroDapterHero` (+ `QuoteRotator`, `HeroAudienceCards`) and `ChooseJourney` — not
+  rendered, kept compiling. §6b and the §7 rows for them describe the previous home page.
+- Links that used to point at the home page's `#support` card (home, patient and clinician
+  content) now go to `/support` (`supportHref` from `site.ts`).
 

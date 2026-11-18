@@ -18,13 +18,12 @@
 
 import { resolve } from '$app/paths';
 import type { ResolvedPathname } from '$app/types';
+// The Support Center page (/support); until 2026-11-18 a card on the home page (#support).
+import { contactHref, supportHref } from '$lib/content/site';
 
 const patientsHref = resolve('/patients');
 const cliniciansHref = resolve('/clinicians');
 const partnersHref = resolve('/partners');
-// The Support Center section at the foot of this page, until a dedicated
-// resources route exists.
-const supportHref = (resolve('/') + '#support') as ResolvedPathname;
 const homeHref = resolve('/');
 
 // ---------------------------------------------------------------------------
@@ -92,12 +91,20 @@ const iconPlusCircle = 'M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z';
 const howItWorksHref = (resolve('/') + '#how-it-works') as ResolvedPathname;
 
 export const hero = {
+	// Canvas "Főoldal" board (2026-11-18): the product name as the page title,
+	// the headline as the light display line under it, and the product chip's
+	// line folded into the intro.
+	title: 'UroDapter®',
 	// U+2011 non-breaking hyphen: the headline must never break after "Catheter-".
 	headline: 'Catheter‑free bladder instillation',
+	intro:
+		'Sterile, single-use syringe adapter. A simple way to perform bladder instillations without catheterization.',
+	photoAlt:
+		'A smiling older woman sitting on an examination couch, talking with a female doctor in a white coat',
+	productAlt: 'The UroDapter syringe adapter',
 	body: 'A simple way to perform bladder instillations without catheterization.',
 	primaryCta: { label: 'See how it works', href: howItWorksHref },
-	// TODO(placeholder): contact route — pending links resolve to #support until it exists
-	secondaryCta: { label: 'Talk to our team', href: supportHref },
+	secondaryCta: { label: 'Talk to our team', href: contactHref },
 	product: {
 		title: 'Sterile, single-use syringe adapter',
 		// Owner wording 2026-09-27: "standard Luer syringe" (D12).
@@ -115,7 +122,7 @@ export const hero = {
 export const heroTrustStats: {
 	title: string;
 	sub?: string;
-	link?: { label: string; externalHref: string };
+	link?: { label: string; href: ResolvedPathname };
 	icon: string;
 	emphasis?: boolean;
 }[] = [
@@ -137,7 +144,8 @@ export const heroTrustStats: {
 	// off-site destination — stands in as the next step until one is settled.
 	{
 		title: 'Available internationally',
-		link: { label: 'Visit our webshop', externalHref: 'https://www.urosystem.com/shop' },
+		// The site's own Webshop page since 2026-11-18 (was www.urosystem.com/shop).
+		link: { label: 'Visit our webshop', href: resolve('/shop') },
 		icon: iconGlobe,
 	},
 	// docx: "FDA Registered (?) / CE Marked / MDR". The client's own question
@@ -191,6 +199,10 @@ export const heroAudienceCards = [
 		// patient page's first section, as the clinician card's names its own.
 		linkLabel: 'Patient benefits',
 		href: patientsHref,
+		quote: {
+			text: 'I now have confidence, less apprehension, more predictability, and an overall better quality of life.',
+			author: 'Hannah, 27 · IC/BPS patient'
+		},
 	},
 	{
 		id: 'clinicians',
@@ -206,6 +218,10 @@ export const heroAudienceCards = [
 		],
 		linkLabel: 'Clinical use & evidence',
 		href: cliniciansHref,
+		quote: {
+			text: 'Perfect for targeted bladder treatments — Less discomfort, more efficiency, better experience.',
+			author: 'Dr. Parekattil, Avant Concierge Urology'
+		},
 	},
 ];
 
@@ -307,18 +323,21 @@ export const journey = {
 		{
 			id: 'patient',
 			title: 'I’m a Patient',
+			icon: iconHeart,
 			copy: 'Learn how catheter-free bladder instillation may improve your treatment experience.',
 			href: patientsHref,
 		},
 		{
 			id: 'clinician',
 			title: 'I’m a Clinician',
+			icon: iconPlusCircle,
 			copy: 'See how UroDapter can improve patient compliance while fitting into your clinical workflow.',
 			href: cliniciansHref,
 		},
 		{
 			id: 'distributor',
 			title: 'I’m a Distributor',
+			icon: iconGlobe,
 			copy: 'Explore partnership and distribution opportunities in your market.',
 			href: partnersHref,
 		},

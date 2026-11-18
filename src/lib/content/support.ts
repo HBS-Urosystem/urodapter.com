@@ -22,7 +22,7 @@ import thumbLovaszInterview from '$lib/assets/support/video-lovasz-interview.jpg
 import thumbDawaPodcast from '$lib/assets/support/video-dawa-podcast.jpg?enhanced';
 import thumbIcaWebinar from '$lib/assets/support/video-ica-webinar.jpg?enhanced';
 import thumbSunaKarabinos from '$lib/assets/support/video-suna-karabinos.jpg?enhanced';
-import productImage from '$lib/assets/support/urodapter-on-syringe.png?enhanced';
+import productImage from '$lib/assets/product/urodapter-on-syringe.png?enhanced';
 import ibsaLogo from '$lib/assets/partners/ibsa.png?enhanced';
 import infuserveLogo from '$lib/assets/partners/infuserve.png?enhanced';
 import morulaaLogo from '$lib/assets/partners/morulaa.jpg?enhanced';

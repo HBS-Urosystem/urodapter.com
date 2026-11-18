@@ -18,10 +18,11 @@
 
 import { resolve } from "$app/paths";
 import type { ResolvedPathname } from "$app/types";
+import { supportHref } from "$lib/content/site";
 
 // Placeholder target until the dedicated routes exist (webshop, UroDapter App,
 // publications, testimonials): everything pending points at the Support Center.
-const supportHref = (resolve("/") + "#support") as ResolvedPathname;
+// The Support Center page (/support); until 2026-11-18 a card on the home page (#support).
 // The patient journey's stories section (`PatientStories` carries the id).
 const patientStoriesHref = (resolve("/patients") + "#stories") as ResolvedPathname;
 
