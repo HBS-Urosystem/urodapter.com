@@ -1167,6 +1167,6 @@ the UroDapter plus as a lilac-20 decoration, a lilac eyebrow with 8px corners, "
 distributor ink, the headline as the `display-light` line, a brand rule and the intro; then two
 cards with 20px corners — the roadmap (white, lilac ring, 14px icon chips) and the B2B
 invitation (`--accent-solid` plum, white 14px-cornered button, the product shot, hidden below
-`sm` where it would cover the button). The invitation's link is still "Back to the overview"
-(home); a contact link would serve a B2B reader better — a copy decision for the client.
+`sm` where it would cover the button). The invitation's link is "Contact us" →
+`/support#contact` (owner direction 2026-11-18; it was "Back to the overview" → home).
 

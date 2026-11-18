@@ -24,7 +24,6 @@ import { contactHref, supportHref } from '$lib/content/site';
 const patientsHref = resolve('/patients');
 const cliniciansHref = resolve('/clinicians');
 const partnersHref = resolve('/partners');
-const homeHref = resolve('/');
 
 // ---------------------------------------------------------------------------
 // Icons reused across several sections
@@ -740,9 +739,9 @@ export const partnerPage = {
 	cta: {
 		heading: 'A special invitation to our B2B partners',
 		body: 'License, build OEM relationships, or form a multi-country corporate alliance with UroSystem.',
-		linkLabel: 'Back to the overview',
-		// The homepage's `#distributors` section is gone (0831 rebuild), so this
-		// goes to the homepage itself rather than a dead anchor.
-		href: homeHref,
+		// Owner direction 2026-11-18: a B2B reader is sent to the contact form
+		// (Support Center → Help and Contact), not back to the home page.
+		linkLabel: 'Contact us',
+		href: contactHref,
 	},
 };
