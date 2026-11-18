@@ -1,6 +1,6 @@
 <script lang="ts">
-  import SiteHeader from '$lib/components/SiteHeader.svelte';
-  import SectionBridge from '$lib/components/shared/SectionBridge.svelte';
+  import ClinicianHero from '$lib/components/clinicians/ClinicianHero.svelte';
+  import DarkBridge from '$lib/components/shared/DarkBridge.svelte';
   import ClinicalValue from '$lib/components/clinicians/ClinicalValue.svelte';
   import ClinicalEvidence from '$lib/components/clinicians/ClinicalEvidence.svelte';
   import SocialProof from '$lib/components/clinicians/SocialProof.svelte';
@@ -44,36 +44,33 @@
   {@html jsonLd}
 </svelte:head>
 
-<!-- 0831 architecture: journey Steps 1–3 ("why should I care?", "what is it?",
-     "how does it work?") are answered on the homepage, so this page opens at
-     Step 4 (clinical value) and runs to Step 9 (Support Center). -->
-<div class="bg-persona-page accent-clinician text-navy-950 dark:text-white transition-colors min-h-screen">
-  <SiteHeader variant="solid" />
+<!-- Canvas "Klinikus oldal" board (2026-11-18), the "cool" direction (design
+     system §15): the header on the pine hero band, white / mist / graph-paper
+     section bands, dark navy bridges and the pine closing band. The 0831 order
+     is unchanged: Step 4 (clinical value) to Step 9 (Support Center). -->
+<div class="accent-clinician bg-white dark:bg-navy-950 text-(--ink)">
+  <ClinicianHero />
 
-  <main class="pb-16">
+  <main>
     <!-- Section 1: clinical value for you and your patients -->
     <ClinicalValue />
 
-    <SectionBridge variant={bridgeEvidence.variant} lead={bridgeEvidence.lead} emphasis={bridgeEvidence.emphasis} />
+    <DarkBridge lead={bridgeEvidence.lead} emphasis={bridgeEvidence.emphasis} next="c-evidence" />
 
     <!-- Section 2: what the clinical evidence shows -->
     <ClinicalEvidence />
 
-    <SectionBridge
-      variant={bridgeSocialProof.variant}
-      lead={bridgeSocialProof.lead}
-      emphasis={bridgeSocialProof.emphasis}
-    />
+    <DarkBridge lead={bridgeSocialProof.lead} emphasis={bridgeSocialProof.emphasis} next="c-social" />
 
     <!-- Section 3: social proof -->
     <SocialProof />
 
-    <SectionBridge variant={bridgeImplementation.variant} emphasis={bridgeImplementation.emphasis} />
+    <DarkBridge emphasis={bridgeImplementation.emphasis} next="c-impl" />
 
     <!-- Section 4: implementation -->
     <Implementation />
 
-    <SectionBridge variant={bridgeNextSteps.variant} emphasis={bridgeNextSteps.emphasis} />
+    <DarkBridge emphasis={bridgeNextSteps.emphasis} next="c-next" />
 
     <!-- Section 5: next steps, then Section 6 as the closing band -->
     <NextSteps />

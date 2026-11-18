@@ -13,15 +13,16 @@
      indications the reader already treats, the workflow checklist and the
      learning path) are the three accordion items: each block title already
      reads as a claim, and the pane beside it is the answer. -->
-<section aria-labelledby="implementation-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="eyebrow">{implementation.eyebrow}</p>
+<section id="c-impl" aria-labelledby="implementation-heading" class="scroll-mt-6">
+<div class="max-w-7xl mx-auto px-5 sm:px-8 py-[clamp(3.5rem,6vw,6rem)]">
+  <p class="eyebrow rounded-[2px]!">{implementation.eyebrow}</p>
   <h2
     id="implementation-heading"
-    class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
+    class="mt-4 display-light"
   >
     {implementation.heading}
   </h2>
-  <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
+  <p class="mt-4 text-lg leading-relaxed text-(--ink-soft) max-w-3xl text-pretty">
     {implementation.intro}
   </p>
 
@@ -106,4 +107,5 @@
       {/snippet}
     </AutoAccordion>
   </div>
+</div>
 </section>

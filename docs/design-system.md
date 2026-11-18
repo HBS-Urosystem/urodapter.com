@@ -9,8 +9,8 @@ section, page, or component.**
 > Webshop) is now the layout reference for the pages; this doc stays the rulebook for tokens,
 > dark mode, a11y and motion. Shipped so far: the canvas **header** (labels, current-page mark,
 > "Contact us"), the site **footer**, the **ink tokens + display type**, **`/shop`**,
-> **`/support`**, the **home page** and **`/patients`** — see §15. Not yet rebuilt from the
-> canvas: Clinician, Partner. (§2's home-page description below predates this rebuild.)
+> **`/support`**, the **home page**, **`/patients`** and **`/clinicians`** — see §15. Not yet
+> rebuilt from the canvas: Partner. (§2's home-page description below predates this rebuild.)
 >
 > **2026-10-05 — UroSystem Brand Guideline 1.0** (`Brand Identity Codes_UroSystem.pdf` in the
 > client's `urodapter - UX/Képek, design ötletek/` folder). Owner decisions:
@@ -1120,4 +1120,26 @@ photo, which is kept). The two image placeholders of the stories and evidence se
 - **Unchanged inside:** the AutoAccordions, benefit / story / stat cards, the outcomes chart and
   the next-step CTA cards keep their pre-canvas styling for now; the canvas's tinted CTA cards
   (blue / blush / mist) are not yet applied.
+
+**Clinician page (`/clinicians`, canvas "Klinikus oldal" board) — the "cool" direction.**
+`ClinicianHero` renders the header too: `SiteHeader variant="dark"` (new: the `solid` look
+without its own band) on one **pine band** with the hero — a rule + caps eyebrow, "UroDapter®" in
+aqua, the docx sub-title as the `display-light` line in white, the two intro paragraphs in mist,
+and the urologist photo (`src/lib/assets/clinicians/hero-urologist.jpg`) with a cut top-left
+corner (`clip-path`) and the product shot over its edge. **The eyebrow text is mist, not the
+canvas's aqua** — aqua on pine is 3.2:1, below AA for 13px text; the aqua rule stays. The hero
+replaced the image placeholder; `ClinicalValue` now starts at its own heading.
+
+- Sections: `ClinicalValue` (white) → `ClinicalEvidence` on **`graph-paper`** (new utility in
+  `layout.css`: mist-15 ruled every 48px with mist-55; dark: faint white lines) → `SocialProof`
+  (mist-15) → `Implementation` (white) → `NextSteps` (white) → `SupportClosing` as a **pine band**
+  (translucent pine → lagoon corner, square aqua button, outlined square topic chips, the
+  closing statement under a hairline). Eyebrows are square here (`rounded-[2px]!`), headings
+  `display-light`.
+- **`DarkBridge` (`components/shared/`)** replaces `SectionBridge` on this page: navy-950 →
+  navy-900 at 45° with a translucent pine → lagoon corner, left-aligned lead + light emphasis,
+  and a square aqua bridge arrow (same `nudge` keyframes, off under reduced motion) pointing at
+  `#c-evidence`, `#c-social`, `#c-impl`, `#c-next`. Dark in both schemes.
+- Unchanged inside: the clinical-value boxes, the evidence and social-proof accordions, stat
+  cards, implementation and next-step cards.
 

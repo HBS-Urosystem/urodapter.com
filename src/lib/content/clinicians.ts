@@ -128,6 +128,14 @@ const iconQuestion =
 // ---------------------------------------------------------------------------
 
 export const hero = {
+  // Canvas "Klinikus oldal" board (2026-11-18): eyebrow, the product name as the
+  // title, the docx sub-title as the light display line, the two docx intro
+  // paragraphs, and the urologist photo with the product shot.
+  eyebrow: "For clinicians",
+  title: "UroDapter®",
+  photoAlt:
+    "A smiling male urologist in a white coat standing in his clinic, with a bladder scan on the monitor and a syringe on the bench",
+  productAlt: "The UroDapter syringe adapter",
   // docx "[Sub-title]" — the display line that sits on the hero image.
   headline:
     "A Better Bladder Instillation Experience. Without Changing Your Practice.",

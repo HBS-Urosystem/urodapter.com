@@ -12,15 +12,18 @@
      (design system §6a) instead of three stacked cards. Each study's label is
      the header, its figures are the pane beside it, and every footnote and
      citation stays in the DOM — the section is shorter, not lighter. -->
-<section aria-labelledby="clinical-evidence-heading" class="max-w-7xl mx-auto px-5 sm:px-8">
-  <p class="eyebrow">{evidence.eyebrow}</p>
+<!-- Canvas restyle 2026-11-18: a mist-15 band ruled as graph paper (48px), the
+     "clinical" texture of the cool direction. -->
+<section id="c-evidence" aria-labelledby="clinical-evidence-heading" class="scroll-mt-6 graph-paper border-y border-mist dark:border-white/10">
+<div class="max-w-7xl mx-auto px-5 sm:px-8 py-[clamp(3.5rem,6vw,6rem)]">
+  <p class="eyebrow rounded-[2px]!">{evidence.eyebrow}</p>
   <h2
     id="clinical-evidence-heading"
-    class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
+    class="mt-4 display-light"
   >
     {evidence.heading}
   </h2>
-  <p class="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-3xl text-pretty">
+  <p class="mt-4 text-lg leading-relaxed text-(--ink-soft) max-w-3xl text-pretty">
     {evidence.intro}
   </p>
 
@@ -101,4 +104,5 @@
       {/snippet}
     </AutoAccordion>
   </div>
+</div>
 </section>

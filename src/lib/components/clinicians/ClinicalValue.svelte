@@ -1,7 +1,6 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/reveal';
-  import { hero, clinicalValue } from '$lib/content/clinicians';
-  import ImagePlaceholder from '$lib/components/shared/ImagePlaceholder.svelte';
+  import { clinicalValue } from '$lib/content/clinicians';
 
   const groups = clinicalValue.groups;
   const uid = $props.id();
@@ -92,42 +91,14 @@
     'M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z';
 </script>
 
-<!-- Section 1 (0831 docx) — "Clinical Value for You and Your Patients".
-     Hero sub-title + the two intro paragraphs, then the two benefit groups as
-     two boxes — the docx's own "1 box for the 3 patient benefit, 1 box for the
-     clinician benefit". The hero photo is still a pending client asset, so the
-     slot states what it should show. -->
-<section aria-labelledby="clinician-hero-heading" class="max-w-7xl mx-auto px-5 sm:px-8 pt-10 sm:pt-16">
-  <div class="grid grid-cols-1 lg:grid-cols-[45fr_55fr] gap-8 lg:gap-12 items-center">
-    <div class="lg:pr-6">
-      <h1
-        id="clinician-hero-heading"
-        class="font-display font-semibold text-navy-950 dark:text-white leading-[1.15] text-balance text-[clamp(1.6rem,3.4vw,2.4rem)]"
-      >
-        {hero.headline}
-      </h1>
-      <div class="mt-7 h-0.5 w-12 rounded-full bg-(--accent-ink)/60" aria-hidden="true"></div>
-      {#each hero.intro as paragraph, i (paragraph)}
-        <p
-          class="{i === 0 ? 'mt-7' : 'mt-4'} text-base leading-relaxed text-slate-600 dark:text-slate-300 max-w-md text-pretty"
-        >
-          {paragraph}
-        </p>
-      {/each}
-    </div>
-
-    <div class="w-full">
-      <ImagePlaceholder description={hero.image.description} ratio="aspect-[3/2]" />
-    </div>
-  </div>
-
-  <div class="mt-14">
-    <p class="eyebrow">{clinicalValue.eyebrow}</p>
-    <h2
-      class="mt-3 font-display font-semibold text-navy-950 dark:text-white leading-tight text-balance text-[clamp(1.6rem,3.2vw,2.25rem)]"
-    >
-      {clinicalValue.heading}
-    </h2>
+<!-- Section 1 (0831 docx) — "Clinical Value for You and Your Patients": the
+     two benefit groups as two boxes — the docx's own "1 box for the 3 patient
+     benefit, 1 box for the clinician benefit". Canvas restyle 2026-11-18: the
+     hero moved into ClinicianHero; square sun eyebrow, light display heading. -->
+<section aria-labelledby="c-value" class="max-w-7xl mx-auto px-5 sm:px-8 py-[clamp(3.5rem,6vw,6rem)]">
+  <div class="flex flex-col items-start gap-4 max-w-3xl">
+    <p class="eyebrow rounded-[2px]!">{clinicalValue.eyebrow}</p>
+    <h2 id="c-value" class="display-light">{clinicalValue.heading}</h2>
   </div>
 
   <!-- Owner direction 2026-09-29: from md the two boxes sit side by side,

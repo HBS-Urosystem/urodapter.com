@@ -515,3 +515,20 @@
   text-wrap: balance;
   color: var(--ink);
 }
+
+/* Graph paper — the canvas clinician page's evidence band (2026-11-18): mist-15
+   ruled every 48px with mist-55 lines; in dark mode the dark band with faint
+   white lines. A texture for the "cool", clinical direction only. */
+@utility graph-paper {
+  background-color: color-mix(in srgb, var(--color-mist) 15%, white);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-mist) 55%, white) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-mist) 55%, white) 1px, transparent 1px);
+  background-size: 48px 48px;
+  @media (prefers-color-scheme: dark) {
+    background-color: #062536;
+    background-image:
+      linear-gradient(rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  }
+}

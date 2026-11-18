@@ -8,7 +8,9 @@
   // `page` sits transparent on the page gradient (home, where the hero is no
   // longer a photo band), so its text follows the colour scheme; `solid` is the
   // subpage bar, white on its own navy→accent gradient.
-  let { variant = 'solid' }: { variant?: 'page' | 'solid' } = $props();
+  // `dark` (canvas clinician page, 2026-11-18) is `solid` without its own
+  // band: white text, transparent, sitting on the page's dark hero band.
+  let { variant = 'solid' }: { variant?: 'page' | 'solid' | 'dark' } = $props();
 
   let mobileMenuOpen = $state(false);
 
@@ -77,7 +79,7 @@
      Both variants share the 20px top padding, so the logo and links sit at the
      same height on every page; only `solid` needs the bottom padding to close
      its band. -->
-<header class={onPage ? 'text-navy-950 dark:text-white' : 'text-white nav-gradient'}>
+<header class={onPage ? 'text-navy-950 dark:text-white' : variant === 'dark' ? 'text-white' : 'text-white nav-gradient'}>
   <div class="max-w-7xl mx-auto px-5 sm:px-8 pt-5 {onPage ? '' : 'pb-5'}">
     <nav {@attach fitLinks} class="relative flex items-center justify-between gap-6">
       <!-- The logo slot takes whatever the row leaves beside the links, and is

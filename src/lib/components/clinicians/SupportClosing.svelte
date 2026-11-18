@@ -4,46 +4,37 @@
 </script>
 
 <!-- Section 6 (0831 docx) — "I want more information" + the closing statement,
-     rendered as ONE full-bleed band: a bridge or a second band stacked on this
-     one would put two tinted surfaces back to back. -->
-<div class="tint-band mt-12 sm:mt-16">
-  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-12 sm:py-16">
-    <div use:reveal class="rounded-2xl surface-panel p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-[minmax(0,19rem)_minmax(0,1fr)] gap-x-10 gap-y-8 items-center">
-      <div>
-        <h2 class="font-semibold text-navy-950 dark:text-white">{closing.heading}</h2>
-        <p class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300 text-pretty">{closing.body}</p>
-        <a
-          href={closing.href}
-          class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink) rounded-sm"
-        >
-          {closing.linkLabel}
-          <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-        </a>
+     as ONE full-bleed band. Canvas restyle 2026-11-18: a pine band (dark in
+     both schemes) with a translucent pine → lagoon corner; the heading in the
+     light display weight, a square aqua button, the topics as outlined
+     square chips, then the docx's closing statement under a hairline. -->
+<section aria-labelledby="c-support" class="relative overflow-hidden bg-pine">
+  <div aria-hidden="true" class="absolute right-0 top-0 w-[40%] h-full opacity-20 bg-linear-45 from-pine to-lagoon [clip-path:polygon(45%_0,100%_0,100%_100%,0_100%)]"></div>
+  <div class="relative max-w-7xl mx-auto px-5 sm:px-8 py-[clamp(3.5rem,6vw,6rem)] flex flex-col gap-10">
+    <div class="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
+      <div class="flex-[1_1_32.5rem] min-w-0 flex flex-col gap-4">
+        <h2 id="c-support" class="display-light text-white!">{closing.heading}</h2>
+        <p class="text-lg leading-relaxed text-mist text-pretty">{closing.body}</p>
       </div>
-      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-5">
-        {#each closing.items as item (item.label)}
-          <li class="flex min-w-0 flex-col items-center gap-2 text-center">
-            <span
-              class="w-10 h-10 rounded-full bg-white dark:bg-navy-800 border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center"
-              aria-hidden="true"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={item.icon} /></svg>
-            </span>
-            <span class="text-xs font-medium leading-snug text-slate-700 dark:text-slate-200">{item.label}</span>
-          </li>
-        {/each}
-      </ul>
+      <a
+        href={closing.href}
+        class="group inline-flex items-center gap-2.5 h-13 px-6 rounded-[3px] font-bold bg-aqua text-navy-950 hover:bg-white
+               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-aqua"
+      >
+        {closing.linkLabel} <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none">→</span>
+      </a>
     </div>
-
-    <!-- The docx's closing statement — the page's last word, in bridge typography -->
-    <div use:reveal class="mt-12 max-w-3xl mx-auto text-center">
-      <div class="h-0.5 w-12 mx-auto rounded-full bg-(--accent-ink)/50 dark:bg-(--accent-ink)/60" aria-hidden="true"></div>
-      <p class="mt-7 font-display font-semibold text-navy-950 dark:text-white text-[clamp(1.35rem,2.6vw,1.9rem)] leading-snug text-balance">
-        {closing.final.heading}
-      </p>
-      <p class="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300 text-pretty">
-        {closing.final.body}
-      </p>
+    <ul use:reveal class="flex flex-wrap gap-2.5">
+      {#each closing.items as item (item.label)}
+        <li class="inline-flex items-center gap-2 h-10 px-3.5 rounded-[2px] ring-1 ring-inset ring-mist/30 text-sm font-semibold text-white">
+          <svg class="size-[18px] text-aqua" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={item.icon} /></svg>
+          {item.label}
+        </li>
+      {/each}
+    </ul>
+    <div use:reveal class="pt-8 border-t border-mist/20 flex flex-col gap-3 max-w-[53.75rem]">
+      <h3 class="text-[clamp(1.375rem,2.2vw,1.75rem)] leading-tight font-light text-white">{closing.final.heading}</h3>
+      <p class="leading-relaxed text-mist text-pretty">{closing.final.body}</p>
     </div>
   </div>
-</div>
+</section>
