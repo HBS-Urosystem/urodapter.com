@@ -50,7 +50,7 @@
       {#snippet panel(item)}
         {@const quote = quoteById.get(item.id)}
         {#if quote}
-        <div class="rounded-2xl surface-card p-6 sm:p-8 h-full flex flex-col justify-center">
+        <div class="rounded-[2px] bg-white ring-1 ring-inset ring-mist dark:bg-navy-900 dark:ring-white/10 p-6 sm:p-8 h-full flex flex-col justify-center">
           <span class="font-display text-4xl leading-none text-(--accent-ink)" aria-hidden="true">&ldquo;</span>
           <blockquote class="mt-3">
             <p class="text-base sm:text-lg leading-relaxed text-navy-900 dark:text-slate-100 text-pretty">

@@ -201,6 +201,10 @@
 --------------------------------------------------------------------------- */
 :root,
 .accent-patient {
+  /* Card corner per persona (canvas 2026-11-18): rounded for the patient's
+     warm direction, square for the clinician's cool one. Read by the shared
+     cards (StatCard, SupportCenterCard, TestimonialCard). */
+  --card-radius: 1.875rem;
   --accent: var(--color-patient);
   --accent-ink: #1d6788;
   --accent-soft: color-mix(in srgb, var(--color-cerulean) 16%, white);
@@ -212,6 +216,7 @@
   --nav-accent: color-mix(in srgb, var(--color-patient) 75%, var(--color-cerulean));
 }
 .accent-clinician {
+  --card-radius: 2px;
   --accent: var(--color-clinician);
   --accent-ink: var(--color-clinician);
   --accent-soft: color-mix(in srgb, var(--color-aqua) 18%, white);
@@ -223,6 +228,7 @@
   --nav-accent: var(--color-clinician);
 }
 .accent-distributor {
+  --card-radius: 0.875rem;
   --accent: var(--color-distributor);
   /* Plum is 4.13:1 under white text and as text on white — just under AA —
      so its ink and its fills are the plum darkened. */

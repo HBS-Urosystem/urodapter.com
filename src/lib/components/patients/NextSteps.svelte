@@ -5,33 +5,47 @@
 
   type Cta = (typeof nextSteps.ctas)[number];
 
-  // CTA tiers: primary is the solid persona gradient (scoped `.cta-primary`);
-  // the other tiers are persona-tinted cards, as on the clinician page
-  // (2026-09-29: were slate-50 — more contrast against the canvas).
+  // Canvas (2026-11-18): three tinted cards, each one link — the first (order)
+  // mist with a powder blob and a white pill, the second (talk to your
+  // clinician) blush, the third (already using) light mist. 32px corners.
+  const looks = [
+    {
+      card: 'bg-mist dark:bg-navy-900 dark:ring-1 dark:ring-powder/25',
+      chip: 'bg-navy-700 text-mist',
+      blob: 'absolute -right-15 -bottom-[70px] w-[220px] h-50 rounded-[52%_48%_44%_56%/56%_44%_56%_44%] bg-powder dark:bg-powder/12',
+      link: 'h-12 px-[22px] rounded-full bg-white text-navy-900 dark:bg-white/10 dark:text-white',
+    },
+    {
+      card: 'bg-[color-mix(in_srgb,var(--color-blush)_40%,white)] dark:bg-navy-900 dark:ring-1 dark:ring-blush/20',
+      chip: 'bg-blush text-navy-900 dark:bg-blush/15 dark:text-white',
+      blob: '',
+      link: 'min-h-11 text-navy-900 dark:text-white',
+    },
+    {
+      card: 'bg-mist/35 dark:bg-navy-900 dark:ring-1 dark:ring-white/10',
+      chip: 'bg-mist text-navy-900 dark:bg-white/10 dark:text-white',
+      blob: '',
+      link: 'min-h-11 text-navy-900 dark:text-white',
+    },
+  ];
+  const look = (cta: Cta) => looks[nextSteps.ctas.indexOf(cta)] ?? looks[2];
   const cardClass = (cta: Cta) =>
-    cta.tier === 'primary'
-      ? 'group cta-primary transition-[background] rounded-2xl p-6 flex flex-col text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-(--accent-ink)'
-      : 'group surface-card rounded-2xl p-6 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink)';
+    `group relative overflow-hidden rounded-[32px] p-8 flex flex-col gap-4 text-(--ink) ${look(cta).card} ` +
+    'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-(--brand-ink)';
 </script>
 
 <!-- Card interior, shared by the on-site and off-site anchors below. -->
 {#snippet cardBody(cta: Cta)}
-  {@const primary = cta.tier === 'primary'}
-  <span
-    class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 {primary
-      ? 'bg-white/20'
-      : 'bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink)'}"
-    aria-hidden="true"
-  >
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={cta.icon} /></svg>
+  {@const l = look(cta)}
+  {#if l.blob}<div aria-hidden="true" class={l.blob}></div>{/if}
+  <span class="relative grid place-items-center size-14 shrink-0 rounded-full {l.chip}" aria-hidden="true">
+    <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={cta.icon} /></svg>
   </span>
-  <h3 class="mt-4 font-semibold {primary ? '' : 'text-navy-950 dark:text-white'}">{cta.title}</h3>
-  <p class="mt-1.5 text-sm leading-relaxed flex-1 {primary ? 'text-white/85' : 'text-slate-600 dark:text-slate-300'}">
-    {cta.body}
-  </p>
-  <span class="mt-4 inline-flex items-center gap-1.5 text-sm {primary ? 'font-semibold' : 'font-medium text-(--accent-ink)'}">
+  <h3 class="relative text-2xl leading-tight font-semibold">{cta.title}</h3>
+  <p class="relative grow leading-relaxed text-(--ink-soft)">{cta.body}</p>
+  <span class="relative self-start inline-flex items-center gap-2 font-semibold {l.link}">
     {cta.linkLabel}{#if cta.externalHref}<span class="sr-only"> (opens in a new tab)</span>{/if}
-    <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
+    <span class="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none" aria-hidden="true">→</span>
   </span>
 {/snippet}
 
@@ -47,7 +61,7 @@
     {nextSteps.intro}
   </p>
 
-  <div use:reveal class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div use:reveal class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
     {#each nextSteps.ctas as cta (cta.title)}
       {#if cta.externalHref}
         <!-- Off-site (client webshop / UroDapter App): a new tab, and
@@ -68,40 +82,28 @@
     {/each}
   </div>
 
-  <!-- Dive deep: Support Center band -->
-  <div use:reveal class="mt-6 rounded-2xl surface-panel p-6 sm:p-7 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-x-10 gap-y-6 items-center">
-    <div class="flex items-start gap-4">
-      <span
-        class="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 text-(--accent-ink) flex items-center justify-center shrink-0"
-        aria-hidden="true"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-      </span>
-      <div>
-        <h3 class="font-semibold text-navy-950 dark:text-white">{nextSteps.diveDeep.heading}</h3>
-        <p class="mt-1.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{nextSteps.diveDeep.body}</p>
-        <a
-          href={nextSteps.diveDeep.href}
-          class="group mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-(--accent-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-ink) rounded-sm"
-        >
-          {nextSteps.diveDeep.linkLabel}
-          <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-        </a>
-      </div>
+  <!-- Dive deep: the Support Center panel (canvas: mist, 32px corners, the
+     topics as white pills, a navy pill button). -->
+  <div use:reveal class="mt-6 rounded-[32px] p-[clamp(1.5rem,3vw,2.25rem)] flex flex-wrap items-center justify-between gap-x-10 gap-y-5 bg-mist/35 dark:bg-navy-900 dark:ring-1 dark:ring-white/10">
+    <div class="flex-[1_1_22.5rem] min-w-0 flex flex-col gap-3.5">
+      <h3 class="text-2xl leading-tight font-semibold text-(--ink)">{nextSteps.diveDeep.heading}</h3>
+      <p class="leading-relaxed text-(--ink-soft)">{nextSteps.diveDeep.body}</p>
+      <ul class="flex flex-wrap gap-2">
+        {#each nextSteps.diveDeep.items as item (item.label)}
+          <li class="inline-flex items-center gap-2 h-[38px] px-3.5 rounded-full bg-white text-sm font-semibold text-navy-900 dark:bg-white/10 dark:text-white">
+            <svg class="size-4 text-(--brand-ink)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={item.icon} /></svg>
+            {item.label}
+          </li>
+        {/each}
+      </ul>
     </div>
-    <ul class="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-5 gap-x-6 gap-y-5">
-      {#each nextSteps.diveDeep.items as item (item.label)}
-        <li class="flex flex-col items-center gap-2 text-center">
-          <span
-            class="w-10 h-10 rounded-full bg-white dark:bg-navy-800 border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center"
-            aria-hidden="true"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={item.icon} /></svg>
-          </span>
-          <span class="text-xs font-medium leading-snug text-slate-700 dark:text-slate-200">{item.label}</span>
-        </li>
-      {/each}
-    </ul>
+    <a
+      href={nextSteps.diveDeep.href}
+      class="group inline-flex items-center gap-2.5 h-12 px-[22px] rounded-full font-semibold bg-navy-900 text-white hover:bg-navy-950 dark:bg-white dark:text-navy-950 dark:hover:bg-mist
+             focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand-ink)"
+    >
+      {nextSteps.diveDeep.linkLabel} <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none">→</span>
+    </a>
   </div>
 </section>
 
@@ -130,17 +132,3 @@
   </div>
 </section>
 
-<style>
-  /* The .surface-solid gradient language (deep → a little of the bright
-     partner), read from the page's accent scope rather than hardcoded. */
-  .cta-primary {
-    background: linear-gradient(
-      135deg,
-      var(--accent-solid) 0%,
-      color-mix(in srgb, var(--accent-solid) 78%, var(--surface-accent)) 100%
-    );
-  }
-  .cta-primary:hover {
-    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-solid) 85%, black) 0%, var(--accent-solid) 100%);
-  }
-</style>

@@ -10,7 +10,7 @@
 <!-- Stat snippet: serif highlight (a number or short phrase) + body + citation.
      Accent comes from the surrounding .accent-* scope, so the same card reads
      blue on the patient page and teal/purple in a persona section. -->
-<div class="rounded-2xl surface-card p-5 flex flex-col">
+<div class="rounded-(--card-radius) bg-white ring-1 ring-inset ring-mist dark:bg-navy-900 dark:ring-white/10 p-5 flex flex-col">
   <div class="flex items-center gap-3">
     <span
       class="w-10 h-10 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center shrink-0"

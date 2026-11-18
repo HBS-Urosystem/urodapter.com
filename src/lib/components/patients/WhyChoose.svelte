@@ -22,25 +22,35 @@
     <h2 id="p-why" class="display-light">{whyChoose.heading}</h2>
   </div>
 
-  <!-- The four benefits are an AutoAccordion (design system §6a). The headers
-       carry no icon chip on purpose — see `whyChooseItems`: chips would make
-       this list taller than the grid it replaces. The icon moves to the pane. -->
-  <div use:reveal class="mt-8">
+  <!-- Canvas (2026-11-18): from 768px the four benefits are four white cards
+     side by side, all visible; below 768px the same cards sit in the
+     AutoAccordion (design system §6a), whose header carries the title. The
+     icon chips alternate blush (warm) and mist (cool). -->
+  {#snippet benefitCard(benefit: (typeof whyChoose.benefits)[number], i: number, withTitle: boolean)}
+    <article class="h-full rounded-[30px] p-7 flex flex-col gap-3.5 bg-white dark:bg-navy-900 dark:ring-1 dark:ring-white/10">
+      <span
+        aria-hidden="true"
+        class="grid place-items-center size-14 rounded-full text-navy-900 dark:text-white {i % 2 === 0 ? 'bg-blush dark:bg-blush/15' : 'bg-mist/55 dark:bg-white/10'}"
+      >
+        <svg class="size-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={benefit.icon} /></svg>
+      </span>
+      {#if withTitle}<h3 class="text-[21px] leading-tight font-semibold text-(--ink)">{benefit.title}</h3>{/if}
+      <p class="leading-relaxed text-(--ink-soft) text-pretty">{benefit.body}</p>
+    </article>
+  {/snippet}
+
+  <ul use:reveal class="mt-10 hidden md:grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+    {#each whyChoose.benefits as benefit, i (benefit.title)}
+      <li>{@render benefitCard(benefit, i, true)}</li>
+    {/each}
+  </ul>
+
+  <div use:reveal class="mt-8 md:hidden">
     <AutoAccordion items={whyChooseItems} controlLabel="the patient benefits">
       {#snippet panel(item)}
         {@const benefit = benefitById.get(item.id)}
         {#if benefit}
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full flex flex-col justify-center">
-            <span
-              class="w-12 h-12 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center shrink-0"
-              aria-hidden="true"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={benefit.icon} /></svg>
-            </span>
-            <p class="mt-5 text-base sm:text-lg leading-relaxed text-slate-700 dark:text-slate-200 text-pretty">
-              {benefit.body}
-            </p>
-          </div>
+          {@render benefitCard(benefit, whyChoose.benefits.indexOf(benefit), false)}
         {/if}
       {/snippet}
     </AutoAccordion>

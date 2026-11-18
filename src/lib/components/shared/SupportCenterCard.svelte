@@ -22,7 +22,7 @@
 
 {#if variant === 'solid'}
   <!-- Bold primary-colour CTA band (white text on the patient accent) -->
-  <div class="rounded-2xl surface-solid p-6 flex items-start gap-4 text-white">
+  <div class="rounded-(--card-radius) surface-solid p-6 flex items-start gap-4 text-white">
     <span class="w-12 h-12 rounded-full bg-white/15 flex items-center justify-center shrink-0" aria-hidden="true">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={bookIcon} /></svg>
     </span>
@@ -39,7 +39,7 @@
     </div>
   </div>
 {:else}
-  <div class="rounded-2xl surface-panel p-6 flex items-start gap-4">
+  <div class="rounded-(--card-radius) bg-mist/35 ring-1 ring-inset ring-mist dark:bg-white/5 dark:ring-white/10 p-6 flex items-start gap-4">
     <span
       class="w-12 h-12 rounded-full bg-white dark:bg-navy-800 border border-slate-200 dark:border-white/10 text-(--accent-ink) flex items-center justify-center shrink-0"
       aria-hidden="true"

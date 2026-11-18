@@ -39,36 +39,43 @@
     />
   </div>
 
-  <!-- The four stories are an AutoAccordion (design system §6a) rather than a
-       four-up grid. The quote is the pane, on screen the whole time — what
-       collapses is the theme label. Desktop barely changes; the section is
-       1 930 px on a 375 px screen, where four stacked cards are nearly all of
-       it, and that is what this buys back. -->
-  <div use:reveal class="mt-10">
+  <!-- Canvas (2026-11-18): from 768px the four stories are four blush cards
+     side by side, all visible; below 768px the same cards sit in the
+     AutoAccordion (design system §6a), whose header carries the theme. -->
+  {#snippet storyCard(story: (typeof stories.testimonials)[number], withTheme: boolean)}
+    <div class="h-full rounded-[30px] p-7 flex flex-col gap-3.5 bg-[color-mix(in_srgb,var(--color-blush)_40%,white)] dark:bg-navy-900 dark:ring-1 dark:ring-blush/20">
+      {#if withTheme}
+        <div class="accent-clinician flex items-center gap-2.5 text-[13px] font-bold tracking-[0.12em] uppercase text-(--accent-ink)">
+          <svg class="size-[18px] shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d={story.icon} /></svg>
+          {story.theme}
+        </div>
+      {/if}
+      <figure class="grow flex flex-col gap-3.5">
+        <blockquote class="text-[19px] leading-snug italic font-light text-(--ink) text-pretty">“{story.quote}”</blockquote>
+        <figcaption class="mt-auto flex flex-col gap-0.5 text-sm text-(--ink-soft)">
+          <strong class="text-[15px] text-(--ink)">{story.author}</strong>{story.meta}
+        </figcaption>
+      </figure>
+      <a
+        href={story.href}
+        class="group self-start inline-flex items-center gap-1.5 min-h-11 text-[15px] font-semibold text-(--brand-ink) rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--brand-ink)"
+      >
+        {story.linkLabel} <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none">→</span>
+      </a>
+    </div>
+  {/snippet}
+
+  <ul use:reveal class="mt-10 hidden md:grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+    {#each stories.testimonials as story (story.author)}
+      <li>{@render storyCard(story, true)}</li>
+    {/each}
+  </ul>
+
+  <div use:reveal class="mt-10 md:hidden">
     <AutoAccordion items={storyItems} controlLabel="the patient stories">
       {#snippet panel(item)}
         {@const story = storyById.get(item.id)}
-        {#if story}
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full flex flex-col justify-center">
-            <span class="font-display text-4xl leading-none text-(--accent-ink)" aria-hidden="true">&ldquo;</span>
-            <blockquote class="mt-3">
-              <p class="text-base sm:text-lg leading-relaxed text-navy-900 dark:text-slate-100 text-pretty">
-                {story.quote}
-              </p>
-              <footer class="mt-5 pt-4 border-t border-slate-100 dark:border-white/10 text-sm">
-                <span class="font-semibold text-navy-950 dark:text-white">{story.author}</span>
-                <span class="block mt-0.5 text-xs text-slate-500 dark:text-slate-400">{story.meta}</span>
-              </footer>
-            </blockquote>
-            <a
-              href={story.href}
-              class="group mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-(--brand-ink) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--brand-ink) rounded-sm self-start"
-            >
-              {story.linkLabel}
-              <span class="group-hover:translate-x-1 transition-transform" aria-hidden="true">→</span>
-            </a>
-          </div>
-        {/if}
+        {#if story}{@render storyCard(story, false)}{/if}
       {/snippet}
     </AutoAccordion>
   </div>

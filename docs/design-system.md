@@ -1117,9 +1117,15 @@ photo, which is kept). The two image placeholders of the stories and evidence se
   bridge arrow (same `nudge` keyframes, off under reduced motion) pointing at the next section's
   id (`#stories`, `#evidence`, `#next-steps`). `above` / `below` take the neighbouring bands'
   fill classes so the waves cut in seamlessly; dark mode uses blush 12% in navy-950.
-- **Unchanged inside:** the AutoAccordions, benefit / story / stat cards, the outcomes chart and
-  the next-step CTA cards keep their pre-canvas styling for now; the canvas's tinted CTA cards
-  (blue / blush / mist) are not yet applied.
+- **Inner cards (2026-11-18, second pass):** from **768px** the four benefits and the four
+  stories are **card grids, all visible** (`md:grid-cols-2 xl:grid-cols-4`); below 768px the same
+  cards sit in the `AutoAccordion` (rendered twice, one hidden by CSS). Benefit cards: white,
+  30px corners, a 56px icon chip alternating blush / mist. Story cards: blush-40, 30px corners,
+  the theme as a pine caps label, the quote italic light, the link outside the `<figure>`. The
+  research section stays an accordion at every width, as on the canvas. Next-step CTA cards:
+  32px corners — mist with a powder blob and a white pill (order), blush-40 (talk to your
+  clinician), mist-35 (already using); the Support Center panel is mist-35 with the topics as
+  white pills and a navy pill button. The scoped `.cta-primary` gradient is gone.
 
 **Clinician page (`/clinicians`, canvas "Klinikus oldal" board) — the "cool" direction.**
 `ClinicianHero` renders the header too: `SiteHeader variant="dark"` (new: the `solid` look
@@ -1140,6 +1146,16 @@ replaced the image placeholder; `ClinicalValue` now starts at its own heading.
   navy-900 at 45° with a translucent pine → lagoon corner, left-aligned lead + light emphasis,
   and a square aqua bridge arrow (same `nudge` keyframes, off under reduced motion) pointing at
   `#c-evidence`, `#c-social`, `#c-impl`, `#c-next`. Dark in both schemes.
-- Unchanged inside: the clinical-value boxes, the evidence and social-proof accordions, stat
-  cards, implementation and next-step cards.
+- **Inner cards (2026-11-18, second pass), all square (2px):** the clinical-value boxes are
+  white with the group name as a pine caps label over a 2px pine rule and each benefit as a row
+  with a square 28px chip; the evidence shows **all three blocks from 960px** (the series full
+  width with three large light figures, then the real-world study and the expert review — the
+  review as the solid pine card with a lagoon corner), an accordion below 960px; quotes and
+  implementation stay accordions at every width, as on the canvas. Next-step cards: the primary
+  one flat pine (`.accent-pill`, lagoon corner, white button look), the others white with a mist
+  ring and square chips.
+- **`--card-radius`** (new, per accent scope in `layout.css`): patient 30px, clinician 2px,
+  distributor 14px. `StatCard`, `SupportCenterCard` and `TestimonialCard` read it and now use
+  white / mist-35 fills with a mist ring instead of `.surface-card` / `.surface-panel` (the
+  solid variant keeps `.surface-solid`).
 

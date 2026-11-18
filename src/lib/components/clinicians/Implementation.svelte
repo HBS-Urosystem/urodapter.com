@@ -33,12 +33,12 @@
           <!-- Block 1 — suitable indications. Icon chips in one panel rather
                than five separate tiles: inside a pane, per-item cards would
                stack surfaces (design system §4). -->
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full">
+          <div class="rounded-[2px] bg-white ring-1 ring-inset ring-mist dark:bg-navy-900 dark:ring-white/10 p-6 sm:p-8 h-full">
             <ul class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-6">
               {#each indications.items as indication (indication.label)}
                 <li class="flex flex-col items-center text-center gap-3">
                   <span
-                    class="w-12 h-12 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center shrink-0"
+                    class="w-12 h-12 rounded-[3px] bg-white ring-1 ring-inset ring-mist dark:bg-white/10 dark:ring-white/15 text-(--accent-ink) flex items-center justify-center shrink-0"
                     aria-hidden="true"
                   >
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={indication.icon} /></svg>
@@ -50,7 +50,7 @@
           </div>
         {:else if item.id === 'workflow'}
           <!-- Block 2 — workflow checklist -->
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full">
+          <div class="rounded-[2px] bg-white ring-1 ring-inset ring-mist dark:bg-navy-900 dark:ring-white/10 p-6 sm:p-8 h-full">
             <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
               {#each workflow.items as workflowItem (workflowItem)}
                 <li class="flex items-start gap-3">
@@ -67,13 +67,13 @@
           </div>
         {:else}
           <!-- Block 3 — the three-step learning path -->
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full">
+          <div class="rounded-[2px] bg-white ring-1 ring-inset ring-mist dark:bg-navy-900 dark:ring-white/10 p-6 sm:p-8 h-full">
             <ol class="space-y-3">
               {#each learning.steps as step, i (step.label)}
                 <li>
                   <div class="flex items-center gap-4">
                     <span
-                      class="w-10 h-10 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center shrink-0"
+                      class="w-10 h-10 rounded-[3px] bg-white ring-1 ring-inset ring-mist dark:bg-white/10 dark:ring-white/15 text-(--accent-ink) flex items-center justify-center shrink-0"
                       aria-hidden="true"
                     >
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d={step.icon} /></svg>
@@ -97,7 +97,7 @@
 
             <ul class="mt-7 pt-5 border-t border-slate-100 dark:border-white/10 flex flex-wrap gap-x-2 gap-y-2">
               {#each learning.resources as resource (resource)}
-                <li class="rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 px-3 py-1 text-xs font-medium text-(--accent-ink)">
+                <li class="rounded-[2px] bg-white ring-1 ring-inset ring-mist dark:bg-white/10 dark:ring-white/15 px-3 py-1 text-xs font-medium text-(--accent-ink)">
                   {resource}
                 </li>
               {/each}

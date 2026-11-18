@@ -27,80 +27,86 @@
     {evidence.intro}
   </p>
 
-  <div use:reveal class="mt-10">
+  <!-- Canvas (2026-11-18): from 960px all three blocks are visible at once —
+       the series full width, then the real-world study and the expert review
+       side by side (the review as the solid pine card); square 2px corners,
+       the clinician's "cool" shape. Below 960px the same panes sit in the
+       AutoAccordion (design system §6a), whose header carries the label. -->
+  {#snippet label(text: string, onDark = false)}
+    <p class="text-xs font-bold tracking-[0.14em] uppercase {onDark ? 'text-white' : 'text-(--accent-ink)'}">{text}</p>
+  {/snippet}
+
+  {#snippet pane(id: string, wide: boolean)}
+    {#if id === 'series'}
+      <article class="h-full flex flex-col rounded-[2px] bg-white ring-1 ring-inset ring-mist dark:bg-navy-900 dark:ring-white/10">
+        <div class="px-8 pt-7 pb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-mist dark:border-white/10">
+          <div class="flex flex-col gap-1.5">
+            {#if wide}{@render label(series.label)}{/if}
+            <h3 class="text-[28px] leading-tight font-light text-(--ink)">{series.title}</h3>
+          </div>
+          <p class="text-sm text-(--ink-soft)">{series.source}</p>
+        </div>
+        <dl class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,13.75rem),1fr))]">
+          {#each series.figures as figure, i (figure.label)}
+            <div class="px-8 py-7 flex flex-col-reverse gap-2.5 {i ? 'shadow-[inset_1px_0_0_var(--color-mist)] dark:shadow-[inset_1px_0_0_rgb(255_255_255/0.1)]' : ''}">
+              <dt class="text-[15px] text-(--ink-soft)">{figure.label}</dt>
+              <dd class="text-[clamp(2.75rem,4.6vw,4rem)] leading-none font-light tracking-[-0.02em] tabular-nums {i === 1 ? 'text-(--accent-ink)' : 'text-(--ink)'}">{figure.value}</dd>
+            </div>
+          {/each}
+        </dl>
+        <div class="mt-auto px-8 pt-4 pb-6 border-t border-mist dark:border-white/10 flex flex-col gap-1 text-[13px] leading-normal text-(--ink-mute)">
+          {#each series.notes as note (note)}<p class="text-pretty">{note}</p>{/each}
+        </div>
+      </article>
+    {:else if id === 'real-world'}
+      <article class="h-full flex flex-col gap-5.5 rounded-[2px] px-8 py-7 bg-white ring-1 ring-inset ring-mist dark:bg-navy-900 dark:ring-white/10">
+        <div class="flex flex-col gap-1.5">
+          {#if wide}{@render label(realWorld.label)}{/if}
+          <h3 class="text-2xl leading-tight font-light text-(--ink)">{realWorld.title}</h3>
+        </div>
+        <DonutStat value={realWorld.ring.value} caption={realWorld.ring.caption} />
+        <div class="pt-4.5 border-t border-mist dark:border-white/10">
+          <h4 class="text-xs font-bold uppercase tracking-[0.14em] text-(--ink-mute)">{realWorld.bars.title}</h4>
+          <ul class="mt-3 flex flex-col gap-3">
+            {#each realWorld.bars.rows as row (row.label)}
+              <li>
+                <div class="flex items-baseline justify-between gap-3 text-sm">
+                  <span class="text-(--ink-soft)">{row.label}</span>
+                  <span class="font-semibold tabular-nums text-(--ink)">{row.value}%</span>
+                </div>
+                <div class="mt-1.5 h-2 rounded-[2px] bg-mist/55 dark:bg-white/10" aria-hidden="true">
+                  <div class="h-full rounded-[2px] bg-(--chart-continuing)" style="width: {row.value}%"></div>
+                </div>
+              </li>
+            {/each}
+          </ul>
+        </div>
+        <p class="mt-auto text-[13px] text-(--ink-mute)">{realWorld.source}</p>
+      </article>
+    {:else}
+      <article class="relative overflow-hidden h-full flex flex-col gap-4.5 rounded-[2px] px-8 py-7 bg-pine text-white dark:ring-1 dark:ring-white/10">
+        <div aria-hidden="true" class="absolute right-0 top-0 w-[55%] h-[70%] bg-lagoon opacity-30 [clip-path:polygon(40%_0,100%_0,100%_100%)]"></div>
+        {#if wide}<div class="relative">{@render label(review.label, true)}</div>{/if}
+        <div class="relative flex flex-col gap-1.5">
+          <h3 class="text-[clamp(2.25rem,4vw,3.5rem)] leading-[1.05] font-light tracking-[-0.02em]">{review.title}</h3>
+          <p>{review.titleNote}</p>
+        </div>
+        <p class="relative text-[17px] leading-relaxed text-pretty">{review.body}</p>
+        <p class="relative mt-auto text-[13px] text-mist">{review.source}</p>
+      </article>
+    {/if}
+  {/snippet}
+
+  <div use:reveal class="mt-10 hidden min-[960px]:grid grid-cols-2 gap-5">
+    <div class="col-span-2">{@render pane('series', true)}</div>
+    {@render pane('real-world', true)}
+    {@render pane('review', true)}
+  </div>
+
+  <div use:reveal class="mt-10 min-[960px]:hidden">
     <AutoAccordion items={evidenceItems} controlLabel="the clinical evidence">
       {#snippet panel(item)}
-        {#if item.id === 'series'}
-          <!-- 1 — Published clinical series: three large figures -->
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full">
-            <dl class="grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-7">
-              {#each series.figures as figure (figure.label)}
-                <div class="sm:border-l sm:border-(--accent-ink)/20 sm:pl-5 sm:first:border-l-0 sm:first:pl-0">
-                  <!-- Smaller than the old full-width card, and `leading-[1.05]`
-                       rather than `leading-none`: "98% / 100%" wraps in a pane
-                       this narrow, and none-leading collides the two lines. -->
-                  <dt class="font-display font-semibold text-navy-950 dark:text-white text-[clamp(1.4rem,2.2vw,1.85rem)] leading-[1.05]">
-                    {figure.value}
-                  </dt>
-                  <dd class="mt-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300 text-pretty">
-                    {figure.label}
-                  </dd>
-                </div>
-              {/each}
-            </dl>
-
-            <div class="mt-8 pt-5 border-t border-slate-100 dark:border-white/10 space-y-1.5">
-              {#each series.notes as note (note)}
-                <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400 text-pretty">{note}</p>
-              {/each}
-              <p class="text-xs text-slate-500 dark:text-slate-400 pt-1.5">{series.source}</p>
-            </div>
-          </div>
-        {:else if item.id === 'real-world'}
-          <!-- 2 — Real-world experience: continuation ring + "why patients continued" -->
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full">
-            <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-8 sm:gap-10 items-center">
-              <DonutStat value={realWorld.ring.value} caption={realWorld.ring.caption} />
-
-              <div>
-                <h4 class="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400">
-                  {realWorld.bars.title}
-                </h4>
-                <ul class="mt-4 space-y-4">
-                  {#each realWorld.bars.rows as row (row.label)}
-                    <li>
-                      <div class="flex items-baseline justify-between gap-3 text-sm">
-                        <span class="text-slate-700 dark:text-slate-200">{row.label}</span>
-                        <span class="font-semibold tabular-nums text-navy-950 dark:text-white">{row.value}%</span>
-                      </div>
-                      <div class="mt-1.5 h-2 rounded-[4px] bg-slate-100 dark:bg-white/10" aria-hidden="true">
-                        <div class="h-full rounded-r-[4px] bg-(--chart-continuing)" style="width: {row.value}%"></div>
-                      </div>
-                    </li>
-                  {/each}
-                </ul>
-              </div>
-            </div>
-
-            <p class="mt-8 text-xs text-slate-500 dark:text-slate-400">{realWorld.source}</p>
-          </div>
-        {:else}
-          <!-- 3 — International expert review -->
-          <div class="rounded-2xl surface-card p-6 sm:p-8 h-full">
-            <h4 class="font-display font-semibold text-navy-950 dark:text-white text-[clamp(1.5rem,3vw,2rem)] leading-none">
-              {review.title}
-            </h4>
-            <p class="mt-2.5 text-sm text-slate-600 dark:text-slate-300">{review.titleNote}</p>
-            <!-- Buford's finding sentence lives here rather than in the
-                 accordion body: it is ~3 lines against one for the other two
-                 items, and the list column is sized to its tallest body. This
-                 is also the thinnest of the three panes, so it has the room. -->
-            <p class="mt-6 text-sm leading-relaxed text-slate-700 dark:text-slate-200 text-pretty">
-              {review.body}
-            </p>
-            <p class="mt-6 text-xs text-slate-500 dark:text-slate-400">{review.source}</p>
-          </div>
-        {/if}
+        {@render pane(item.id, false)}
       {/snippet}
     </AutoAccordion>
   </div>

@@ -180,32 +180,25 @@
           aria-labelledby={compact ? `${uid}-tab${i}` : undefined}
           inert={compact && i !== active}
         >
-          <article aria-labelledby="{uid}-title{i}" class="h-full rounded-2xl surface-card overflow-hidden flex flex-col">
-            <!-- A solid persona header: the card says whose benefits these
-                 are before a word is read (2026-09-29: more contrast). -->
-            <div class="bg-(--accent-solid) text-white px-5 sm:px-6 py-4 flex items-center gap-3">
-              <span class="w-9 h-9 rounded-full bg-white/15 flex items-center justify-center shrink-0" aria-hidden="true">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
-                  ><path stroke-linecap="round" stroke-linejoin="round" d={group.icon} /></svg
-                >
-              </span>
-              <h3 id="{uid}-title{i}" class="font-semibold text-base sm:text-lg leading-snug">{group.title}</h3>
-            </div>
-            <ul class="flex-1 p-5 sm:p-6 space-y-6">
+          <article aria-labelledby="{uid}-title{i}" class="h-full flex flex-col rounded-[2px] bg-white ring-1 ring-inset ring-mist p-[clamp(1.25rem,2.5vw,2rem)] dark:bg-navy-900 dark:ring-white/10">
+            <!-- Canvas (2026-11-18): the group name as a caps label over a pine
+                 rule, then each benefit as a row under a mist hairline. -->
+            <h3 id="{uid}-title{i}" class="pb-3.5 border-b-2 border-(--accent-ink) text-sm font-bold tracking-[0.14em] uppercase text-(--accent-ink)">{group.title}</h3>
+            <ul class="flex-1">
               {#each group.items as benefit (benefit.title)}
                 <!-- Chip + title on one row; on a phone the body runs full
                      width under both, from md it aligns under the title. -->
-                <li class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1.5 items-center">
+                <li class="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-x-3 gap-y-1.5 items-start py-5 border-b border-mist last:border-b-0 dark:border-white/10">
                   <span
-                    class="w-9 h-9 rounded-full bg-(--accent-soft) border border-(--accent-ink)/20 dark:border-(--accent-ink)/25 text-(--accent-ink) flex items-center justify-center shrink-0"
+                    class="grid place-items-center size-7 shrink-0 rounded-[3px] bg-white ring-1 ring-inset ring-mist text-(--accent-ink) dark:bg-white/10 dark:ring-white/15 row-span-2"
                     aria-hidden="true"
                   >
                     <svg class="w-[1.125rem] h-[1.125rem]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"
                       ><path stroke-linecap="round" stroke-linejoin="round" d={benefit.icon} /></svg
                     >
                   </span>
-                  <h4 class="font-semibold leading-snug text-navy-950 dark:text-white text-pretty">{benefit.title}</h4>
-                  <p class="col-span-2 md:col-start-2 md:col-span-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300 text-pretty">
+                  <h4 class="text-lg font-semibold leading-snug text-(--ink) text-pretty">{benefit.title}</h4>
+                  <p class="col-start-2 leading-relaxed text-(--ink-soft) text-pretty">
                     {benefit.body}
                   </p>
                 </li>
